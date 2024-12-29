@@ -1,0 +1,8 @@
+.totalads {
+    display: flex;
+    justify-content: flex-end;/* Distributes the content from right to left */
+    align-items: center; /* Aligns vertically, optional */
+    width: 100%; /* Adjust width as needed */
+    padding: 10px; /* Optional for spacing */
+}
+

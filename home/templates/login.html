@@ -1,0 +1,33 @@
+{% load static %}
+<div class="container">
+  <div class="form-container">
+    <div class="form-title">Welcome to Logo</div>
+    <form method="post">
+      <!-- Username -->
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="login">
+      <div class="mb-1">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" name="lusername" class="form-control fmc" id="uusername" placeholder="Enter username" required />
+      </div>
+      <!-- Password -->
+      <div class="mb-1">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" name="lpassword" class="form-control fmc" id="upassword" placeholder="Enter password" required />
+      </div>
+      <!-- Submit Button -->
+      <div class="d-grid mt-3">
+        <button type="submit" class="btn btn-submit">Log in</button>
+      </div>
+    </form>
+
+    <div class="form-footer">
+      <p class="fs-5 text-dark">or</p>
+      <div class="gologin text-dark mb-3">
+        <img class="googlepic me-2" src="{% static 'img/google.png' %}" alt="" />
+        <div>Continue with Google</div>
+      </div>
+      Not on logo yet? <a href="" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#SignUp">Sign up</a>
+    </div>
+  </div>
+</div>

@@ -4,11 +4,13 @@ from django.contrib.auth.models import AbstractUser
 
 # Custom User Model
 class CustomUser(AbstractUser):
+    about_me = models.TextField(default='', null=True, blank=True)
     phone_number = models.IntegerField(unique=True, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='user_profiles/', blank=True, null=True)
-    date_of_birth = models.DateField(blank=True, null=True)
+    email = models.EmailField(default='', max_length=254, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.username
@@ -20,6 +22,7 @@ class Category(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    catagory_icon_FS = models.CharField(max_length=100, blank=True, null=True, default='')
 
     def __str__(self):
         return self.name

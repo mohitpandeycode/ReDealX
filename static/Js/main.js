@@ -79,3 +79,21 @@
     
 })(jQuery);
 
+window.onload = function() {
+    const searchTerms = ['Products', 'Cars', 'Mobiles', 'Bikes', 'Electronics', 'Furnitures','Properties', 'jobs'];
+    let currentIndex = 0;
+
+    function changePlaceholder() {
+        const inputField = document.getElementById('searchInput');
+        if (inputField) {
+            // Update placeholder with the current search term
+            inputField.placeholder = `Search "${searchTerms[currentIndex]}"`;
+            // Move to the next search term
+            currentIndex = (currentIndex + 1) % searchTerms.length;
+        }
+    }
+
+    // Change the placeholder every second
+    setInterval(changePlaceholder, 1500);
+};
+

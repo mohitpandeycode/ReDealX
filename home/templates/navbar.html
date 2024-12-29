@@ -1,0 +1,101 @@
+{% load static %}
+<div class="container-fluid nav-bar bg-transparent">
+  <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+    <a href="/" class="navbar-brand d-flex align-items-center text-center">
+      <div class="icon p-2 me-2">
+        <img class="img-fluid" src="{% static 'img/icon-deal.png' %}" alt="Icon" style="width: 30px; height: 30px;" />
+      </div>
+      <h1 class="m-0 text-primary">Logo</h1>
+    </a>
+    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav ms-auto">
+        <a href="/" class="nav-item nav-link active">Home</a>
+        <a href="about.html" class="nav-item nav-link">About</a>
+        <a href="contact.html" class="nav-item nav-link">Contact</a>
+        <!-- Button trigger signup login modal -->
+        {% if not user.is_authenticated %}
+          <a type="button" class="nav-item nav-link" data-bs-toggle="modal" data-bs-target="#SignUp">SignUp</a>
+          <a type="button" class="nav-item nav-link" data-bs-toggle="modal" data-bs-target="#login">Login</a>
+        {% else %}
+          <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
+        {% endif %}
+
+        <!-- login form Modal -->
+        <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                {% if messages %}
+                  {{ message.tags }}
+                  {% for message in messages %}
+                    <h5 class="modal-title" style="color:#b700ff;font-size: 15px;">{{ message }}</h5>
+                  {% endfor %}
+                {% endif %}
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                {% include 'login.html' %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SignUp form model -->
+        <div class="modal fade" id="SignUp" tabindex="-1" aria-labelledby="SignUpLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                {% if messages %}
+                  {{ message.tags }}
+                  {% for message in messages %}
+                    <h5 class="modal-title" style="color:#b700ff;font-size: 15px;">{{ message }}</h5>
+                  {% endfor %}
+                {% endif %}
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                {% include 'signup.html' %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="" class="btn btn-primary gradient-btn px-3 d-none d-lg-flex"><i class="py-1 px-1 fas fa-plus"></i>Sell Item</a>
+    </div>
+  </nav>
+  <!-- Search Start -->
+  <div class="container-fluid bg-primary mb-1 wow fadeIn" data-wow-delay="0.1s" style="padding: 10px;">
+    <div class="container">
+      <div class="row g-2">
+        <div class="col-md-10">
+          <div class="row g-2">
+            <div class="col-md-4">
+              <input type="text" class="form-control py-3 border-0" placeholder="🔍 Search city, area or locality" />
+            </div>
+            <div class="col-md-8">
+              <input type="text" id="searchInput" class="form-control py-3 border-0" placeholder="Search Products" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-dark border-0 w-100 py-3">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Search End -->
+</div>
+
+<!-- Navbar End -->
+<!-- alert meassage -->
+{% if messages %}
+  {{ message.tags }}
+  {% for message in messages %}
+    <div class="alert alert-info alertmsg alert-dismissible fade show" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+<!-- end alert meassage -->
