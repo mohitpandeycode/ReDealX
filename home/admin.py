@@ -17,3 +17,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'category', 'seller', 'condition', 'created_at')
     list_filter = ('category', 'condition')
     search_fields = ('title', 'description')
+
+@admin.register(ProductImages)
+class ProductImagesAdmin(admin.ModelAdmin):
+    list_display = ('product', 'image1', 'image2', 'image3', 'image4', 'user')
+    search_fields = ('product', 'user')

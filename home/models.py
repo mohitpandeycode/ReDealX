@@ -30,11 +30,11 @@ class Category(models.Model):
 
 # Product Model
 class Product(models.Model):
+    brand = models.CharField(max_length=200, default='', blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='product_images/')
-    location = models.TextField(default='',null=True, blank=True)
+    price = models.IntegerField()
+    location = models.TextField(default='', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Link to user model
@@ -42,9 +42,23 @@ class Product(models.Model):
     condition_choices = [
         ('new', 'New'),
         ('used', 'Used'),
-        ('refurbished', 'Refurbished'),
     ]
     condition = models.CharField(max_length=20, choices=condition_choices, default='used')
 
     def __str__(self):
         return self.title
+
+def user_directory_path(instance, filename):
+    return f'product_images/{instance.user.username}/{filename}'
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image1 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    image2 = models.ImageField(upload_to=user_directory_path)
+    image3 = models.ImageField(upload_to=user_directory_path)
+    image4 = models.ImageField(upload_to=user_directory_path)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.product.title} image uploaded by {self.user.username}"
+

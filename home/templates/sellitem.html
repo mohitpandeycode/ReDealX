@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  All-Products
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'Css/sellitem.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/index.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <!-- Navbar Start -->
+  {% include 'navbar.html' %}
+  <!-- Navbar end -->
+
+  <div class="custom-form-container">
+    <h2 class="custom-form-heading">Sell Your Product Now</h2>
+    <form id="sellForm" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="category" class="custom-label">Category</label>
+        <select class="form-control custom-input" name="category" id="category" required oninput="checkForm()">
+          <option value="">Select Category</option>
+          {% for category in categories %}
+            <option value="{{ category.name }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="modelName" class="custom-label">Brand</label>
+        <input type="text" class="form-control custom-input" name="brand" id="modelName" placeholder="Enter brand name" required oninput="checkForm()" />
+      </div>
+      <div class="mb-3">
+        <label for="title" class="custom-label">Ad Title</label>
+        <input type="text" class="form-control custom-input" name="title" id="title" placeholder="Mention the key features of your item (e.g. brand, model, age, type)" required oninput="checkForm()" />
+      </div>
+      <div class="mb-3">
+        <label for="description" class="custom-label">Description</label>
+        <textarea class="form-control custom-input" name="description" id="description" rows="4" placeholder="Include condition, features and reason for selling" required oninput="checkForm()"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="condition" class="custom-label">Condition</label>
+        <select class="form-control custom-input" name="condition" id="condition" required oninput="checkForm()">
+          <option value="">Select Condition</option>
+          {% for value, label in condition_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="custom-label">SET A PRICE</label>
+        <input type="number" class="form-control custom-input" name="price" id="price" placeholder="₹ " required oninput="checkForm()" />
+      </div>
+      <div class="mb-3">
+        <label class="custom-label">Upload Images</label>
+        <div class="image-upload-row">
+          <div class="image-upload">
+            <input type="file" id="image1" name="img1" accept="image/*" required onchange="previewImage(event, 1); checkForm()" />
+            <label for="image1"><i class="fas fa-camera"></i></label>
+            <img src="" alt="Preview" class="image-preview" id="preview1" />
+            <i class="fas fa-times cancel-icon" id="cancel1" onclick="resetImage(1); checkForm()"></i>
+          </div>
+          <div class="image-upload">
+            <input type="file" id="image2" name="img2" accept="image/*" onchange="previewImage(event, 2); checkForm()" />
+            <label for="image2"><i class="fas fa-camera"></i></label>
+            <img src="" alt="Preview" class="image-preview" id="preview2" />
+            <i class="fas fa-times cancel-icon" id="cancel2" onclick="resetImage(2); checkForm()"></i>
+          </div>
+          <div class="image-upload">
+            <input type="file" id="image3" name="img3" accept="image/*" onchange="previewImage(event, 3); checkForm()" />
+            <label for="image3"><i class="fas fa-camera"></i></label>
+            <img src="" alt="Preview" class="image-preview" id="preview3" />
+            <i class="fas fa-times cancel-icon" id="cancel3" onclick="resetImage(3); checkForm()"></i>
+          </div>
+          <div class="image-upload">
+            <input type="file" id="image4" name="img4" accept="image/*" onchange="previewImage(event, 4); checkForm()" />
+            <label for="image4"><i class="fas fa-camera"></i></label>
+            <img src="" alt="Preview" class="image-preview" id="preview4" />
+            <i class="fas fa-times cancel-icon" id="cancel4" onclick="resetImage(4); checkForm()"></i>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="location" class="custom-label">Address</label>
+        <input type="text" class="form-control custom-input" name="location" id="location" placeholder="Area, Street, City, State," required oninput="checkForm()" />
+      </div>
+      <hr />
+      {% if user.is_authenticated %}
+        <h3>Review your details</h3>
+        <div class="page-content mt-2 mt-lg-4 page-container" id="page-content">
+          <div class="row w-100 d-flex justify-content-center">
+            <div class="col-xl-6 w-100 col-md-12">
+              <div class="card user-card-full">
+                <div class="row">
+                  <div class="col-sm-4 bg-c-lite-green user-profile">
+                    <div class="card-block text-center text-white">
+                      <div class="">
+                        <img src="https://img.icons8.com/bubbles/100/000000/user.png" class="img-radius" alt="User-Profile-Image" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-8 mt-0 mt-lg-3">
+                    <div class="information mt-1 text-center">
+                      <div class="col-sm-6">
+                        <p class="f-w-700 mb-1">Your Name</p>
+                        <h6 class="text-muted f-w-400">{{ user.first_name }} {{ user.last_name }}</h6>
+                      </div>
+                      <div class="col-sm-6">
+                        <p class="f-w-700 mb-1">Your Phone No.</p>
+                        <h6 class="text-muted f-w-400">{{ user.phone_number }}</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <button type="submit" class="btn custom-btn-submit w-100" id="postButton" disabled>Post Now</button>
+      {% else %}
+        <button class="btn fs-5 pt-3 custom-btn-submit w-10" data-bs-toggle="modal" data-bs-target="#login"><marquee behavior="scroll" direction="left">Login to post the Ad</marquee></button>
+      {% endif %}
+    </form>
+  </div>
+  <script>
+    // Preview and Reset functions
+    function previewImage(event, index) {
+      const file = event.target.files[0]
+      const preview = document.getElementById(`preview${index}`)
+      const cancel = document.getElementById(`cancel${index}`)
+    
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = function (e) {
+          preview.src = e.target.result
+          preview.style.display = 'block'
+          cancel.style.display = 'block'
+        }
+        reader.readAsDataURL(file)
+      }
+    }
+    
+    function resetImage(index) {
+      const input = document.getElementById(`image${index}`)
+      const preview = document.getElementById(`preview${index}`)
+      const cancel = document.getElementById(`cancel${index}`)
+    
+      input.value = ''
+      preview.style.display = 'none'
+      preview.src = ''
+      cancel.style.display = 'none'
+    }
+    
+    // Form Validation
+    function checkForm() {
+      const form = document.getElementById('sellForm')
+      const inputs = form.querySelectorAll('input[required], textarea[required]')
+      const button = document.getElementById('postButton')
+    
+      let allFilled = true
+      inputs.forEach((input) => {
+        if (!input.value) {
+          allFilled = false
+        }
+      })
+    
+      button.disabled = !allFilled
+    }
+  </script>
+{% endblock %}

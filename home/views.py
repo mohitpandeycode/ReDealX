@@ -4,10 +4,14 @@ from .models import *
 from django.contrib.auth import authenticate, login, logout  
 from django.contrib.auth.models import User  
 from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def index(request):
     products = Product.objects.order_by('?')[:8]
+    for product in products:
+        # Fetch the associated images for each product
+        product.images = ProductImages.objects.filter(product=product)
     categories = Category.objects.order_by('?')[:5]
     auth_response = handle_user_auth(request)
     if auth_response:
@@ -70,9 +74,75 @@ def handle_logout(request):
 
 
 def allproducts(request):
-    products = Product.objects.order_by('?')
+    products = Product.objects.all()  # Fetch all products
+    for product in products:
+        # Fetch the associated images for each product
+        product.images = ProductImages.objects.filter(product=product)
+    
     context = {'products': products}
     auth_response = handle_user_auth(request)
     if auth_response:
         return auth_response  # Redirect if authentication actions occurred
     return render(request, 'allProducts.html', context)
+
+
+
+
+def sellItem(request):
+    auth_response = handle_user_auth(request)
+    if auth_response:
+        return auth_response  # Redirect if authentication actions occurred
+
+    condition_choices = Product.condition_choices
+    category = Category.objects.all()
+
+    if request.method == "POST":
+        cate_name = request.POST.get('category')  # Get the category name from the form
+        category_instance = Category.objects.filter(name=cate_name).first()  # Get the Category instance
+
+        # Handle other form fields
+        brand = request.POST.get('brand')
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        condition = request.POST.get('condition')
+        price = request.POST.get('price')
+        location = request.POST.get('location')
+        image1 = request.FILES.get('img1')
+        image2 = request.FILES.get('img2')
+        image3 = request.FILES.get('img3')
+        image4 = request.FILES.get('img4')
+
+        # Check if the category instance exists
+        if category_instance:
+            product = Product.objects.create(
+                category=category_instance,  # Assign the Category instance
+                brand=brand,
+                title=title,
+                description=description,
+                price=price,
+                location=location,
+                condition=condition,
+                seller=request.user
+            )
+
+            # Create ProductImages
+            ProductImages.objects.create(
+                product=product,
+                image1=image1,
+                image2=image2,
+                image3=image3,
+                image4=image4,
+                user=request.user
+            )
+
+            messages.success(request, "Product added successfully.")
+            return redirect('/allproducts/')
+        else:
+            messages.error(request, "Category not found.")
+            return redirect('sell_item')  # Redirect back to the form
+
+    context = {'condition_choices': condition_choices, 'categories': category}
+    return render(request, 'sellitem.html', context)
+
+
+

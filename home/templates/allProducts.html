@@ -40,14 +40,16 @@
                 <div class="col-lg-3 col-6 col-sm-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                   <div class="property-item rounded overflow-hidden">
                     <div class="position-relative overflow-hidden">
-                      <a href=""><img class="img-thumbnail prodimg border-1 border-dark" src="{{ product.image.url }}" alt="" /></a>
+                      <a href=""><img class="img-thumbnail prodimg border-1 border-dark" src="{{ product.images.first.image1.url }}" alt="" /></a>
                       <div class="bg-danger rounded text-white position-absolute end-0 top-0 m-2 pt-1 px-2">
                         <i class="fs-5 fas fa-heart"></i>
                       </div>
-                      <div class="bg-warning rounded-top text-dark position-absolute start-0 bottom-0 mx-2 pt-1 px-1">Featured</div>
                     </div>
                     <div class="p-2 pb-0">
-                      <h5 class="priceelemnt text-primary mb-1">₹ {{ product.price }}</h5>
+                      <div style="display: flex;justify-content: space-between; align-items: center;">
+                        <h5 class="priceelemnt text-primary mb-1">₹ {{ product.price }}</h5>
+                        <p class="categoryp px-2 py-1 rounded mb-1">{{ product.category|truncatechars:8 }}</p>
+                      </div>
                       <a class="titleitem d-block h6 mb-1" href="">{{ product.title|slice:':30' }}</a>
                       <p class="descitem">{{ product.description|slice:':45' }}...</p>
                     </div>

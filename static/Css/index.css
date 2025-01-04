@@ -13,65 +13,87 @@
     font-size: 1.1rem;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #66b3ff, #4caf50); /* Blue to Green gradient */
+    background: linear-gradient(135deg, #66b3ff, #4caf50);
+    /* Blue to Green gradient */
     color: white;
-    border: 2px solid transparent; /* Default transparent border */
+    border: 2px solid transparent;
+    /* Default transparent border */
     border-radius: 10px;
     text-decoration: none;
-    position: relative; /* For the pseudo-element */
-    overflow: hidden; /* To hide the moving border */
-    transition: all 0.3s ease; /* Smooth transition for all effects */
+    position: relative;
+    /* For the pseudo-element */
+    overflow: hidden;
+    /* To hide the moving border */
+    transition: all 0.3s ease;
+    /* Smooth transition for all effects */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
+}
 
-  .gradient-btn:hover {
-    background: linear-gradient(135deg, #4caf50, #66b3ff); /* Reversed gradient on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Glow effect */
-    transform: scale(1.05); /* Subtle scaling effect */
-  }
+.gradient-btn:hover {
+    background: linear-gradient(135deg, #4caf50, #66b3ff);
+    /* Reversed gradient on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    /* Glow effect */
+    transform: scale(1.05);
+    /* Subtle scaling effect */
+}
 
-  .gradient-btn i {
+.gradient-btn i {
     margin-right: 8px;
     font-size: 1.3rem;
-    transition: transform 0.6s ease-in-out; /* Smooth transition for rotation */
-  }
+    transition: transform 0.6s ease-in-out;
+    /* Smooth transition for rotation */
+}
 
-  /* Full 360-degree rotation for the icon */
-  .gradient-btn:hover i {
-    transform: rotate(360deg); /* Full rotation on hover */
-  }
+/* Full 360-degree rotation for the icon */
+.gradient-btn:hover i {
+    transform: rotate(360deg);
+    /* Full rotation on hover */
+}
 
-  /* Moving gradient border effect */
-  .gradient-btn::before {
+/* Moving gradient border effect */
+.gradient-btn::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, #81c784, #4db6ac, #009688, #80deea, #00bcd4); /* Green to Blue gradient */
-    background-size: 300% 300%; /* Make the gradient larger to allow movement */
-    border-radius: 10px; /* Border radius to match button */
-    z-index: -1; /* Put the gradient border behind the button */
-    animation: gradientBorder 3s linear infinite; /* Animation to move the gradient border */
-  }
+    background: linear-gradient(45deg, #81c784, #4db6ac, #009688, #80deea, #00bcd4);
+    /* Green to Blue gradient */
+    background-size: 300% 300%;
+    /* Make the gradient larger to allow movement */
+    border-radius: 10px;
+    /* Border radius to match button */
+    z-index: -1;
+    /* Put the gradient border behind the button */
+    animation: gradientBorder 3s linear infinite;
+    /* Animation to move the gradient border */
+}
 
-  /* Animation to move the gradient around */
-  @keyframes gradientBorder {
+/* Animation to move the gradient around */
+@keyframes gradientBorder {
     0% {
-      background-position: 0% 50%;
+        background-position: 0% 50%;
     }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
 
-  /* Responsive classes for visibility */
-  .d-none { display: none; }
-  .d-lg-flex { display: flex; }
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Responsive classes for visibility */
+.d-none {
+    display: none;
+}
+
+.d-lg-flex {
+    display: flex;
+}
 
 .back-to-top {
     position: fixed;
@@ -141,10 +163,12 @@
     color: var(--primary);
     margin-bottom: 20px;
 }
+
 .form-label {
     font-weight: bold;
     color: black;
 }
+
 .fmc {
     border: none;
     border-bottom: 2px solid #ccc;
@@ -152,10 +176,12 @@
     background: transparent;
     transition: all 0.3s ease;
 }
+
 .form-control:focus {
     border-bottom: 2px solid #1eff00;
     box-shadow: none;
 }
+
 .btn-submit {
     background: var(--primary);
     color: #fff;
@@ -165,25 +191,30 @@
     font-weight: bold;
     transition: all 0.3s ease;
 }
+
 .btn-submit:hover {
     background: #028d6c;
     color: white;
     box-shadow: 0 5px 15px #028d6d77;
 }
+
 .form-footer {
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
     color: #777;
 }
+
 .form-footer a {
     color: #4e54c8;
     text-decoration: none;
 }
+
 .form-footer a:hover {
     text-decoration: underline;
 }
-.gologin{
+
+.gologin {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -195,18 +226,18 @@
     margin: auto;
 }
 
-.gologin:hover{
+.gologin:hover {
     background-color: rgb(225, 225, 225);
     cursor: pointer;
 }
 
-.googlepic{
+.googlepic {
     width: 20px;
     height: 20px;
     padding-right: px;
 }
 
-.alertmsg{
+.alertmsg {
     width: 35%;
     margin: auto;
     position: absolute;
@@ -269,7 +300,7 @@
         padding: 0;
     }
 
-    .navbar-light .navbar-nav .nav-link  {
+    .navbar-light .navbar-nav .nav-link {
         margin-right: 0;
         padding: 10px 0;
     }
@@ -298,7 +329,7 @@
         opacity: 0;
         visibility: hidden;
         transition: .5s;
-        
+
     }
 
     .navbar .nav-item:hover .dropdown-menu {
@@ -353,29 +384,39 @@
     }
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
     color: #DDDDDD;
 }
 
 .owl-carousel {
-    width: 100%; /* Ensure carousel spans the full width */
-    height: 100%; /* Set height explicitly */
+    width: 100%;
+    /* Ensure carousel spans the full width */
+    height: 100%;
+    /* Set height explicitly */
     position: relative;
 }
 
 .owl-carousel-item {
     width: 100%;
-    height: 400px; /* Explicit height for the carousel items */
-    position: relative; /* Required for proper positioning */
-    overflow: hidden; /* Hide overflowing parts of the image */
+    height: 400px;
+    /* Explicit height for the carousel items */
+    position: relative;
+    /* Required for proper positioning */
+    overflow: hidden;
+    /* Hide overflowing parts of the image */
 }
 
 .owl-carousel-item img {
-    width: 100%; /* Make the image stretch to full width */
-    height: 100%; /* Make the image stretch to full height */
-    object-fit: cover; /* Ensure the image fully covers the container */
-    object-position: center; /* Center the image */
-    position: absolute; /* Fixes alignment issues */
+    width: 100%;
+    /* Make the image stretch to full width */
+    height: 100%;
+    /* Make the image stretch to full height */
+    object-fit: cover;
+    /* Ensure the image fully covers the container */
+    object-position: center;
+    /* Center the image */
+    position: absolute;
+    /* Fixes alignment issues */
     top: 0;
     left: 0;
 }
@@ -383,36 +424,41 @@
 
 :root {
     --gradient-percent: 0%;
-  }
-  .header {
+}
+
+.header {
     position: relative;
     margin-top: 0px;
     padding-top: 4px;
     text-align: center;
     background: linear-gradient(90deg, rgba(0, 49, 84, .8) var(--gradient-percent), rgb(51, 120, 169) 100%);
     color: white;
-  }
-  .logo {
+}
+
+.logo {
     width: 50px;
     fill: white;
     padding-right: 15px;
     display: inline-block;
     vertical-align: middle;
-  }
-  .inner-header {
+}
+
+.inner-header {
     height: 65vh;
     width: 100%;
     margin: 0;
     padding: 0;
-  }
-  .flex {
+}
+
+.flex {
     /*Flexbox for containers*/
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-  }
-  .waves {
+}
+
+.waves {
     position: relative;
     width: 100%;
     height: 15vh;
@@ -420,54 +466,65 @@
     /*Fix for safari gap*/
     min-height: 100px;
     max-height: 150px;
-  }
-  .content {
+}
+
+.content {
     position: relative;
     height: 20vh;
     text-align: center;
     background-color: white;
-  }
-  /* Animation */
-  .parallax>use {
+}
+
+/* Animation */
+.parallax>use {
     animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
-  }
-  .parallax>use:nth-child(1) {
+}
+
+.parallax>use:nth-child(1) {
     animation-delay: -2s;
     animation-duration: 7s;
-  }
-  .parallax>use:nth-child(2) {
+}
+
+.parallax>use:nth-child(2) {
     animation-delay: -3s;
     animation-duration: 10s;
-  }
-  .parallax>use:nth-child(3) {
+}
+
+.parallax>use:nth-child(3) {
     animation-delay: -4s;
     animation-duration: 13s;
-  }
-  .parallax>use:nth-child(4) {
+}
+
+.parallax>use:nth-child(4) {
     animation-delay: -5s;
     animation-duration: 20s;
-  }
-  @keyframes move-forever {
+}
+
+@keyframes move-forever {
     0% {
-      transform: translate3d(-90px, 0, 0);
+        transform: translate3d(-90px, 0, 0);
     }
+
     100% {
-      transform: translate3d(85px, 0, 0);
+        transform: translate3d(85px, 0, 0);
     }
-  }
-  /*Shrinking for mobile*/
-  @media (max-width: 768px) {
+}
+
+/*Shrinking for mobile*/
+@media (max-width: 768px) {
     .waves {
-      height: 40px;
-      min-height: 40px;
+        height: 40px;
+        min-height: 40px;
     }
+
     .content {
-      height: 30vh;
+        height: 30vh;
     }
+
     h1 {
-      font-size: 24px;
+        font-size: 24px;
     }
-  }
+}
 
 
 /*** Icon ***/
@@ -552,69 +609,98 @@
     border-right: 1px dashed rgba(0, 185, 142, .3) !important;
 }
 
-small{
+small {
     height: 20px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.prodimg{
+
+.prodimg {
     height: 30vh;
     width: 100%;
 }
 
-@media (max-width: 500px) {
- .priceelemnt{
-    font-size: 14px;
-}   
-.titleitem{
+.categoryp {
     font-size: 12px;
-}
-.descitem{
-    font-size: 10px;
+    background-color: #505050;
+    color: white;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-small{
-    font-size: 10px;
+
+@media (max-width: 500px) {
+    .priceelemnt {
+        font-size: 14px;
+    }
+
+    .titleitem {
+        font-size: 12px;
+    }
+
+    .descitem {
+        font-size: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    small {
+        font-size: 10px;
+    }
+
+    .prodimg {
+        height: 20vh;
+        width: 100%;
+    }
+
+    .grbtn {
+        position: fixed;
+        right: 30%;
+        bottom: 35px;
+        z-index: 99;
+        left: 30%;
+        border: 4px dashed #ff8b00;
+    }
+
+    .catname h6 {
+        font-size: 10px;
+    }
+
+    .titleitem {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .categoryp {
+        font-size: 12px;
+        background-color: #505050;
+        color: white;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .titled {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .alertmsg {
+        width: 75%;
+        margin: auto;
+        position: absolute;
+        left: 10%;
+        right: 10%;
+        z-index: 10000;
+        text-align: center;
+    }
 }
-.prodimg{
-    height: 20vh; 
-    width: 100%;
-}
-.grbtn{
-    position: fixed;
-    right: 30%;
-    bottom: 35px;
-    z-index: 99;
-    left: 30%;
-    border: 4px dashed #ff8b00;
-}
-.catname h6{
-    font-size: 10px;
-}
-.titleitem{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.titled{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.alertmsg{
-    width: 75%;
-    margin: auto;
-    position: absolute;
-    left: 10%;
-    right: 10%;
-    z-index: 10000;
-    text-align: center;
-}
-}
-.descitem{
+
+.descitem {
     font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
@@ -664,7 +750,7 @@ small{
     align-items: center;
     justify-content: center;
     color: var(--light);
-    border: 1px solid rgba(255,255,255,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 35px;
     transition: .3s;
 }
@@ -699,7 +785,7 @@ small{
 }
 
 .footer .form-control {
-    border-color: rgba(255,255,255,0.5);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .footer .copyright {
