@@ -66,23 +66,25 @@
   </nav>
   <!-- Search Start -->
   <div class="container-fluid searchbox bg-primary mb-1 wow fadeIn" data-wow-delay="0.1s" style="padding: 10px;">
-    <div class="container">
-      <div class="row g-2">
-        <div class="col-md-10">
-          <div class="row g-2">
-            <div class="col-md-4">
-              <input type="text" class="form-control py-3 border-0" placeholder="🔍 Search city, area or locality" />
-            </div>
-            <div class="col-md-8">
-              <input type="text" id="searchInput" class="form-control py-3 border-0" placeholder="Search Products" />
+    <form method="get">
+      <div class="container">
+        <div class="row g-2">
+          <div class="col-md-10">
+            <div class="row g-2">
+              <div class="col-md-4">
+                <input type="text" name="address" class="form-control py-3 border-0" placeholder="🔍 Search city, area or locality" />
+              </div>
+              <div class="col-md-8">
+                <input type="text" name="prod" id="searchInput" class="form-control py-3 border-0" placeholder="Search Products" />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-2">
-          <button class="btn btn-dark border-0 w-100 py-3">Search</button>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-dark border-0 w-100 py-3">Search</button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
   <!-- Search End -->
 </div>

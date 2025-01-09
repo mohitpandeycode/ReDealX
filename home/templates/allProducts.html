@@ -19,14 +19,14 @@
 
   <div class="container-xxl py-5">
     <div class="container">
+      {% if products %}
       <div class="row g-0 gx-5 align-items-end">
         <div class="col-lg-6">
           <div class="text-start mx-auto mb-1 mb-lg-3 wow slideInLeft" data-wow-delay="0.1s">
-            <h3 class="mb-1">Buy & Sell used products near your place</h3>
+            <h3 class="mb-1">Buy & Sell used products near your city</h3>
           </div>
         </div>
       </div>
-      {% if products %}
         <div class="totalads">
           <p class="mb-0 text-dark">
             <b>{{ products.count }}</b> ads in your city
@@ -63,6 +63,27 @@
             </div>
           </div>
         </div>
+        {% else %}
+        <section class="py-1 py-md-2 min-vh-75 d-flex justify-content-center align-items-center">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="text-center">
+                  <h2 class="d-flex justify-content-center align-items-center gap-2 mb-4">
+                    <span class="display-1 fw-bold">S</span>
+                    <i class="far fa-frown text-danger display-4"></i>
+                    <span class="display-1 fw-bold bsb-flip-h">R</span>
+                    <span class="display-1 fw-bold bsb-flip-h">R</span>
+                    <span class="display-1 fw-bold bsb-flip-h">Y</span>
+                  </h2>
+                  <h3 class="h2 mb-2">Oops! Product not found.</h3>
+                  <p class="mb-5">We didn't find anything that matches this search. Try search for something more general</p>
+                  <a class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" href="/" role="button">Back to Home</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       {% endif %}
     </div>
   </div>
