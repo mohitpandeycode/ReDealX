@@ -698,6 +698,17 @@ small {
         z-index: 10000;
         text-align: center;
     }
+    .searchbox input:placeholder-shown{
+        font-size: 13px;
+    }
+    .searchbox input{
+        font-size: 14px;
+    }
+
+    .searchbox button{
+        height: 40px;
+        text-align: center;
+    }
 }
 
 .descitem {

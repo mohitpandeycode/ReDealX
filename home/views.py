@@ -4,7 +4,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User  
 from django.contrib import messages, auth
 from django.db.models import Q
+import uuid
+import base64
+import random
+import string
 # Create your views here.
+
+
+# function to generate random string for my urls
+def generate_random_string(length=15):
+    random_uuid = uuid.uuid4().bytes
+    base_slug = base64.urlsafe_b64encode(random_uuid).decode('utf-8').rstrip('=')
+    additional_characters = string.ascii_letters + string.digits + "?&%-"
+    if length > len(base_slug):
+        extra = ''.join(random.choices(additional_characters, k=length - len(base_slug)))
+        return (base_slug + extra)[:length]
+    return base_slug[:length]
 
 
 # home page of the website
@@ -217,3 +232,33 @@ def search_products(request):
         prod.images = ProductImages.objects.filter(product=prod)
 
     return products
+
+
+#product by category function
+def prodbyCategory(request, category):
+    # Check if there are search parameters
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)
+        if search_results.exists():  # Render search results only if they exist
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
+    products = Product.objects.filter(category__name=category)  # Fetch products by category
+    for product in products:
+        # Fetch the associated images for each product
+        product.images = ProductImages.objects.filter(product=product)
+    context = {'products': products}
+
+    return render(request, 'allProducts.html', context)
+
+
+def view_Product(request, slug):
+    product = Product.objects.get(slug=slug)
+    product.images = ProductImages.objects.filter(product=product)
+    context = {'product': product}
+    return render(request, 'viewProduct.html', context)
+
+
+
+
+

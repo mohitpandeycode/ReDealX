@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import uuid
 
 # Custom User Model
 class CustomUser(AbstractUser):
@@ -39,6 +40,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Link to user model
     category = models.ForeignKey(Category, related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True)
     condition_choices = [
         ('new', 'New'),
         ('used', 'Used'),
@@ -47,6 +49,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Generate slug only if it doesn't exist
+            self.slug = str(uuid.uuid4())[:8]  # Shorten the UUID for a compact slug
+        super().save(*args, **kwargs)
 
 def user_directory_path(instance, filename):
     return f'product_images/{instance.user.username}/{filename}'

@@ -120,10 +120,10 @@
             </div>
           </div>
         </div>
-        <hr>
+        <hr />
         <button type="submit" class="btn custom-btn-submit w-100" id="postButton" disabled>Post Now</button>
       {% else %}
-        <button class="btn fs-5 pt-3 custom-btn-submit w-10" data-bs-toggle="modal" data-bs-target="#login"><marquee behavior="scroll" direction="left">Login to post the Ad</marquee></button>
+        <a data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><button class="btn fs-5 pt-3 custom-btn-submit w-10" data-bs-toggle="modal" data-bs-target="#login"><marquee behavior="scroll" direction="left">Login for post the Ad</marquee></button></a>
       {% endif %}
     </form>
   </div>
@@ -171,5 +171,8 @@
     
       button.disabled = !allFilled
     }
+
+    btn2.style.display = "none";
+
   </script>
 {% endblock %}
