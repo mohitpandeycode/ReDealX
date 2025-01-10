@@ -50,7 +50,6 @@ def index(request):
 
 
 
-
 # login signup auth function for the website
 def handle_user_auth(request):
     if request.method == "POST":
@@ -109,13 +108,11 @@ def handle_user_auth(request):
 
 
 
-
 # logout function for the website
 def handle_logout(request):
     logout(request)
     messages.success(request, "You're logged out")
     return redirect("/")
-
 
 
 
@@ -140,8 +137,6 @@ def allproducts(request):
     if auth_response:
         return auth_response  # Redirect if authentication actions occurred
     return render(request, 'allProducts.html', context)
-
-
 
 
 
@@ -204,7 +199,6 @@ def sellItem(request):
 
 
 
-
 #function for searching products
 def search_products(request):
     # Get the address and product search parameters
@@ -252,11 +246,41 @@ def prodbyCategory(request, category):
     return render(request, 'allProducts.html', context)
 
 
+# product details function
 def view_Product(request, slug):
     product = Product.objects.get(slug=slug)
     product.images = ProductImages.objects.filter(product=product)
     context = {'product': product}
     return render(request, 'viewProduct.html', context)
+
+
+def profilePage(request):
+    product_ads = Product.objects.filter(seller=request.user)
+    for product in product_ads:
+        # Fetch the associated images for each product
+        product.images = ProductImages.objects.filter(product=product)
+    context = {'products': product_ads}
+    print(product_ads)
+    return render(request, 'profilePage.html',context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

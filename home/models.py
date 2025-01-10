@@ -5,12 +5,12 @@ import uuid
 
 # Custom User Model
 class CustomUser(AbstractUser):
-    about_me = models.TextField(default='', null=True, blank=True)
     phone_number = models.IntegerField(unique=True, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='user_profiles/', blank=True, null=True)
     email = models.EmailField(default='', max_length=254, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
