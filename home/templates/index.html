@@ -106,6 +106,7 @@
                 <div class="col-lg-3 col-6 col-sm-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                   <div class="property-item rounded overflow-hidden">
                     <div class="position-relative overflow-hidden">
+                      <p style="position: absolute; bottom: -10px;right: 20px;font-size: 30px;font-weight: 900;color: white;font-family: cursive;mix-blend-mode: color-dodge;">olx</p>
                       <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg border-1 border-dark" src="{{ product.images.first.image1.url }}" alt="" /></a>
                       <div class="bg-danger rounded text-white position-absolute end-0 top-0 m-2 pt-1 px-2">
                         <i class="fs-5 fas fa-heart"></i>
@@ -176,7 +177,7 @@
         <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
           <div class="row g-5 align-items-center">
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-              <img class="img-fluid rounded w-100" src="img/call-to-action.jpg" alt="" />
+              <img class="img-fluid rounded w-75" src="{% static 'img/contactus.png' %}" alt="" />
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
               <div class="mb-4">
@@ -204,7 +205,7 @@
         <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
           <div class="team-item rounded overflow-hidden">
             <div class="position-relative">
-              <img class="img-fluid" src="img/team-1.jpg" alt="" />
+              <img class="img-fluid" src="{% static 'img/team-1.jpg' %}" alt="" />
               <div class="position-absolute start-50 top-100 translate-middle d-flex align-items-center">
                 <a class="btn btn-square mx-1" href=""><i class="fab fa-facebook-f"></i></a>
                 <a class="btn btn-square mx-1" href=""><i class="fab fa-twitter"></i></a>

@@ -11,17 +11,6 @@ import string
 # Create your views here.
 
 
-# function to generate random string for my urls
-def generate_random_string(length=15):
-    random_uuid = uuid.uuid4().bytes
-    base_slug = base64.urlsafe_b64encode(random_uuid).decode('utf-8').rstrip('=')
-    additional_characters = string.ascii_letters + string.digits + "?&%-"
-    if length > len(base_slug):
-        extra = ''.join(random.choices(additional_characters, k=length - len(base_slug)))
-        return (base_slug + extra)[:length]
-    return base_slug[:length]
-
-
 # home page of the website
 def index(request):
     # Check if there are search parameters
@@ -31,7 +20,7 @@ def index(request):
             return render(request, "allProducts.html", {'products': search_results})
         else:
             return render(request, "allProducts.html")
-
+    
     # Default behavior for the index page
     products = Product.objects.order_by('?')[:8]
     for product in products:
@@ -73,7 +62,10 @@ def handle_user_auth(request):
 
             # Check if the username already exists
             if CustomUser.objects.filter(username=username).exists():
-                messages.error(request, "Username already taken.")  # Show error message
+                messages.warning(request, "Username already taken. Sign in again!!!")  # Show error message
+                return redirect(request.path)  # Redirect back to the same page
+            if CustomUser.objects.filter(phone_number=phone).exists():
+                messages.warning(request, "User form this number is already signed in.")  # Show error message
                 return redirect(request.path)  # Redirect back to the same page
 
             # Create a new user if validation passes
@@ -248,22 +240,71 @@ def prodbyCategory(request, category):
 
 # product details function
 def view_Product(request, slug):
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)  # call search function
+        if search_results.exists():  # Render search results only if they exist
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
+      # Handle user authentication (if required)
+    auth_response = handle_user_auth(request)  # call authentication function
+    if auth_response:
+        return auth_response  # Redirect if authentication actions occurred
+
+        
     product = Product.objects.get(slug=slug)
+    product.views += 1
+    product.save()
     product.images = ProductImages.objects.filter(product=product)
     context = {'product': product}
     return render(request, 'viewProduct.html', context)
 
 
 def profilePage(request):
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)  # call search function
+        if search_results.exists():  # Render search results only if they exist
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
+      # Handle user authentication (if required)
+    auth_response = handle_user_auth(request)  # call authentication function
+    if auth_response:
+        return auth_response  # Redirect if authentication actions occurred
+
     product_ads = Product.objects.filter(seller=request.user)
     for product in product_ads:
         # Fetch the associated images for each product
         product.images = ProductImages.objects.filter(product=product)
     context = {'products': product_ads}
-    print(product_ads)
     return render(request, 'profilePage.html',context)
 
 
+def adsPage(request):
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)  # call search function
+        if search_results.exists():  # Render search results only if they exist
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
+      # Handle user authentication (if required)
+    auth_response = handle_user_auth(request)  # call authentication function
+    if auth_response:
+        return auth_response  # Redirect if authentication actions occurred
+
+    product_ads = Product.objects.filter(seller=request.user)
+    for product in product_ads:
+        # Fetch the associated images for each product
+        product.images = ProductImages.objects.filter(product=product)
+    context = {'products': product_ads}
+    return render(request, 'adsPage.html',context)
+
+
+def deleteAd(request, slug):
+    product = Product.objects.get(slug=slug)
+    product.delete()
+    messages.success(request, "Product deleted successfully.")
+    return redirect('adspage') 
 
 
 

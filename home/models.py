@@ -46,6 +46,8 @@ class Product(models.Model):
         ('used', 'Used'),
     ]
     condition = models.CharField(max_length=20, choices=condition_choices, default='used')
+    views = models.IntegerField(default=0, null=True, blank=True)
+    likes = models.IntegerField(default=0, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -61,9 +63,9 @@ def user_directory_path(instance, filename):
 class ProductImages(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image1 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
-    image2 = models.ImageField(upload_to=user_directory_path)
-    image3 = models.ImageField(upload_to=user_directory_path)
-    image4 = models.ImageField(upload_to=user_directory_path)
+    image2 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    image3 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    image4 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):

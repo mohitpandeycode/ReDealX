@@ -293,11 +293,28 @@
 .navbar-light .navbar-nav .nav-link.active {
     color: var(--primary);
 }
+.smallnav{
+    display: none;
+}
 
 @media (max-width: 991.98px) {
     .nav-bar {
         margin: 0;
         padding: 0;
+    }
+    .smallnav{
+        display: block;
+    }
+    .grbtn {
+        position: fixed;
+        right: 30%;
+        bottom: 35px;
+        z-index: 99;
+        left: 30%;
+        border: 4px dashed #ff8b00;
+        text-align: center;
+        width: 150px;
+        margin: auto;
     }
 
     .navbar-light .navbar-nav .nav-link {
@@ -655,14 +672,6 @@ small {
         width: 100%;
     }
 
-    .grbtn {
-        position: fixed;
-        right: 30%;
-        bottom: 35px;
-        z-index: 99;
-        left: 30%;
-        border: 4px dashed #ff8b00;
-    }
 
     .catname h6 {
         font-size: 10px;
