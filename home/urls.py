@@ -11,6 +11,8 @@ urlpatterns = [
     path('profile?-page&view-details/', views.profilePage, name="profilePage"),
     path('your-posted?top?ads-view&details/', views.adsPage, name="adspage"),
     path('delete-post?select?ad-view&delete/<slug>/', views.deleteAd, name="deletead"),
+    path('settings/privacy/', views.settingsPage, name="settings"),
+    path('delete/useraccount/', views.deleteAccount, name="deleteaccount"),
    
 
 ]

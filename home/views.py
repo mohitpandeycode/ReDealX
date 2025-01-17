@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib.auth import authenticate, login, logout  
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User  
 from django.contrib import messages, auth
+from django.contrib.auth import update_session_auth_hash
 from django.db.models import Q
 import uuid
 import base64
@@ -307,9 +309,62 @@ def deleteAd(request, slug):
     return redirect('adspage') 
 
 
+def settingsPage(request):
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)  # call search function
+        if search_results.exists():  # Render search results only if they exist
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
+        
+    if request.method == "POST":
+        form_type = request.POST.get("form_type")
+        
+        if form_type == "changepass":
+            newpass = request.POST.get('newpass')
+            cpass = request.POST.get('cpass')
+            if newpass != cpass:
+                messages.error(request, "Passwords do not match.")
+                return redirect('settings')
+            
+            elif request.user.check_password(newpass):
+                messages.error(request, "password is same as old password.")
+                return redirect('settings')
+            else:
+                user = request.user  # Directly use the logged-in user
+                user.set_password(newpass)
+                user.save()
+                update_session_auth_hash(request, user)  # Keep the user logged in
+                messages.success(request, "Password changed successfully.")
+                return redirect('settings')
+            
+        elif form_type == "personaldetails":
+            fName = request.POST.get('fname')
+            lName = request.POST.get('lname')
+            phone = request.POST.get('phone')
+            address = request.POST.get('address')
+            email = request.POST.get('email')
+            user = request.user  # Get the currently logged-in user
+        
+        # Update user fields
+            user.first_name = fName
+            user.last_name = lName
+            user.phone_number = phone
+            user.email = email
+            user.address = address
+            user.save()  # Save changes
+        
+            messages.success(request, "Your details have been updated successfully!")
+            return redirect('settings')
+        
+    return render(request, 'settings.html')
 
 
-
+def deleteAccount(request):
+    user = request.user
+    user.delete()
+    messages.success(request, "Account deleted successfully.")
+    return redirect('/')
 
 
 

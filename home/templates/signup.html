@@ -32,14 +32,16 @@
                     <input type="tel" name="phone" class="form-control fmc" id="phoneNumber" placeholder="123-456-7890" required>
                 </div>
                 <!-- Password -->
-                <div class="mb-1">
+                <div class="mb-1" style="position: relative;">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" name="password" class="form-control fmc" id="password" placeholder="Enter password" required>
+                    <span  style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('password', this)"><i class="bi bi-eye"></i></span>
                 </div>
                 <!-- Confirm Password -->
-                <div class="mb-1">
+                <div class="mb-1" style="position: relative;">
                     <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" name="cpassword" class="form-control fmc" id="confirmPassword" placeholder="Re-enter password" required>
+                    <input type="password" name="cpassword" class="form-control fmc" id="cpas" placeholder="Re-enter password" required>
+                    <span  style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('cpas', this)"><i class="bi bi-eye"></i></span>
                 </div>
                 <!-- Submit Button -->
                 <div class="d-grid mt-3">
@@ -52,3 +54,19 @@
             </div>
         </div>
     </div>
+    <script>
+        function togglePasswordVisibility(fieldId, toggleElement) {
+            const passwordField = document.getElementById(fieldId)
+            const icon = toggleElement.querySelector('i')
+            if (passwordField.type === 'password') {
+              passwordField.type = 'text'
+              icon.classList.remove('bi-eye')
+              icon.classList.add('bi-eye-slash')
+            } else {
+              passwordField.type = 'password'
+              icon.classList.remove('bi-eye-slash')
+              icon.classList.add('bi-eye')
+            }
+          }
+          
+    </script>

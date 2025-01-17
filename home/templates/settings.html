@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Settings
+{% endblock %}
+
+{% block css %}
+  <style>
+    .password-toggle {
+      cursor: pointer;
+    }
+    .input-group-text {
+      background: none;
+      border-left: none;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <!-- Navbar Start -->
+  {% include 'navbar.html' %}
+  <!-- Navbar end -->
+
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-md-4 mb-3">
+        <div class="list-group">
+          <h4 class="mb-3">Privacy</h4>
+          <a id="changepass" class="list-group-item list-group-item-action active"><strong>Change Password</strong></a>
+          <p id="personaldetails" class="list-group-item list-group-item-action">
+            <strong>Personal Details</strong>
+          </p>
+          <p class="list-group-item list-group-item-action border text-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <strong>Delete Account</strong>
+          </p>
+          <!-- Button trigger modal -->
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content" style="width: 90%; margin: auto;">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Delete account</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  You are about to permanently <b>delete your account</b>. Are you sure about this?
+                </div>
+                <div class="modal-footer">
+                  <div class="row w-100">
+                    <div class="col-6">
+                      <a href="{% url 'deleteaccount' %}" class="btn btn-dark border border-dark w-100">Delete</a>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-light border border-dark w-100" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="formbody col-md-8 mt-4">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Change Password</h4><hr />
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="form_type" value="changepass" />
+              <div class="mb-3">
+                <label for="newPassword" class="form-label text-muted">New Password</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="newPassword" name="newpass" placeholder="Use minimum 6 characters, and at least one letter and one number" required />
+                  <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('newPassword', this)"><i class="bi bi-eye"></i></span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label text-muted">Confirm New Password</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="confirmPassword" name="cpass" required />
+                  <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('confirmPassword', this)"><i class="bi bi-eye"></i></span>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Change Password</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let changepassform = document.getElementById('changepass')
+    let personaldetailsform = document.getElementById('personaldetails')
+    let formbody = document.querySelector('.formbody')
+    
+    //eye feature to see the pass
+    function togglePasswordVisibility(fieldId, toggleElement) {
+      const passwordField = document.getElementById(fieldId)
+      const icon = toggleElement.querySelector('i')
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text'
+        icon.classList.remove('bi-eye')
+        icon.classList.add('bi-eye-slash')
+      } else {
+        passwordField.type = 'password'
+        icon.classList.remove('bi-eye-slash')
+        icon.classList.add('bi-eye')
+      }
+    }
+    
+    //changepass function
+    changepassform.addEventListener('click', () => {
+      changepassform.classList.add('active')
+      personaldetailsform.classList.remove('active')
+      formbody.innerHTML = `
+                                         <div class="card">
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Change Password</h4><hr>
+                                                    <form method="POST"> {% csrf_token %}
+                                                        <input type="hidden" name="form_type" value="changepass">
+                                                        <div class="mb-3">
+                                                            <label for="newPassword" class="form-label text-muted">New Password</label>
+                                                            <div class="input-group">
+                                                                <input type="password" class="form-control" id="newPas" name="newpass" placeholder="Use minimum 6 characters, and at least one letter and one number" required>
+                                                                <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('newPas', this)">
+                                                                    <i class="bi bi-eye"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="confirmPassword" class="form-label text-muted">Confirm New Password</label>
+                                                            <div class="input-group">
+                                                                <input type="password" class="form-control" id="confirmPas" name="cpass" required>
+                                                                <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('confirmPas', this)">
+                                                                    <i class="bi bi-eye"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        `
+    })
+    
+    //personal details function
+    personaldetails.addEventListener('click', () => {
+      personaldetailsform.classList.add('active')
+      changepass.classList.remove('active')
+      formbody.innerHTML = `
+                                      <div class="card">
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Change Personal Details</h4><hr>
+                                                    <form method="POST"> {% csrf_token %}
+                                                         <input type="hidden" name="form_type" value="personaldetails">
+                                                        <div class="row mb-2">
+                                                        <div class="col-md-6 mb-1">
+                                                            <label for="firstName" class="form-label text-muted">First Name</label>
+                                                            <input type="text" name="fname" class="form-control" value="{{user.first_name}}" id="fName">
+                                                        </div>
+                                                        <div class="col-md-6 mb-1">
+                                                            <label for="lastName" class="form-label text-muted">Last Name</label>
+                                                            <input type="text" name="lname" class="form-control" value="{{user.last_name}}" id="lName">
+                                                        </div>
+                                                        </div>
+
+                                                        <div class="row mb-2">
+                                                        <div class="col-md-6 mb-1">
+                                                         <label for="email" class="form-label text-muted">Email</label>
+                                                            <input type="email" class="form-control" id="email" value="{{user.email}}" name="email" >
+                                                        </div>
+                                                        <div class="col-md-6 mb-1">
+                                                          <label for="username" class="form-label text-muted">User Name</label>
+                                                            <input type="text" class="form-control" id="username" value="{{user.username}}" name="username" {% if user.username %} readonly {% endif %}>
+                                                        </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="phoneNumber" class="form-label text-muted">Phone Number</label>
+                                                            <input type="tel" class="form-control" id="phoneNumber" value="{{user.phone_number}}" name="phone">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="address" class="form-label text-muted">Address</label>
+                                                            <textarea class="form-control" id="address" name="address" rows="3">{{user.address}}</textarea>
+                                                        </div>
+                                                        <button id="changepd" type="submit" class="btn btn-primary">Save Changes</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                  `
+    })
+    
+  </script>
+{% endblock %}
