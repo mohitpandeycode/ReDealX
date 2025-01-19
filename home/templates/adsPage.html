@@ -15,14 +15,14 @@
   <!-- Navbar end -->
 
   {% if products %}
-    <div class="container adsbox mt-4">
+    <div class="container p-3 adsbox mt-4">
       <div class="totalads">
         <p class="mb-0 text-muted">
           <u>You Posted <b>{{ products.count }}</b> Ads</u>
         </p>
       </div>
       {% for product in products %}
-        <div class="card adcard mt-3 px-3 py-1">
+        <div class="card adcard mt-3 px-1 py-1">
           <div class="d-flex adsbox text-center align-items-center">
             <!-- Created At -->
             <div class="me-3">

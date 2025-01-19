@@ -15,7 +15,7 @@
   {% include 'navbar.html' %}
   <!-- Navbar end -->
 
-  <div class="container bootstrap snippets bootdey">
+  <div class="container p-3 bootstrap snippets bootdey">
     <div class="row">
       <div class="profile-nav col-md-3">
         <div class="panel">
@@ -40,13 +40,13 @@
           </div>
         </div>
       </div>
-      <div class="profile-info col-md-9">
+      <div class="profile-info p-e col-md-9">
         <div class="panel">
           <div class="bio-graph-heading">Your Posted Ads</div>
         </div>
         <div style="overflow: auto; height: 60vh;">
-          <div class="container-xxl py-5">
-            <div class="container">
+          <div class="container-xxl py-5 px-0">
+            <div class="container p-2">
               {% if products %}
                 <div class="totalads">
                   <p class="mb-0 text-dark">
@@ -58,7 +58,7 @@
                   <div id="tab-1" class="tab-pane fade show p-0 active">
                     <div class="row g-3">
                       {% for product in products %}
-                        <div class="col-lg-3 col-6 col-sm-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="col-lg-4 col-6 col-sm-6 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                           <div class="property-item rounded overflow-hidden">
                             <div class="position-relative overflow-hidden">
                               <p style="position: absolute; bottom: -10px;right: 20px;font-size: 30px;font-weight: 900;color: white;font-family: cursive;mix-blend-mode: color-dodge;">olx</p>

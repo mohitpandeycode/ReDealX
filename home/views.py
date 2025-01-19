@@ -6,10 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from django.contrib.auth import update_session_auth_hash
 from django.db.models import Q
-import uuid
-import base64
-import random
-import string
+
+
 # Create your views here.
 
 
@@ -103,6 +101,7 @@ def handle_user_auth(request):
 
 
 # logout function for the website
+@login_required
 def handle_logout(request):
     logout(request)
     messages.success(request, "You're logged out")
@@ -261,7 +260,8 @@ def view_Product(request, slug):
     context = {'product': product}
     return render(request, 'viewProduct.html', context)
 
-
+#profile page function
+@login_required
 def profilePage(request):
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)  # call search function
@@ -282,6 +282,8 @@ def profilePage(request):
     return render(request, 'profilePage.html',context)
 
 
+#ads page function
+@login_required
 def adsPage(request):
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)  # call search function
@@ -302,6 +304,8 @@ def adsPage(request):
     return render(request, 'adsPage.html',context)
 
 
+#delete ad function
+@login_required
 def deleteAd(request, slug):
     product = Product.objects.get(slug=slug)
     product.delete()
@@ -309,6 +313,8 @@ def deleteAd(request, slug):
     return redirect('adspage') 
 
 
+#settings page function
+@login_required
 def settingsPage(request):
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)  # call search function
@@ -360,6 +366,8 @@ def settingsPage(request):
     return render(request, 'settings.html')
 
 
+#delete account function
+@login_required
 def deleteAccount(request):
     user = request.user
     user.delete()

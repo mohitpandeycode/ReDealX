@@ -40,12 +40,39 @@
                   </li>
                   <hr class="m-0" />
                   <li>
-                    <a href="{% url 'logout' %}" class="dropdown-item text-secondary"><i class="fas fa-sign-out-alt pe-2"></i> Logout</a>
+                    <a class="dropdown-item text-secondary"data-bs-toggle="modal" data-bs-target="#logout"><i class="fas fa-sign-out-alt pe-2"></i> Logout</a>
                   </li>
                 </ul>
               </li>
             </ul>
           </div>
+          
+          <!--Model logout -->
+
+          <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logoutLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content" style="width: 90%; margin: auto;">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Logout account</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  You are about to <b>Logout your account</b>. Are you sure about this?
+                </div>
+                <div class="modal-footer">
+                  <div class="row w-100">
+                    <div class="col-6">
+                      <a href="{% url 'logout' %}" class="btn btn-dark border border-dark w-100">Log Out</a>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-light border border-dark w-100" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
 <!--navbar for mobile screens-->
           <div class=" nav-item navlink smallnav">
             <li>
