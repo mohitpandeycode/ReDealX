@@ -20,9 +20,15 @@
       <div class="profile-nav col-md-3">
         <div class="panel">
           <div class="user-heading round">
-            <a href="#"><img src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" /></a>
+            <a><img src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" /></a>
             <h1>{{ user.first_name }} {{ user.last_name }}</h1>
             <p>{{ user.email }}</p>
+            <div style="display: flex;justify-content: center;align-items: center;background-color:rgb(255, 255, 255);width: 80px;margin: auto;border-radius: 25px;padding: 1px 44px 1px 41px; color: black;">
+              {% if user.is_verified %}
+                <img width="24px" src="{% static 'img/approved.png' %}" alt="" />
+                <p class="p-0 m-0">Verified</p>
+              {% endif %}
+            </div>
           </div>
           <div class="details mt-3">
             <p class="text-muted-custom">

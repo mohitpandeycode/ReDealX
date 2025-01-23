@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block css %}
- <link rel="stylesheet" href="{% static 'Css/viewProduct.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/viewProduct.css' %}" />
 {% endblock %}
 
 {% block body %}
@@ -115,7 +115,15 @@
                         <div class="col-8">
                           <div class="px-3">
                             <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name }}</h3>
-                            <p class="text-muted small mb-2">Seller</p>
+                            
+                            {% if product.seller.is_verified %}
+                            <div style="display:flex;align-items:center">
+                              <img width="20px" src="{% static 'img/approved.png' %}" alt="varified" />
+                              <p class="p-0 m-0" style="font-size: 14px; font-weight:600">Verified Seller</p>
+                            </div>
+                            {% else %}
+                            <p style="font-size: 14px; font-weight:600" class="text-muted small mb-2">Seller</p>
+                            {% endif %}
                           </div>
                         </div>
                       </div>
