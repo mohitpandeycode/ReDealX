@@ -22,3 +22,8 @@ class ProductAdmin(admin.ModelAdmin):
 class ProductImagesAdmin(admin.ModelAdmin):
     list_display = ('product', 'image1', 'image2', 'image3', 'image4', 'user')
     search_fields = ('product', 'user')
+
+@admin.register(Repoerted_ad)
+class Repoerted_adAdmin(admin.ModelAdmin):
+    list_display = ('reporter','product','reason','description','created_at')
+    search_fields = ('reporter', 'product')

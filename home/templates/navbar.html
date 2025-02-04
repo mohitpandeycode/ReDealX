@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <div class="navbar-nav ms-auto">
         <a href="/" class="nav-item nav-link  {% if request.path == '/' %}active{% endif %}">Home</a>
-        <a href="{% url 'allprod' %}" class="nav-item nav-link {% if request.path == '/allproducts/' %}active{% endif %}">Products</a>
+        <a href="{% url 'allprod' %}" class="nav-item nav-link me-3 {% if request.path == '/allproducts/' %}active{% endif %}">Products</a>
 
         <!-- Button trigger signup login modal -->
         {% if not user.is_authenticated %}
@@ -19,9 +19,46 @@
           <a type="button" class="nav-item nav-link" data-bs-toggle="modal" data-bs-target="#login">Login</a>
         {% else %}
           <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav d-flex align-items-center">
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                <i class="far fa-heart icon navic p-2" style="border: none; font-size: 20px;"></i>
+                <i class="far fa-comment icon navic p-2" style="border: none; font-size: 20px;"></i>
+                <div class="nav-item dropdown">
+                  <i class="text-muted far fa-bell icon navic p-2 nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; font-size: 20px;margin-right: 0px;"><p class="badgeic"></p></i>
+                  <ul class="dropdown-menu notification-box">
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> <b>New message from Alice</b></a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> <b class="text-muted">Product ad is posted</b></a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> Password changed successfuly</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> Product add deleted</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> Adom replied to your chat</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> You're logged in successfully</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> Welcome to LoGO user</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item notify" href="#"><img style="opacity: 0.5;" class="mx-2" width="25px" height="28px" src="{% static 'img/notification.png' %}" alt="" /> Your account has created!</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
               <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img style="width: 40px; height: 40px; border-radius: 50%;" src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" /></button>
+                <button class="btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" />
+                  <i class="mx-1 fas fa-chevron-down"></i>
+                </button>
                 <ul class="dropdown-menu p-2 dropdown-menu-light">
                   <li>
                     <p class="fs-5 dropdown-item">
@@ -40,14 +77,14 @@
                   </li>
                   <hr class="m-0" />
                   <li>
-                    <a class="dropdown-item text-secondary"data-bs-toggle="modal" data-bs-target="#logout"><i class="fas fa-sign-out-alt pe-2"></i> Logout</a>
+                    <a class="dropdown-item text-secondary" data-bs-toggle="modal" data-bs-target="#logout"><i class="fas fa-sign-out-alt pe-2"></i> Logout</a>
                   </li>
                 </ul>
               </li>
             </ul>
           </div>
-          
-          <!--Model logout -->
+
+          <!-- Model logout -->
 
           <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logoutLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -73,14 +110,14 @@
             </div>
           </div>
 
-<!--navbar for mobile screens-->
-          <div class=" nav-item navlink smallnav">
+          <!-- navbar for mobile screens -->
+          <div class="nav-item navlink smallnav">
             <li>
               <p class="fs-5 mb-2 dropdown-item">
-              <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" /> <strong class="text-dark">{{ user.first_name }}</strong>
+                <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" /> <strong class="text-dark">{{ user.first_name }}</strong>
               </p>
             </li>
-            <hr class="m-1"/>
+            <hr class="m-1" />
             <li>
               <a class="dropdown-item" href="{% url 'profilePage' %}"><i class="fas fa-user pe-2"></i> View Profile</a>
             </li>
@@ -95,7 +132,6 @@
               <a href="{% url 'logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt pe-2"></i> Logout</a>
             </li>
           </div>
-
         {% endif %}
 
         <!-- login form Modal -->

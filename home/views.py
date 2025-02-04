@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from django.contrib.auth import authenticate, login, logout  
 from django.contrib.auth.decorators import login_required
@@ -22,7 +22,7 @@ def index(request):
             return render(request, "allProducts.html")
     
     # Default behavior for the index page
-    products = Product.objects.order_by('?')[:8]
+    products = Product.objects.order_by('?')[:16]
     for product in products:
         # Fetch the associated images for each product
         product.images = ProductImages.objects.filter(product=product)
@@ -259,6 +259,32 @@ def view_Product(request, slug):
     product.images = ProductImages.objects.filter(product=product)
     context = {'product': product}
     return render(request, 'viewProduct.html', context)
+
+
+# Report for a add 
+def reportad(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+
+    if request.method == "POST":
+        reason = request.POST.get("reason")
+        description = request.POST.get("description", "").strip()
+
+        if not reason:
+            messages.error(request, "Please select a reason")
+            return redirect('viewproduct',slug=slug)
+
+        Repoerted_ad.objects.create(
+            product=product,
+            reporter=request.user,
+            reason=reason,
+            description=description[:500]  # Limit to 500 characters
+        )
+
+        messages.success(request, "Your report has been submitted successfully.")
+        return redirect('viewproduct', slug=slug)
+    context = {'product': product}
+    return render(request, 'viewProduct.html', context)
+
 
 #profile page function
 @login_required

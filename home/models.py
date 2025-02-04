@@ -71,3 +71,19 @@ class ProductImages(models.Model):
     def __str__(self):
         return f"{self.product.title} image uploaded by {self.user.username}"
 
+class Repoerted_ad(models.Model):
+    REPORT_CHOICES = [
+        ('offensive', 'Offensive Content'),
+        ('fraud', 'Fraud'),
+        ('duplicate', 'Duplicate Ad'),
+        ('other', 'Other'),
+    ]
+
+    reporter = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # The user reporting the post
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reports")
+    reason = models.CharField(max_length=20, choices=REPORT_CHOICES)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report by {self.reporter.username} on {self.product.title}"

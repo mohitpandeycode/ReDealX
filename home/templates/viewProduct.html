@@ -67,7 +67,7 @@
 
   <!-- product details section start -->
   <div class="container p-2 mt-5">
-    <div class="card">
+    <div class="card mb-2">
       <!-- Header -->
       <div class="card-header bg-primary text-white text-center py-3">
         <h5 class="text-light mb-0">Product Details</h5>
@@ -115,14 +115,14 @@
                         <div class="col-8">
                           <div class="px-3">
                             <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name }}</h3>
-                            
+
                             {% if product.seller.is_verified %}
-                            <div style="display:flex;align-items:center">
-                              <img width="20px" src="{% static 'img/approved.png' %}" alt="varified" />
-                              <p class="p-0 m-0" style="font-size: 14px; font-weight:600">Verified Seller</p>
-                            </div>
+                              <div style="display:flex;align-items:center">
+                                <img width="20px" src="{% static 'img/approved.png' %}" alt="varified" />
+                                <p class="p-0 m-0" style="font-size: 14px; font-weight:600">Verified Seller</p>
+                              </div>
                             {% else %}
-                            <p style="font-size: 14px; font-weight:600" class="text-muted small mb-2">Seller</p>
+                              <p style="font-size: 14px; font-weight:600" class="text-muted small mb-2">Seller</p>
                             {% endif %}
                           </div>
                         </div>
@@ -143,7 +143,68 @@
         <!-- Call to Action -->
       {% endif %}
     </div>
-  </div>
+    <a data-bs-toggle="modal" data-bs-target="#report" style="font-size: 12px;" class="btn btn-dark px-2 py-2"><i class="fas fa-exclamation-triangle"></i> REPORT THIS AD</a>
 
+    <div class="modal fade" id="report" tabindex="-1" aria-labelledby="reportLabel" aria-hidden="true">
+      <form method="post" action="{% url 'reportad' product.slug %} ">
+        {% csrf_token %}
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="width: 90%; margin: auto;">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Report Ad</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- Radio Buttons -->
+              <div class="mb-3">
+                <label class="form-label">Select a reason:</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="offensive" id="offensive" required />
+                  <label class="text-dark form-check-label" for="offensive">Offensive Content</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="fraud" id="fraud" required />
+                  <label class="text-dark form-check-label" for="fraud">Fraud</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="duplicate" id="duplicate" required />
+                  <label class="text-dark form-check-label" for="duplicate">Duplicate Ad</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="other" id="other" required />
+                  <label class="text-dark form-check-label" for="other">Other</label>
+                </div>
+              </div>
+
+              <!-- Textarea with Character Counter -->
+              <div class="mb-2">
+                <label for="description" class="form-label">Additional Details (optional)</label>
+                <textarea class="form-control" name="description" id="description" rows="3" maxlength="500" oninput="updateCharCount()" placeholder="Provide additional details..."></textarea>
+                <p id="charCount" class="text-muted small">0/500 characters</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="row w-100">
+                <div class="col-12">
+                  <button type="submit" class="btn btn-dark border border-dark w-100">Send Complaint</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    function updateCharCount() {
+      let textarea = document.getElementById('description')
+      let charCount = textarea.value.length
+      document.getElementById('charCount').innerText = `${charCount}/500 characters`
+    
+      if (charCount > 500) {
+        textarea.value = textarea.value.substring(0, 500)
+      }
+    }
+  </script>
   <!-- product details section end -->
 {% endblock %}
