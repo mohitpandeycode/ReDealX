@@ -262,6 +262,7 @@ def view_Product(request, slug):
 
 
 # Report for a add 
+@login_required
 def reportad(request, slug):
     product = get_object_or_404(Product, slug=slug)
 
@@ -401,6 +402,25 @@ def deleteAccount(request):
     return redirect('/')
 
 
+#product seller profile
+def viewSeller(request, slug):
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)  # call search function
+        if search_results.exists():  # Render search results only if they exist
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
+      # Handle user authentication (if required)
+    auth_response = handle_user_auth(request)  # call authentication function
+    if auth_response:
+        return auth_response  # Redirect if authentication actions occurred
+    seller = CustomUser.objects.get(username = slug)
+    products = Product.objects.filter(seller=seller)
+    for product in products:
+        # Fetch the associated images for each product
+        product.images = ProductImages.objects.filter(product=product)
+    context = {'seller': seller,'products':products}
+    return render(request, 'sellerprofile.html',context)
 
 
 

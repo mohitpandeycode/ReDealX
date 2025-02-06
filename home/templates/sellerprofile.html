@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Your Profile
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'Css/profilePage.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <!-- Navbar Start -->
+  {% include 'navbar.html' %}
+  <!-- Navbar end -->
+
+  <div class="container p-3 bootstrap snippets bootdey">
+    <div class="row">
+      <div class="profile-nav col-md-3">
+        {% if seller %}
+          <div class="panel">
+            <div class="user-heading round">
+              <a><img src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" /></a>
+              <h1>{{ seller.first_name }} {{ seller.last_name }}</h1>
+              <div style="display: flex;justify-content: center;align-items: center;background-color:rgb(255, 255, 255);width: 80px;margin: auto;border-radius: 25px;padding: 1px 44px 1px 41px; color: black;">
+                {% if seller.is_verified %}
+                  <img width="24px" src="{% static 'img/approved.png' %}" alt="" />
+                  <p class="p-0 m-0">Verified</p>
+                {% else %}
+                  <p class="p-0 m-0">Seller</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="details mt-3">
+              <div class="text-muted-custom d-flex justify-content-between align-items-center">
+                <p>
+                <strong><i class="fas fa-user"></i> Username:</strong> {{ seller.username }}
+            </p>
+                <i class="fa-solid fa-user-plus icon" style="cursor: pointer;padding: 10px;"></i>
+              </div>
+              <p class="text-muted-custom">
+                <strong><i class="fas fa-calendar"></i> Member Since:</strong> {{ seller.created_at|timesince }}
+              </p>
+              <div class="text-dark d-flex justify-content align-items-center mb-2">
+                <strong><i class="fa-solid fa-users"></i> 0 </strong> &nbsp;<span style="font-size: 12px;"'"> Followers</span> 
+                <hr style="rotate: 90deg; height: 1px;width: 20px;">
+                <strong>0 </strong>&nbsp; <span style="font-size: 12px;"> Followings</span>
+              </div>
+            </div>
+            <div class="row g-3">
+              <button class="btn btn-dark col-md-12 p-2" id="shareButton"><i class="fa-solid fa-square-share-nodes"></i> Share profile</button>
+              <button class="btn btn-outline-dark col-md-12 p-2" data-bs-toggle="modal" data-bs-target="#reportuser"><i class="fa-regular fa-flag"></i> Report user</button>
+            </div>
+
+            <!-- Report user model -->
+
+            <div class="modal fade" id="reportuser" tabindex="-1" aria-labelledby="reportuserLabel" aria-hidden="true">
+              <form method="post">
+                {% csrf_token %}
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content" style="width: 90%; margin: auto;">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Report User</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Radio Buttons -->
+                      <div class="mb-3">
+                        <label class="form-label">Select a reason:</label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" value="Spam" id="Spam" required />
+                          <label class="text-dark form-check-label" for="Spam">Spam</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" value="fraud" id="fraud" required />
+                          <label class="text-dark form-check-label" for="fraud">Fraud</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" value="offensive" id="offensive" required />
+                          <label class="text-dark form-check-label" for="offensive">Offensive Content</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" value="Inappropriate" id="Inappropriate" required />
+                          <label class="text-dark form-check-label" for="Inappropriate">Inappropriate profile picture</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" value="insulting" id="insulting" required />
+                          <label class="text-dark form-check-label" for="insulting">This user is insulting me</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" value="other" id="other" required />
+                          <label class="text-dark form-check-label" for="other">Other</label>
+                        </div>
+                      </div>
+
+                      <!-- Textarea with Character Counter -->
+                      <div class="mb-2">
+                        <label for="description" class="form-label">Additional Details (optional)</label>
+                        <textarea class="form-control" name="description" id="description" rows="3" maxlength="500" oninput="updateCharCount()" placeholder="Provide additional details..."></textarea>
+                        <p id="charCount" class="text-muted small">0/500 characters</p>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <div class="row w-100">
+                        <div class="col-12">
+                          <button type="submit" class="btn btn-dark border border-dark w-100">Send Complaint</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      <div class="profile-info p-e col-md-9">
+        <div class="panel">
+          <div class="bio-graph-heading">Ads by {{ seller.first_name }}</div>
+        </div>
+        <div style="overflow: auto; height: 60vh;">
+          <div class="container-xxl py-5 px-0">
+            <div class="container p-2">
+              {% if products %}
+                <div class="totalads">
+                  <p class="mb-0 text-dark">
+                    <b>{{ products.count }}</b> ads user posted
+                  </p>
+                </div>
+                <hr class="mb-3 mt-0" />
+                <div class="tab-content">
+                  <div id="tab-1" class="tab-pane fade show p-0 active">
+                    <div class="row g-3">
+                      {% for product in products %}
+                        <div class="col-lg-4 col-6 col-sm-6 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+                          <div class="property-item rounded overflow-hidden">
+                            <div class="position-relative overflow-hidden">
+                              <p style="position: absolute; bottom: -10px;right: 20px;font-size: 30px;font-weight: 900;color: white;font-family: cursive;mix-blend-mode: color-dodge;">olx</p>
+                              <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg border-1 border-dark" src="{{ product.images.first.image1.url }}" onerror="src='{% static 'img/noimage.jpg' %}'" alt="" /></a>
+                            </div>
+                            <a href="{% url 'viewproduct' product.slug %}">
+                              <div class="p-2 pb-0">
+                                <div style="display: flex;justify-content: space-between; align-items: center;">
+                                  <h5 class="priceelemnt text-primary mb-1">₹ {{ product.price }}</h5>
+                                  <p class="categoryp px-2 py-1 rounded mb-1">{{ product.category|truncatechars:8 }}</p>
+                                </div>
+                                <a class="titleitem d-block h6 mb-1" href="{% url 'viewproduct' product.slug %}">{{ product.title|slice:':30' }}</a>
+                                <p class="descitem">{{ product.description|slice:':45' }}...</p>
+                              </div>
+                            </a>
+                            <div class="d-flex border-top py-2">
+                              <small class="flex-fill text-center border-end"><i class="fa fa-map-marker-alt text-primary mx-1"></i>{{ product.location|slice:':20' }}...</small>
+                              <small class="flex-fill text-center"><i class="fa fa-clock text-primary mx-1"></i>{{ product.created_at|date:'d M Y' }}</small>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              {% else %}
+                <section class="py-1 py-md-2 min-vh-75 d-flex justify-content-center align-items-center">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="text-center">
+                          <h2 class="d-flex justify-content-center align-items-center gap-2 mb-4">
+                            <span class="display-1 fw-bold">O</span>
+                            <i class="far fa-frown text-danger display-4"></i>
+                            <span class="display-1 fw-bold bsb-flip-h">P</span>
+                            <span class="display-1 fw-bold bsb-flip-h">P</span>
+                            <span class="display-1 fw-bold bsb-flip-h">S</span>
+                          </h2>
+                          <h3 class="h2 mb-2">{{ seller.first_name }} haven't listed anything yet</h3>
+                          <p class="mb-5">We will notify once user post something.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

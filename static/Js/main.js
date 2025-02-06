@@ -97,3 +97,39 @@ window.onload = function() {
     setInterval(changePlaceholder, 1500);
 };
 
+//share button funnction
+
+document.getElementById('shareButton').addEventListener('click', function () {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: document.title,
+          text: 'Check out this page!',
+          url: window.location.href
+        })
+        .then(() => {
+          console.log('Thanks for sharing!')
+        })
+        .catch(console.error)
+    } else {
+      // Fallback: Copy to Clipboard
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          alert('Link copied to clipboard!')
+        })
+        .catch(console.error)
+    }
+  })
+
+
+//   check char is less the 500 for text box
+function updateCharCount() {
+    let textarea = document.getElementById('description')
+    let charCount = textarea.value.length
+    document.getElementById('charCount').innerText = `${charCount}/500 characters`
+  
+    if (charCount > 500) {
+      textarea.value = textarea.value.substring(0, 500)
+    }
+  }

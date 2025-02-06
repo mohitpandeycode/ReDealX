@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-  View-Product
+  {{ product.title }}-View Product
 {% endblock %}
 
 {% block css %}
@@ -81,7 +81,14 @@
             <!-- Product Details Section -->
             <div class="col-12 col-md-6">
               <div style="overflow: auto; height: 500px;" class="p-3 border-end">
-                <h2 class="text-dark mb-3 fw-bold">₹ {{ product.price }}</h2>
+                <div class="d-flex justify-content-between">
+                  <h2 class="text-dark mb-3 fw-bold">₹ {{ product.price }}</h2>
+                  <hr style="height: 2px;width: 40px;rotate: 90deg;" />
+                  <div style="cursor: pointer;font-size: 22px;color:black ;">
+                    <i class="fa-regular navic p-2 me-2 fa-share-from-square" id="shareButton"></i>
+                    <i class="navic p-2 far fa-heart"></i>
+                  </div>
+                </div>
                 <h4 class="text-uppercase fw-bold text-dark">{{ product.title }}</h4>
                 <h5 class="text-muted-custom mb-2">Brand: {{ product.brand }}</h5>
                 <p class="text-muted-custom">
@@ -104,29 +111,31 @@
                 <div class="row d-flex justify-content-center">
                   <div class="col-12" style="overflow: auto; height: 450px;">
                     <div class="card user-card-full">
-                      <div class="row align-items-center g-0">
-                        <!-- Profile Picture -->
-                        <div class="col-4 bg-c-lite-green user-profile d-flex justify-content-center align-items-center">
-                          <div style="width: 100px; height: 100px;" class="text-center text-white">
-                            <img src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" class="img-fluid img-radius" alt="User Profile Image" />
+                      <a class="text-dark" href="{% url 'viewSeller' product.seller.username %}">
+                        <div class="row align-items-center g-0">
+                          <!-- Profile Picture -->
+                          <div class="col-4 bg-c-lite-green user-profile d-flex justify-content-center align-items-center">
+                            <div style="width: 100px; height: 100px;" class="text-center text-white">
+                              <img src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" class="img-fluid img-radius" alt="User Profile Image" />
+                            </div>
                           </div>
-                        </div>
-                        <!-- User Information -->
-                        <div class="col-8">
-                          <div class="px-3">
-                            <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name }}</h3>
+                          <!-- User Information -->
+                          <div class="col-8">
+                            <div class="px-3">
+                              <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name }}</h3>
 
-                            {% if product.seller.is_verified %}
-                              <div style="display:flex;align-items:center">
-                                <img width="20px" src="{% static 'img/approved.png' %}" alt="varified" />
-                                <p class="p-0 m-0" style="font-size: 14px; font-weight:600">Verified Seller</p>
-                              </div>
-                            {% else %}
-                              <p style="font-size: 14px; font-weight:600" class="text-muted small mb-2">Seller</p>
-                            {% endif %}
+                              {% if product.seller.is_verified %}
+                                <div style="display:flex;align-items:center">
+                                  <img width="20px" src="{% static 'img/approved.png' %}" alt="varified" />
+                                  <p class="p-0 m-0" style="font-size: 14px; font-weight:600">Verified Seller</p>
+                                </div>
+                              {% else %}
+                                <p style="font-size: 14px; font-weight:600" class="text-muted small mb-2">Seller</p>
+                              {% endif %}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </a>
                     </div>
                     <div class="text-center my-3 d-flex justify-content-center gap-4">
                       <a href="tel:{{ product.seller.phone_number }}" class="btn btn-dark px-4 py-2"><i class="fas fa-phone-alt"></i> Call</a>
@@ -143,12 +152,14 @@
         <!-- Call to Action -->
       {% endif %}
     </div>
-    <a data-bs-toggle="modal" data-bs-target="#report" style="font-size: 12px;" class="btn btn-dark px-2 py-2"><i class="fas fa-exclamation-triangle"></i> REPORT THIS AD</a>
+    {% if user.is_authenticated %}
+      <a data-bs-toggle="modal" data-bs-target="#report" style="font-size: 12px;" class="btn btn-dark px-2 py-2"><i class="fas fa-exclamation-triangle"></i> REPORT THIS AD</a>
+    {% endif %}
 
     <div class="modal fade" id="report" tabindex="-1" aria-labelledby="reportLabel" aria-hidden="true">
       <form method="post" action="{% url 'reportad' product.slug %} ">
         {% csrf_token %}
-      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content" style="width: 90%; margin: auto;">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">Report Ad</h1>
@@ -205,6 +216,29 @@
         textarea.value = textarea.value.substring(0, 500)
       }
     }
+    
+    document.getElementById('shareButton').addEventListener('click', function () {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: document.title,
+            text: 'Check out this page!',
+            url: window.location.href
+          })
+          .then(() => {
+            console.log('Thanks for sharing!')
+          })
+          .catch(console.error)
+      } else {
+        // Fallback: Copy to Clipboard
+        navigator.clipboard
+          .writeText(window.location.href)
+          .then(() => {
+            alert('Link copied to clipboard!')
+          })
+          .catch(console.error)
+      }
+    })
   </script>
   <!-- product details section end -->
 {% endblock %}
