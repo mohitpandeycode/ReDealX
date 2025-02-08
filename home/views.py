@@ -6,6 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from django.contrib.auth import update_session_auth_hash
 from django.db.models import Q
+from django.utils.timezone import now
+from datetime import timedelta
+import random
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -111,26 +115,48 @@ def handle_logout(request):
 
 # function for all products page
 def allproducts(request):
+    # Handle search query
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)
-        if search_results.exists():  # Render search results only if they exist
+        if search_results.exists():
             return render(request, "allProducts.html", {'products': search_results})
         else:
             return render(request, "allProducts.html")
-        
-    products = Product.objects.all()  # Fetch all products
-    for product in products:
-        # Fetch the associated images for each product
-        product.images = ProductImages.objects.filter(product=product)
-    
-    context = {'products': products}
 
-    # check login signup in this page also by using auth function
+    # Fetch all products sorted by newest first
+    all_products = Product.objects.all().order_by('-created_at')
+
+    # Get products from the last 2 months
+    two_months_ago = now() - timedelta(days=60)
+    recent_products = list(Product.objects.filter(created_at__gte=two_months_ago))
+
+    # Shuffle and select only 50
+    random.shuffle(recent_products)
+    first_50_products = recent_products[:50]
+
+    # Remaining products sorted by newest first (excluding the first 50)
+    remaining_products = all_products.exclude(id__in=[p.id for p in first_50_products])
+
+    # Combine first 50 random + remaining sorted
+    products = first_50_products + list(remaining_products)
+
+    # Attach images to each product
+    for product in products:
+        product.images = ProductImages.objects.filter(product=product)
+
+    # Pagination (10 products per page)
+    paginator = Paginator(products, 48)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'products': page_obj}
+
+    # Authentication check
     auth_response = handle_user_auth(request)
     if auth_response:
-        return auth_response  # Redirect if authentication actions occurred
-    return render(request, 'allProducts.html', context)
+        return auth_response
 
+    return render(request, 'allProducts.html', context)
 
 
 #function for selling items form

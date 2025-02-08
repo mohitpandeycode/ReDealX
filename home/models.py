@@ -27,6 +27,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+def user_directory_path(instance, filename):
+    return f'product_images/{instance.user.username}/{filename}'
 
 
 # Product Model
@@ -57,8 +61,6 @@ class Product(models.Model):
             self.slug = str(uuid.uuid4())[:8]  # Shorten the UUID for a compact slug
         super().save(*args, **kwargs)
 
-def user_directory_path(instance, filename):
-    return f'product_images/{instance.user.username}/{filename}'
 
 class ProductImages(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

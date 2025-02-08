@@ -38,18 +38,10 @@
             <div class="row g-3">
               {% for product in products %}
                 <div class="col-lg-3 col-6 col-sm-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
-                  <div class="property-item rounded overflow-hidden">
+                  <div class="property-item rounded overflow-hidden" style="border:1px solid #80808075">
                     <div class="position-relative overflow-hidden">
-                      <p style="position: absolute;
-    bottom: -10px;
-    right: 20px;
-    font-size: 30px;
-    font-weight: 900;
-    color: white;
-    font-family: cursive;
-    mix-blend-mode: color-dodge;
-">olx</p>
-                      <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg border-1 border-dark" src="{{ product.images.first.image1.url }}" alt="" /></a>
+                      <p style="position: absolute;bottom: -10px;right: 20px;font-size: 30px;font-weight: 900;color: white;font-family: cursive;mix-blend-mode: color-dodge;">olx</p>
+                      <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg" src="{{ product.images.first.image1.url }}" alt="" /></a>
                       <div class="bg-danger rounded text-white position-absolute end-0 top-0 m-2 pt-1 px-2">
                         <i class="fs-5 fas fa-heart"></i>
                       </div>
@@ -71,6 +63,32 @@
                   </div>
                 </div>
               {% endfor %}
+            </div>
+            <!-- Pagination -->
+          
+            <div class="wrapper">
+              <div aria-label="Page navigation example">
+                <ul class="pagination">
+                  <li class="page-item">
+                    {% if products.has_previous %}
+                    <a href="?page=1" class="page-link"><i class="fa-solid fa-angles-left"></i></a>
+                  {% endif %}
+                  </li>
+                  <li class="page-item">
+                    {% if products.has_previous %}
+                    <a href="?page={{ products.previous_page_number }}" class="page-link"><i class="fa-solid fa-chevron-left"></i> </a>
+                  {% endif %}
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">Page {{ products.number }}</a>
+                  </li>
+                  <li class="page-item">
+                    {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}" class="page-link"> <i class="fa-solid fa-chevron-right"></i></a>
+              {% endif %}
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
