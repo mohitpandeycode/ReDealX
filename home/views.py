@@ -149,7 +149,7 @@ def allproducts(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context = {'products': page_obj}
+    context = {'products': page_obj, 'allprod':all_products}
 
     # Authentication check
     auth_response = handle_user_auth(request)

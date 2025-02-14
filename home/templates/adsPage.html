@@ -34,7 +34,7 @@
             <div class="adsinfo text-center">
               <div>
                 <div class="me-3">
-                  <img src="{{ product.images.first.image1.url }}" alt="Product Image" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;" />
+                  <img src="{{ product.images.first.image1.url }}" alt="Product Image" onerror="src='{% static "img/onerrorimage.webp" %}'" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;" />
                 </div>
               </div>
 

@@ -36,6 +36,7 @@
             <img src="{{ image.image1.url }}" class="d-block crouselimage" alt="..." />
           </div>
         {% endif %}
+
         {% if image.image2 %}
           <div class="carousel-item">
             <img src="{{ image.image2.url }}" class="d-block crouselimage" alt="..." />
@@ -91,6 +92,7 @@
                 </div>
                 <h4 class="text-uppercase fw-bold text-dark">{{ product.title }}</h4>
                 <h5 class="text-muted-custom mb-2">Brand: {{ product.brand }}</h5>
+                <h5 class="text-muted-custom mb-2">Condition: {{ product.condition }}</h5>
                 <p class="text-muted-custom">
                   <strong>Category:</strong> {{ product.category }}
                 </p>
