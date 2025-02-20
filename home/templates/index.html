@@ -13,7 +13,7 @@ LOGO - Free classifieds in India, Buy and Sell for free anywhere in India with L
   <div class="container-fluid d-lg-block header mt-1 bg-white p-">
     <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
       <div class="col-md-6 p-2 p-lg-5 mt-lg-5">
-        <h1 class="display-6 animated fadeIn mb-4">Your One-Stop Marketplace for <span class="text-primary">Affordable pre-owned</span> Mobiles, Electronics, and More!</h1>
+        <h1 style="color: black;" class="display-6 animated fadeIn mb-4">Your One-Stop Marketplace for <span class="text-primary">Affordable pre-owned</span> Mobiles, Electronics, and More!</h1>
         <p class="animated fadeIn mb-4 pb-2">
           Discover affordable, pre-owned mobiles, electronics, furniture, appliances, property, and more! Buy and sell with ease in a trusted marketplace, where you’ll find great deals on quality items in excellent condition. Your perfect product is just a click away <i class="far fa-hand-pointer"></i>
         </p>
@@ -88,7 +88,7 @@ LOGO - Free classifieds in India, Buy and Sell for free anywhere in India with L
   <hr />
   <!-- Category End -->
 
-  <!-- Property List Start -->
+  <!-- Product List Start -->
   <div class="container-xxl py-5">
     <div class="container p-3">
       <div class="row g-0 gx-0 align-items-end">
@@ -108,9 +108,17 @@ LOGO - Free classifieds in India, Buy and Sell for free anywhere in India with L
                     <div class="position-relative overflow-hidden">
                       <p style="position: absolute; bottom: -10px;right: 20px;font-size: 30px;font-weight: 900;color: white;font-family: cursive;mix-blend-mode: color-dodge;">olx</p>
                       <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg" src="{{ product.images.first.image1.url }}" alt="Product Image" onerror="src='{% static "img/onerrorimage.webp" %}'" /></a>
-                      <div class="bg-danger rounded text-white position-absolute end-0 top-0 m-2 pt-1 px-2">
+                      {% if user.is_authenticated %}   
+                      {% if product.id in user_wishlist %}
+                      <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
+                        <i class="fs-5 fas fa-heart text-danger"></i>
+                      </div>
+                      {% else %}
+                      <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
                         <i class="fs-5 fas fa-heart"></i>
                       </div>
+                      {% endif %}               
+                      {% endif %}
                       <div class="bg-warning rounded-top text-dark position-absolute start-0 small bottom-0 mx-2 pt-1 px-1">Featured</div>
                     </div>
                     <a href="{% url 'viewproduct' product.slug %}">
@@ -191,4 +199,39 @@ LOGO - Free classifieds in India, Buy and Sell for free anywhere in India with L
     </div>
   </div>
   <!-- Call to Action End -->
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>  
+      $(document).ready(function () {
+        $('.wishlist-btn').click(function () {
+          let btn = $(this);
+          let productId = btn.data('product-id');
+      
+          $.ajax({
+            type: 'POST',
+            url: '/toggle-wishlist/',
+            data: {
+              product_id: productId,
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+              if (response.status === 'added') {
+                btn.find('i').addClass('text-danger'); // Highlight icon
+      
+                // Add badge dynamically to the wishlist element
+                let wishlistElement = document.querySelector('.wishlisst');
+                if (wishlistElement) {
+                  wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;""></p>';
+                }
+              } else if (response.status === 'removed') {
+                btn.find('i').removeClass('text-danger'); // Remove highlight
+              }
+            },
+            error: function () {
+              alert('Something went wrong. Try again.');
+            }
+          });
+        });
+      });
+    </script>
 {% endblock %}

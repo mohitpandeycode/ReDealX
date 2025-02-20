@@ -27,3 +27,9 @@ class ProductImagesAdmin(admin.ModelAdmin):
 class Repoerted_adAdmin(admin.ModelAdmin):
     list_display = ('reporter','product','reason','description','created_at')
     search_fields = ('reporter', 'product')
+
+
+@admin.register(WishlistItem)
+class WishlistItemAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'created_at')
+    search_fields = ('reporter', 'product')

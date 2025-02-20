@@ -85,10 +85,20 @@
                 <div class="d-flex justify-content-between">
                   <h2 class="text-dark mb-3 fw-bold">₹ {{ product.price }}</h2>
                   <hr style="height: 2px;width: 40px;rotate: 90deg;" />
-                  <div style="cursor: pointer;font-size: 22px;color:black ;">
-                    <i class="fa-regular navic p-2 me-2 fa-share-from-square" id="shareButton"></i>
-                    <i class="navic p-2 far fa-heart"></i>
+                  <div style="cursor: pointer;font-size: 22px;color:black ;" class="d-flex">
+                    <div>
+                      <i class="fa-regular navic p-2 me-2 fa-share-from-square" id="shareButton"></i>
+                    </div>
+                      
+                    {% if user.is_authenticated %}                  
+                        
+                    <div class=" wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
+                      <i class="navic p-2 far fa-heart {% if product in user_wishlist %} text-danger {% endif %}"></i>
+                    </div>
+
+                    {% endif %}
                   </div>
+               
                 </div>
                 <h4 class="text-uppercase fw-bold text-dark">{{ product.title }}</h4>
                 <h5 class="text-muted-custom mb-2">Brand: {{ product.brand }}</h5>
@@ -208,6 +218,41 @@
       </form>
     </div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>  
+      $(document).ready(function () {
+        $('.wishlist-btn').click(function () {
+          let btn = $(this);
+          let productId = btn.data('product-id');
+      
+          $.ajax({
+            type: 'POST',
+            url: '/toggle-wishlist/',
+            data: {
+              product_id: productId,
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+              if (response.status === 'added') {
+                btn.find('i').addClass('text-danger'); // Highlight icon
+      
+                // Add badge dynamically to the wishlist element
+                let wishlistElement = document.querySelector('.wishlisst');
+                if (wishlistElement) {
+                  wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;""></p>';
+                }
+              } else if (response.status === 'removed') {
+                btn.find('i').removeClass('text-danger'); // Remove highlight
+              }
+            },
+            error: function () {
+              alert('Something went wrong. Try again.');
+            }
+          });
+        });
+      });
+    </script>
   <script>
     function updateCharCount() {
       let textarea = document.getElementById('description')
@@ -241,6 +286,8 @@
           .catch(console.error)
       }
     })
+
+
   </script>
   <!-- product details section end -->
 {% endblock %}

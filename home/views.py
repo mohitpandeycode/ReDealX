@@ -3,6 +3,8 @@ from .models import *
 from django.contrib.auth import authenticate, login, logout  
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User  
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.contrib import messages, auth
 from django.contrib.auth import update_session_auth_hash
 from django.db.models import Q
@@ -36,9 +38,12 @@ def index(request):
     auth_response = handle_user_auth(request)  # call authentication function
     if auth_response:
         return auth_response  # Redirect if authentication actions occurred
+    user_wishlist = []
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
 
     # Render the index page
-    context = {'products': products, 'categories': categories}
+    context = {'products': products, 'categories': categories,'user_wishlist': list(user_wishlist)}
     return render(request, 'index.html', context)
 
 
@@ -148,8 +153,13 @@ def allproducts(request):
     paginator = Paginator(products, 48)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    user_wishlist = []
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
 
-    context = {'products': page_obj, 'allprod':all_products}
+
+
+    context = {'products': page_obj, 'allprod':all_products,'user_wishlist': list(user_wishlist)}
 
     # Authentication check
     auth_response = handle_user_auth(request)
@@ -449,9 +459,36 @@ def viewSeller(request, slug):
     return render(request, 'sellerprofile.html',context)
 
 
+#Wishlist for user
+@login_required
+def wishlist(request):
+    products = WishlistItem.objects.filter(user=request.user).order_by('-created_at')
+    
+    for product in products:
+        # Fetch images for the specific product
+        product.images = ProductImages.objects.filter(product=product.product)
+    
+    context = {'products': products}
+    return render(request, 'wishlist.html', context)
 
 
 
+@login_required
+def toggle_wishlist(request):
+    """Handles wishlist toggle (add/remove) via AJAX."""
+    if request.method == "POST":
+        product_id = request.POST.get("product_id")
+        product = get_object_or_404(Product, id=product_id)
+        wishlist_item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
+
+        if not created:
+            # Product already in wishlist, so remove it
+            wishlist_item.delete()
+            return JsonResponse({"status": "removed", "message": "Removed from Wishlist"})
+        else:
+            return JsonResponse({"status": "added", "message": "Added to Wishlist"})
+    
+    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
 
 
