@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib import messages, auth
 from django.contrib.auth import update_session_auth_hash
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.utils.timezone import now
 from datetime import timedelta
@@ -39,11 +40,12 @@ def index(request):
     if auth_response:
         return auth_response  # Redirect if authentication actions occurred
     user_wishlist = []
+    notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-
+        notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
     # Render the index page
-    context = {'products': products, 'categories': categories,'user_wishlist': list(user_wishlist)}
+    context = {'products': products, 'categories': categories,'user_wishlist': list(user_wishlist),'notifications':notifications}
     return render(request, 'index.html', context)
 
 
@@ -154,12 +156,13 @@ def allproducts(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     user_wishlist = []
+    notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
 
 
-
-    context = {'products': page_obj, 'allprod':all_products,'user_wishlist': list(user_wishlist)}
+    context = {'products': page_obj, 'allprod':all_products,'user_wishlist': list(user_wishlist),'notifications':notifications}
 
     # Authentication check
     auth_response = handle_user_auth(request)
@@ -472,7 +475,7 @@ def wishlist(request):
     return render(request, 'wishlist.html', context)
 
 
-
+#wishlist items selection
 @login_required
 def toggle_wishlist(request):
     """Handles wishlist toggle (add/remove) via AJAX."""
@@ -492,7 +495,21 @@ def toggle_wishlist(request):
 
 
 
+@login_required
+@csrf_exempt  # Allows AJAX POST requests
+def mark_notification_as_read(request):
+    if request.method == "POST":
+        notification_id = request.POST.get("notification_id")
 
+        try:
+            notification = Notification.objects.get(id=notification_id, user=request.user)
+            notification.is_read = True
+            notification.save()
+            return JsonResponse({"status": "success"})
+        except Notification.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Notification not found."}, status=404)
+
+    return JsonResponse({"status": "error", "message": "Invalid request."}, status=400)
 
 
 

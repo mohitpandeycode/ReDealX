@@ -5,10 +5,12 @@
     --light: #EFFDF5;
     --dark: #0E2E50;
 }
+
 /* Scrollbar width */
 ::-webkit-scrollbar {
     width: 5px;
 }
+
 
 /* Scrollbar track (background) */
 ::-webkit-scrollbar-track {
@@ -26,6 +28,10 @@
     background: rgb(190, 190, 190);
 }
 
+* {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif;
+
+}
 
 .gradient-btn {
     display: flex;
@@ -186,7 +192,7 @@
 }
 
 .form-label {
-    font-weight: bold;
+    font-weight: 600;
     color: black;
 }
 
@@ -298,6 +304,7 @@
 .navic:hover {
     background-color: #c8f8f6;
 }
+
 /* Ensure modal is always on top */
 .modal {
     z-index: 9999 !important;
@@ -307,7 +314,7 @@
 /* Ensure modal backdrop is also on top */
 .modal-backdrop {
     z-index: 9998 !important;
-    
+
 }
 
 
@@ -322,7 +329,7 @@
 }
 
 .notification-box {
-    width:300px ;
+    width: 300px;
     max-height: 220px;
     overflow: auto;
     overflow-x: hidden;

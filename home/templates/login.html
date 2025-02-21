@@ -1,7 +1,10 @@
 {% load static %}
 <div class="container">
+  <div class="p-2 me-0 text-center">
+    <img class="img-fluid" src="{% static 'img/logo.png' %}" alt="Icon" style="width: 40px; height: 35px;" />
+  </div>
   <div class="form-container">
-    <div class="form-title">Welcome to Logo</div>
+    <div class="form-title">Welcome to RedealX</div>
     <form method="post">
       <!-- Username -->
       {% csrf_token %}
@@ -27,7 +30,7 @@
         <img class="googlepic me-2" src="{% static 'img/google.png' %}" alt="" />
         <div>Continue with Google</div>
       </div>
-      Not on logo yet? <a href="" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#SignUp">Sign up</a>
+      Not on ReDealX yet? <a href="" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#SignUp">Sign up</a>
     </div>
   </div>
 </div>

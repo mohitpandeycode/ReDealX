@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-LOGO - Free classifieds in India, Buy and Sell for free anywhere in India with LOGO Online Classified Advertising
+ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India with ReDealX Online Classified Advertising
 {% endblock %}
 
 {% block body %}
@@ -106,7 +106,7 @@ LOGO - Free classifieds in India, Buy and Sell for free anywhere in India with L
                 <div class="col-lg-3 col-6 col-sm-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                   <div class="property-item rounded overflow-hidden" Style="border:1px solid #80808075">
                     <div class="position-relative overflow-hidden">
-                      <p style="position: absolute; bottom: -10px;right: 20px;font-size: 30px;font-weight: 900;color: white;font-family: cursive;mix-blend-mode: color-dodge;">olx</p>
+                      <p style="position: absolute; bottom: -10px;right: 20px;font-size: 15px;font-weight: 900;color: white;font-family: cursive;  filter: opacity(0.8);">RDL</p>
                       <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg" src="{{ product.images.first.image1.url }}" alt="Product Image" onerror="src='{% static "img/onerrorimage.webp" %}'" /></a>
                       {% if user.is_authenticated %}   
                       {% if product.id in user_wishlist %}
@@ -161,7 +161,7 @@ LOGO - Free classifieds in India, Buy and Sell for free anywhere in India with L
         </div>
         <div class="col-lg-7 wow fadeIn" data-wow-delay="0.5s">
           <h1 class="mb-4">#1 Place To Find The Perfect Product Where Quality Meets Affordability</h1>
-          <p class="mb-4">At [Your Platform], we offer an easy way to find high-quality second-hand goods at unbeatable prices. With a wide variety of items across categories, you'll always find great deals that fit your budget. Shop confidently with secure transactions and help reduce waste by buying pre-loved products.</p>
+          <p class="mb-4">At ReDealX, we offer an easy way to find high-quality second-hand goods at unbeatable prices. With a wide variety of items across categories, you'll always find great deals that fit your budget. Shop confidently with secure transactions and help reduce waste by buying pre-loved products.</p>
           <p>
             <i class="fa fa-check text-primary me-2"></i>Wide selection of products across various categories
           </p>

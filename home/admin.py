@@ -32,4 +32,11 @@ class Repoerted_adAdmin(admin.ModelAdmin):
 @admin.register(WishlistItem)
 class WishlistItemAdmin(admin.ModelAdmin):
     list_display = ('user', 'product', 'created_at')
-    search_fields = ('reporter', 'product')
+    search_fields = ('user', 'product')
+
+
+@admin.register(Notification)
+class NotificationtemAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'created_at')
+    search_fields = ('user', 'message')
+

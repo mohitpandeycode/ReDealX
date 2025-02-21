@@ -8,6 +8,7 @@ urlpatterns = [
     path('sell-item/', views.sellItem, name="sellitem"),
     path('wishlist/', views.wishlist, name="wishlist"),
     path('toggle-wishlist/', views.toggle_wishlist, name='toggle_wishlist'),
+    path("mark-notification-read/", views.mark_notification_as_read, name="mark_notification_as_read"),
     path('product-by-category/<category>/', views.prodbyCategory, name="categoryproduct"),
     path('product-details/<slug>/', views.view_Product, name="viewproduct"),
     path('product-Seller/<slug>/', views.viewSeller, name="viewSeller"),

@@ -36,7 +36,7 @@
                         <div class="col-lg-3 col-6 col-sm-6 col-md-4" data-wow-delay="0.1s">
                           <div class="property-item rounded overflow-hidden">
                             <div class="position-relative overflow-hidden">
-                              <p style="position: absolute; bottom: -10px;right: 20px;font-size: 30px;font-weight: 900;color: white;font-family: cursive;mix-blend-mode: color-dodge;">olx</p>
+                              <p style="position: absolute; bottom: -10px;right: 20px;font-size: 15px;font-weight: 900;color: white;font-family: cursive;  filter: opacity(0.8);">RDL</p>
                               <a href="{% url 'viewproduct' product.product.slug %}"><img class="img-thumbnail prodimg border-1 border-dark" src="{{ product.images.first.image1.url }}" alt="Product Image" onerror="src='{% static 'img/onerrorimage.webp' %}'" /></a>
                               <div style="cursor: pointer;" class="bg-light rounded text-white position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.product.id }}">
                                 <i class="fs-5 fas fa-heart text-danger"></i>
