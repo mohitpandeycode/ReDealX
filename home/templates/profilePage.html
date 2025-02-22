@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}
   Your Profile
@@ -41,7 +42,7 @@
               <strong><i class="fas fa-home"></i> Address:</strong> {{ user.address }}
             </p>
             <p class="text-muted-custom">
-              <strong><i class="fas fa-calendar"></i> Member Since:</strong> {{ user.created_at|timesince }}
+              <strong><i class="fas fa-calendar"></i> Member Since:</strong> {{ user.created_at|custom_timesince }}
             </p>
           </div>
         </div>

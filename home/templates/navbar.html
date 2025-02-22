@@ -1,8 +1,10 @@
 {% load static %}
+{% load custom_filters %}
+<!-- start navbar -->
 <div class="container-fluid nav-bar bg-transparent">
   <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
     <a href="/" class="navbar-brand d-flex align-items-center text-center" style="margin-left: -25px;">
-      <div class="p-2 me-0">
+      <div class="pl-2">
         <img class="img-fluid" src="{% static 'img/logo.png' %}" alt="Icon" style="width: 40px; height: 35px;" />
       </div>
       <h2 class="m-0 text-primary">
@@ -28,14 +30,16 @@
           <a type="button" class="nav-item nav-link me-4" data-bs-toggle="modal" data-bs-target="#SignUp">SignUp</a>
           <a type="button" class="nav-item nav-link me-4" data-bs-toggle="modal" data-bs-target="#login">Login</a>
         {% else %}
+
+        <!-- chat wishlist and notification system -->
           <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
             <ul class="navbar-nav d-flex align-items-center">
               <div class="d-flex align-items-center justify-content-center gap-2">
                 <a class="text-muted" href="{% url 'wishlist' %}"><i class="far fa-heart icon navic p-2 wishlisst" style="border: none; font-size: 20px;"></i></a>
                 <i class="far fa-comment icon navic p-2" style="border: none; font-size: 20px;"></i>
                 <div class="nav-item dropdown">
-                  <i class="text-muted far fa-bell icon navic p-2 nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; font-size: 20px;margin-right: 0px;"><p class="badgeic"></p></i>
-                  <ul class="dropdown-menu notification-box" style="right: -140px;">
+                  <i class="text-muted far fa-bell icon navic p-2 nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; font-size: 20px;margin-right: 0px;">{% if notifications %}<p class="badgeic"></p>{% endif %}</i>
+                  <ul class="dropdown-menu notification-box" style="right: -140px; padding: 0px;">
                     {% if notifications %}
                     {% for notification in notifications %}
                       <li class="notification-item" 
@@ -43,8 +47,9 @@
                           onclick="markAsRead(this)">
                         <a class="dropdown-item notify {% if notification.is_read %}text-muted{% endif %}" href="#">
                           <img style="opacity: 0.8;" class="mx-2" width="25px" height="28px" 
-                               src="{% static 'img/notification.png' %}" alt="" />
-                          {{ notification.message }}
+                               src="{% static 'img/notification.png' %}" alt="" /><b>
+                          {{ notification.message }}</b>
+                          <p style="margin: 0px 45px;font-size: 12px;" class="text-muted">{{notification.created_at|custom_timesince}}</p>
                         </a>
                       </li>
                     {% endfor %}
@@ -53,15 +58,15 @@
                       <a class="dropdown-item notify" href="#">
                         <img style="opacity: 0.8;" class="mx-2" width="25px" height="28px" 
                              src="{% static 'img/notification.png' %}" alt="" />
-                        No notifications yet
+                        No new notifications yet
                       </a>
                     </li>
                   {% endif %}
-                  
                   </ul>
                 </div>
               </div>
 
+<!-- user profile section -->
               <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
                   <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" />
@@ -188,6 +193,7 @@
       <a href="{% url 'sellitem' %}" class="btn btn-primary gradient-btn px-3 d-none d-lg-flex"><i class="py-1 px-1 fas fa-plus"></i>Sell Item</a>
     </div>
   </nav>
+
   <!-- Search Start -->
   <div class="searchbox bg-primary mb-1 wow fadeIn" data-wow-delay="0.1s" style="padding: 5px;">
     <form method="get">
@@ -225,23 +231,21 @@
   {% endfor %}
 {% endif %}
 
-
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   function markAsRead(element) {
     let notificationId = $(element).data("id");
 
     $.ajax({
-      url: "{% url 'mark_notification_as_read' %}",  // Update with your actual URL name
+      url: "{% url 'mark_notification_as_read' %}",  // Change to your actual view URL
       type: "POST",
       data: {
         "notification_id": notificationId,
-        "csrfmiddlewaretoken": "{{ csrf_token }}"  // CSRF token for security
+        "csrfmiddlewaretoken": "{{ csrf_token }}"  // Required for CSRF protection
       },
       success: function(response) {
         if (response.status === "success") {
-          $(element).addClass("text-muted");  // Add the muted class
+          $(element).find(".notify").addClass("text-muted");
         }
       },
       error: function(xhr) {
@@ -250,5 +254,8 @@
     });
   }
 </script>
+
+
+
 
 <!-- end alert meassage -->

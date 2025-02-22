@@ -43,7 +43,8 @@ def index(request):
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+  
     # Render the index page
     context = {'products': products, 'categories': categories,'user_wishlist': list(user_wishlist),'notifications':notifications}
     return render(request, 'index.html', context)
@@ -159,8 +160,7 @@ def allproducts(request):
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
-
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
 
     context = {'products': page_obj, 'allprod':all_products,'user_wishlist': list(user_wishlist),'notifications':notifications}
 
@@ -225,8 +225,15 @@ def sellItem(request):
         else:
             messages.error(request, "Category not found.")
             return redirect('sell_item')  # Redirect back to the form
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
 
-    context = {'condition_choices': condition_choices, 'categories': category}
+
+    context = {'condition_choices': condition_choices, 'categories': category,'user_wishlist': list(user_wishlist),'notifications':notifications}
+
     return render(request, 'sellitem.html', context)
 
 
@@ -256,6 +263,13 @@ def search_products(request):
     # Attach images to each product
     for prod in products:
         prod.images = ProductImages.objects.filter(product=prod)
+    
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+
 
     return products
 
@@ -273,7 +287,12 @@ def prodbyCategory(request, category):
     for product in products:
         # Fetch the associated images for each product
         product.images = ProductImages.objects.filter(product=product)
-    context = {'products': products}
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+    context = {'products': products,'user_wishlist': list(user_wishlist),'notifications':notifications}
 
     return render(request, 'allProducts.html', context)
 
@@ -296,7 +315,13 @@ def view_Product(request, slug):
     product.views += 1
     product.save()
     product.images = ProductImages.objects.filter(product=product)
-    context = {'product': product}
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+
+    context = {'product': product,'user_wishlist': list(user_wishlist),'notifications':notifications}
     return render(request, 'viewProduct.html', context)
 
 
@@ -344,7 +369,14 @@ def profilePage(request):
     for product in product_ads:
         # Fetch the associated images for each product
         product.images = ProductImages.objects.filter(product=product)
-    context = {'products': product_ads}
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+
+
+    context = {'products': product_ads,'user_wishlist': list(user_wishlist),'notifications':notifications}
     return render(request, 'profilePage.html',context)
 
 
@@ -366,7 +398,14 @@ def adsPage(request):
     for product in product_ads:
         # Fetch the associated images for each product
         product.images = ProductImages.objects.filter(product=product)
-    context = {'products': product_ads}
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+
+
+    context = {'products': product_ads,'user_wishlist': list(user_wishlist),'notifications':notifications}
     return render(request, 'adsPage.html',context)
 
 
@@ -458,13 +497,26 @@ def viewSeller(request, slug):
     for product in products:
         # Fetch the associated images for each product
         product.images = ProductImages.objects.filter(product=product)
-    context = {'seller': seller,'products':products}
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+
+    context = {'seller': seller,'products':products,'user_wishlist': list(user_wishlist),'notifications':notifications}
     return render(request, 'sellerprofile.html',context)
 
 
 #Wishlist for user
 @login_required
 def wishlist(request):
+     # Handle search query
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)
+        if search_results.exists():
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
     products = WishlistItem.objects.filter(user=request.user).order_by('-created_at')
     
     for product in products:
@@ -487,8 +539,13 @@ def toggle_wishlist(request):
         if not created:
             # Product already in wishlist, so remove it
             wishlist_item.delete()
+            if product.likes > 0:  # Ensure likes don't go negative
+                product.likes -= 1
+                product.save()
             return JsonResponse({"status": "removed", "message": "Removed from Wishlist"})
         else:
+            product.likes += 1
+            product.save()
             return JsonResponse({"status": "added", "message": "Added to Wishlist"})
     
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
@@ -507,9 +564,9 @@ def mark_notification_as_read(request):
             notification.save()
             return JsonResponse({"status": "success"})
         except Notification.DoesNotExist:
-            return JsonResponse({"status": "error", "message": "Notification not found."}, status=404)
+            return JsonResponse({"status": "error", "message": "Notification not found"}, status=404)
 
-    return JsonResponse({"status": "error", "message": "Invalid request."}, status=400)
+    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
 
 

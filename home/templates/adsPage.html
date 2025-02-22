@@ -14,6 +14,7 @@
   {% include 'navbar.html' %}
   <!-- Navbar end -->
 
+  <!-- product page  -->
   {% if products %}
     <div class="container p-3 adsbox mt-4">
       <div class="totalads">
@@ -61,13 +62,16 @@
               <i class="fas fa-eye"></i> Views - <strong>{{ product.views }}</strong>
             </p>
             <p>
-              <i class="fas fa-heart"></i> Likes - <strong>{{ product.likes }}</strong>
+              <i class="fas fa-heart {% if product.likes > 0 %}text-danger{% endif %} "></i> Likes - <strong>{{ product.likes }}</strong>
             </p>
           </div>
         </div>
       {% endfor %}
     </div>
+
+    <!-- if no products then appear this -->
   {% else %}
+
   <section class="py-1 py-md-2 min-vh-75 d-flex justify-content-center align-items-center">
     <div class="container">
       <div class="row">
