@@ -8,7 +8,7 @@
     <form method="post">
       <!-- Username -->
       {% csrf_token %}
-      <input type="hidden" name="form_type" value="login">
+      <input type="hidden" name="form_type" value="login" />
       <div class="mb-1">
         <label for="username" class="form-label">Username</label>
         <input type="text" name="lusername" class="form-control fmc" id="uusername" placeholder="Enter username" required />
@@ -30,25 +30,24 @@
       <div class="gologin text-dark mb-3">
         <img class="googlepic me-2" src="{% static 'img/google.png' %}" alt="" />
         <div>Continue with Google</div>
-      </div>
-      Not on ReDealX yet? <a href="" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#SignUp">Sign up</a>
+      </div>Not on ReDealX yet? <a href="" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#SignUp">Sign up</a>
     </div>
   </div>
 </div>
 
 <script>
-function togglePasswordVisibility(fieldId, toggleElement) {
-    const passwordField = document.getElementById(fieldId);  // Use fieldId parameter instead of upassword
-    const icon = toggleElement.querySelector('i');
-    
+  function togglePasswordVisibility(fieldId, toggleElement) {
+    const passwordField = document.getElementById(fieldId) // Use fieldId parameter instead of upassword
+    const icon = toggleElement.querySelector('i')
+  
     if (passwordField.type === 'password') {
-        passwordField.type = 'text';
-        icon.classList.remove('bi-eye');
-        icon.classList.add('bi-eye-slash');
+      passwordField.type = 'text'
+      icon.classList.remove('bi-eye')
+      icon.classList.add('bi-eye-slash')
     } else {
-        passwordField.type = 'password';
-        icon.classList.remove('bi-eye-slash');
-        icon.classList.add('bi-eye');
+      passwordField.type = 'password'
+      icon.classList.remove('bi-eye-slash')
+      icon.classList.add('bi-eye')
     }
-}
+  }
 </script>
