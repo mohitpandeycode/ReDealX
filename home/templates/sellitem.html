@@ -120,8 +120,10 @@
             </div>
           </div>
         </div>
-        <hr />
-        <button type="submit" class="btn btn-primary custom-btn-submit w-100" id="postButton" disabled>Post Now</button>
+        <hr />  
+        <div id="postbtn">
+          <button type="submit" class="btn btn-primary custom-btn-submit w-100" id="postButton" disabled>Post Now</button>
+        </div>
       {% else %}
         <a data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><button class="btn fs-5 pt-3 custom-btn-submit w-10" data-bs-toggle="modal" data-bs-target="#login"><marquee behavior="scroll" direction="left">Login for post the Ad</marquee></button></a>
       {% endif %}
@@ -173,6 +175,21 @@
     }
 
     btn2.style.display = "none";
+
+
+      //ad post btn change 
+// Get elements
+let fbtn = document.getElementById('postButton');
+let btndiv = document.getElementById('postbtn');  
+
+// Add click event listener
+fbtn.addEventListener('click', () => {
+    fbtn.innerHTML = ''; // Clear existing content
+    fbtn.innerHTML = `
+            <span class="loader"></span> Posting
+        
+    `;
+});
 
   </script>
 {% endblock %}

@@ -205,12 +205,12 @@
                 <input type="text" name="address" class="form-control py-2 border-0" placeholder="🔍 City, area or locality" />
               </div>
               <div class="col-8 col-lg-8">
-                <input type="text" name="prod" id="searchInput" class="form-control py-2 border-0" required placeholder="Search Products" />
+                <input type="text" name="prod" id="searchInput" class="form-control py-2 border-0" placeholder="Search Products" />
               </div>
             </div>
           </div>
           <div class="col-md-2">
-            <button type="submit" class="btn btn-dark py-2 border-0 w-100">Search</button>
+            <button type="submit" id="searchbtn" class="btn btn-dark py-2 border-0 w-100">Search</button>
           </div>
         </div>
       </div>
@@ -253,7 +253,19 @@
       }
     });
   }
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchbtn');
+  
+  function toggleButtonState() {
+      const inputValue = searchInput.value.trim();
+      searchBtn.type = inputValue.length === 0 ? 'reset' : 'submit';
+  }
+  
+  searchInput.addEventListener('input', toggleButtonState);
+  toggleButtonState();
 </script>
+
+
 
 
 

@@ -153,7 +153,7 @@ def allproducts(request):
         product.images = ProductImages.objects.filter(product=product)
 
     # Pagination (10 products per page)
-    paginator = Paginator(products, 48)
+    paginator = Paginator(products, 60)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     user_wishlist = []
@@ -345,7 +345,7 @@ def reportad(request, slug):
             description=description[:500]  # Limit to 500 characters
         )
 
-        messages.success(request, "Your report has been submitted successfully.")
+        messages.success(request, "We'll be taking care of this as soon as possible.")
         return redirect('viewproduct', slug=slug)
     context = {'product': product}
     return render(request, 'viewProduct.html', context)
@@ -522,8 +522,14 @@ def wishlist(request):
     for product in products:
         # Fetch images for the specific product
         product.images = ProductImages.objects.filter(product=product.product)
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+
     
-    context = {'products': products}
+    context = {'products': products,'user_wishlist': list(user_wishlist),'notifications':notifications}
     return render(request, 'wishlist.html', context)
 
 
