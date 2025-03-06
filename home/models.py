@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
@@ -12,10 +11,8 @@ class CustomUser(AbstractUser):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return self.username
-
 
 # Category Model
 class Category(models.Model):
@@ -28,10 +25,8 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-    
 def user_directory_path(instance, filename):
     return f'product_images/{instance.user.username}/{filename}'
-
 
 # Product Model
 class Product(models.Model):
@@ -42,7 +37,7 @@ class Product(models.Model):
     location = models.TextField(default='', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Link to user model
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products')  # Added related_name
     category = models.ForeignKey(Category, related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True)
     condition_choices = [
@@ -57,18 +52,17 @@ class Product(models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
-        if not self.slug:  # Generate slug only if it doesn't exist
-            self.slug = str(uuid.uuid4())[:8]  # Shorten the UUID for a compact slug
+        if not self.slug:
+            self.slug = str(uuid.uuid4())[:8]
         super().save(*args, **kwargs)
 
-
 class ProductImages(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')  # Added related_name
     image1 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     image2 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     image3 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     image4 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='uploaded_images')  # Added related_name
 
     def __str__(self):
         return f"{self.product.title} image uploaded by {self.user.username}"
@@ -80,9 +74,8 @@ class Repoerted_ad(models.Model):
         ('duplicate', 'Duplicate Ad'),
         ('other', 'Other'),
     ]
-
-    reporter = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # The user reporting the post
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reports")
+    reporter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='reported_ads')  # Added related_name
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reports')
     reason = models.CharField(max_length=20, choices=REPORT_CHOICES)
     description = models.TextField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -90,20 +83,19 @@ class Repoerted_ad(models.Model):
     def __str__(self):
         return f"Report by {self.reporter.username} on {self.product.title}"
 
-
 class WishlistItem(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="wishlist")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="wishlisted_by")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='wishlist')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlisted_by')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'product') 
+        unique_together = ('user', 'product')
 
     def __str__(self):
         return f"{self.user.username} - {self.product.title}"
-    
+
 class Notification(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="notifications")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='notifications')
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)

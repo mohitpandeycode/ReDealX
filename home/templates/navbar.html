@@ -49,7 +49,7 @@
                       <li class="notification-item" 
                           data-id="{{ notification.id }}" 
                           onclick="markAsRead(this)">
-                        <a class="dropdown-item notify {% if notification.is_read %}text-muted{% endif %}" href="#">
+                        <a class="dropdown-item notify {% if notification.is_read %}text-muted {% endif %}" href="#">
                           <img style="opacity: 0.8;" class="mx-2" width="25px" height="28px" 
                                src="{% static 'img/notification.png' %}" alt="" /><b>
                           {{ notification.message|safe }}</b>
