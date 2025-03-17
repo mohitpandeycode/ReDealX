@@ -483,3 +483,28 @@ def mark_notification_as_read(request):
             return JsonResponse({"status": "error", "message": "Notification not found"}, status=404)
     
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
+
+
+
+# chats page
+@login_required
+def chatsPage(request):
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)
+        if search_results.exists():
+            return render(request, "allProducts.html", {'products': search_results})
+        else:
+            return render(request, "allProducts.html")
+    
+    auth_response = handle_user_auth(request)
+    if auth_response:
+        return auth_response
+
+    user_wishlist = []
+    notifications = ''
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+
+    context = {'user_wishlist': list(user_wishlist), 'notifications': notifications}
+    return render(request, 'chatPage.html', context)

@@ -334,7 +334,7 @@
 /*** Navbar ***/
 .nav-bar {
     position: relative;
-    margin-top: 45px;
+    margin-top: 0px;
     padding: 0 3rem;
     transition: .5s;
     z-index: 9999;
@@ -411,7 +411,7 @@
     font-weight: 900;
     vertical-align: middle;
     margin-left: 5px;
-    transition: .5s;
+    transition: .2s;
 }
 
 

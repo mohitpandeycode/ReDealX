@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Chats
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'Css/chatPage.css' %}" />
+{% endblock %}
+
+{% block body %}
+<!-- Navbar Start -->
+{% include 'navbar.html' %}
+
+<!-- Navbar end -->
+
+<div class="chat-container">
+    <aside class="sidebar">
+        <h2>Chats</h2>
+        <input type="text" class="search-bar" placeholder="Search messages or users" />
+        <div class="contacts">
+            <div class="contact active">
+                <div class="imagechat">
+                    <img src="https://avatar.iran.liara.run/public/49" alt="User" />
+                </div>
+                <div class="chat-details">
+                    <div class="detailname">
+                        <p class="name">Doris Brown</p>
+                        <p class="date">08/10/25</p>
+                    </div>
+                    <div class="newchat">
+                        <p>The new price is lower than the previous</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contact">
+                <div class="imagechat">
+                    <img src="https://avatar.iran.liara.run/public/49" alt="User" />
+                </div>
+                <div class="chat-details">
+                    <div class="detailname">
+                        <p class="name">Mohit Pandey</p>
+                        <p class="date">08/10/25</p>
+                    </div>
+                    <div class="newchat">
+                        <p>The new price is lower than the previous</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contact">
+                <div class="imagechat">
+                    <img src="https://avatar.iran.liara.run/public/49" alt="User" />
+                </div>
+                <div class="chat-details">
+                    <div class="detailname">
+                        <p class="name">Ashish Mehra</p>
+                        <p class="date">08/10/25</p>
+                    </div>
+                    <div class="newchat">
+                        <p>The new price is lower than the previous</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main class="chat-window">
+        <header class="chat-header">
+            <div class="topname">
+                <div class="image-container">
+                    <img src="{% static 'img/product.jpg' %}" class="big-image" alt="Big Image">
+                    <img src="https://avatar.iran.liara.run/public/50" class="small-image" alt="Small Image">
+                </div>
+                <div class="chat-details">
+                    <b><span class="username">Doris Brown 🔹</span></b>
+                    <p class="chat-info">7 months old only - ₹ 8,500</p>
+                </div>
+            </div>
+        </header>
+        
+
+        <div class="chat-messages">
+            <div class="message received">Good morning, How are you?</div>
+            <div class="message sent">Good Morning ☀</div>
+            <div class="message sent">Yeah everything is fine</div>
+            <div class="message sent">& Next meeting tomorrow 10.00 AM</div>
+        </div>
+        <footer class="chat-input">
+            <input type="text" placeholder="Enter Message..." />
+            <button><i class="fa-solid fa-paper-plane"></i></button>
+        </footer>
+    </main>
+</div>
+
+<script>
+    document.querySelector('.grbtn').style.display = "none"
+</script>
+{% endblock %}
