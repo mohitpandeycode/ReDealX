@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -18,7 +18,10 @@ urlpatterns = [
     path('delete-post?select?ad-view&delete/<slug>/', views.deleteAd, name="deletead"),
     path('settings/privacy/', views.settingsPage, name="settings"),
     path('delete/useraccount/', views.deleteAccount, name="deleteaccount"),
-    path('new/chats', views.chatsPage, name="chats"),
+    path('chat/', include('Chat.urls')),  
+
+
+
    
 
 ]

@@ -40,3 +40,4 @@ class NotificationtemAdmin(admin.ModelAdmin):
     list_display = ('user', 'message', 'created_at')
     search_fields = ('user', 'message')
 
+

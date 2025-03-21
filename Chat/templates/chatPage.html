@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Chats{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'Css/chatPage.css' %}" />
+{% endblock %}
+
+{% block body %}
+<!-- Navbar -->
+{% include 'navbar.html' %}
+
+<div class="chat-container">
+    <!-- Sidebar - Chat List -->
+    <aside class="sidebar">
+        <h2>Chats</h2>
+        <input type="text" class="search-bar" placeholder="Search messages or users" />
+
+        <div class="contacts">
+            {% for chat in chats %}
+                {% if request.user == chat.buyer %}
+                    {% with chat.seller as other_user %}
+                        <div class="contact" onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
+                            <div class="imagechat">
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}https://avatar.iran.liara.run/public/24{% endif %}" alt="User Avatar" />
+                            </div>
+                            <div class="chat-details">
+                                <div class="detailname">
+                                    <p class="name">{{ other_user.first_name }} {{ other_user.last_name }}</p>
+                                    <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
+                                </div>
+                                <div class="newchat">
+                                    <p>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% else %}
+                    {% with chat.buyer as other_user %}
+                        <div class="contact" onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
+                            <div class="imagechat">
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}https://avatar.iran.liara.run/public/24{% endif %}" alt="User Avatar" />
+                            </div>
+                            <div class="chat-details">
+                                <div class="detailname">
+                                    <p class="name">{{ other_user.first_name }} {{ other_user.last_name }}</p>
+                                    <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
+                                </div>
+                                <div class="newchat">
+                                    <p>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </aside>
+
+    <!-- Main Chat Window -->
+    <main class="chat-window">
+        <header class="chat-header">
+            <div class="topname">
+                <div class="image-container">
+                    <img id="chat-user-image" src="https://avatar.iran.liara.run/public/24" alt="User Image" class="chat-user-image">
+                    <img src="https://avatar.iran.liara.run/public/24" alt="User Image" class="user-image">
+                </div>
+                
+                <div class="chat-details">
+                    <b><span id="chat-username">Select a chat</span></b>
+                    <p id="prodinfo" class="m-0 p-0"></p>
+                </div>
+            </div>
+        </header>
+        
+        <div class="chat-messages" id="chat-messages" data-user-id="{{ request.user.id }}">
+            <p class="no-messages">Select a chat to see messages</p>
+        </div>
+
+        <footer class="chat-input">
+            <input type="text" id="message-input" placeholder="Enter Message..." />
+            <button id="send-message-btn"><i class="fa-solid fa-paper-plane"></i></button>
+        </footer>
+    </main>
+</div>
+
+<script>
+    let activeChatId = null;
+
+    function getCSRFToken() {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            let cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.startsWith('csrftoken=')) {
+                    cookieValue = cookie.substring(10);
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function setActiveChat(element, chatId, first_name, last_name, title, price, imageUrl) {
+        // Remove 'active' class from all contacts
+        document.querySelectorAll('.contact').forEach(contact => {
+            contact.classList.remove('active');
+        });
+    
+        // Add 'active' class to the selected contact
+        element.classList.add('active');
+
+        // Default image if none is found
+        let displayImage = imageUrl && imageUrl !== 'None' ? imageUrl : "https://via.placeholder.com/50";
+    
+        // Handle cases where title is undefined
+        let displayTitle = title ? title : "No Product";
+    
+        // Correctly display user name and product title
+        document.getElementById('chat-username').innerText = first_name + " " + last_name;
+        document.getElementById('prodinfo').innerText = displayTitle + " - " + "₹" + price;
+        document.getElementById('chat-user-image').src = displayImage;
+    
+        // Set the active chat ID
+        activeChatId = chatId;
+    
+        // Load messages for the selected chat
+        loadMessages(chatId);
+    }
+    
+    function loadMessages(chatId) {
+        fetch(`/chat/get-messages/${chatId}/`)  
+            .then(response => response.json())
+            .then(data => {
+                let chatMessages = document.getElementById('chat-messages');
+                chatMessages.innerHTML = '';
+                let currentUserId = chatMessages.getAttribute('data-user-id');
+                
+                if (data.messages.length === 0) {
+                    chatMessages.innerHTML = '<p>No messages yet.</p>';
+                    return;
+                }
+                data.messages.forEach(msg => {
+                    let msgDiv = document.createElement('div');
+                    msgDiv.classList.add('message');
+                    msgDiv.classList.add(msg.sender_id == currentUserId ? 'sent' : 'received');
+                    msgDiv.innerText = msg.text;
+                    chatMessages.appendChild(msgDiv);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => console.error('🔥 Error fetching messages:', error));
+    }
+
+    document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+    document.getElementById('message-input').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') sendMessage();
+    });
+
+    function sendMessage() {
+        let messageInput = document.getElementById('message-input');
+        let messageText = messageInput.value.trim();
+        if (messageText === '' || !activeChatId) return;
+
+        fetch(`/chat/send-message/${activeChatId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({'text': messageText}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadMessages(activeChatId);
+                messageInput.value = '';
+            }
+        })
+        .catch(error => console.error('Error sending message:', error));
+    }
+</script>
+{% endblock %}
