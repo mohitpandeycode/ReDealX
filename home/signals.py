@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from .models import Notification
 from django.contrib.auth.models import User
 from home.models import Product
+from Chat.models import Message
 from django.contrib.auth import get_user_model
 
 User = get_user_model()  # Get the custom user model
@@ -36,3 +37,24 @@ def product_deleted_notification(sender, instance, **kwargs):
     )
 
 
+@receiver(post_save, sender=Message)
+def chat_message_notification(sender, instance, created, **kwargs):
+    if created:
+        # Determine the receiver of the message
+        chat = instance.chat
+        if instance.sender == chat.buyer:
+            receiver = chat.seller  # If sender is buyer, receiver is seller
+        else:
+            receiver = chat.buyer  # If sender is seller, receiver is buyer
+
+        # Get the product name associated with the chat
+        product_name = chat.product.title  # Assuming Chat has a ForeignKey to Product
+
+        # Create a notification for the receiver with product name
+        Notification.objects.create(
+            user=receiver,
+            message=(
+                f"You have a new message from <b>{instance.sender.first_name} {instance.sender.last_name}</b> "
+                f"about <b>{product_name}</b>: '{instance.text[:30]}...'"
+            )
+        )

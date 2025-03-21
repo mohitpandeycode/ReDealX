@@ -1,342 +1,335 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-{{ product.title }}-View Product
+  {{ product.title }}-View Product
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'Css/viewProduct.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/viewProduct.css' %}" />
 {% endblock %}
 
 {% block body %}
-<!-- Navbar Start -->
-{% include 'navbar.html' %}
-<!-- Navbar end -->
-<!-- start view product -->
-<!-- Image crousel start -->
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-  {% for image in product.images.all %}
-  <div class="carousel-indicators">
-    {% if image.image1 %}
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-      aria-current="true" aria-label="Slide 1"></button>
-    {% endif %}
-    {% if image.image2 %}
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-      aria-label="Slide 2"></button>
-    {% endif %}
-    {% if image.image3 %}
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-      aria-label="Slide 3"></button>
-    {% endif %}
-    {% if image.image4 %}
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
-      aria-label="Slide 4"></button>
-    {% endif %}
-  </div>
-  <div class="carousel-inner crouselbox">
-    {% if image.image1 %}
-    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-      <img src="{{ image.image1.url }}" class="d-block crouselimage" alt="..." />
-    </div>
-    {% endif %}
-
-    {% if image.image2 %}
-    <div class="carousel-item">
-      <img src="{{ image.image2.url }}" class="d-block crouselimage" alt="..." />
-    </div>
-    {% endif %}
-    {% if image.image3 %}
-    <div class="carousel-item">
-      <img src="{{ image.image3.url }}" class="d-block crouselimage" alt="..." />
-    </div>
-    {% endif %}
-    {% if image.image4 %}
-    <div class="carousel-item">
-      <img src="{{ image.image4.url }}" class="d-block crouselimage" alt="..." />
-    </div>
-    {% endif %}
-  </div>
-  {% endfor %}
-
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-<!-- Image crousel end -->
-
-<!-- product details section start -->
-<div class="container p-2 mt-5">
-  <div class="card mb-2">
-    <!-- Header -->
-    <div class="card-header bg-primary text-white text-center py-3">
-      <h5 class="text-light mb-0">Product Details</h5>
-    </div>
-
-    {% if product %}
-    <!-- Card Body -->
-    <div class="card-body p-3">
-      <!-- Flex Row for Product and Seller Details -->
-      <div class="row d-flex flex-wrap">
-        <!-- Product Details Section -->
-        <div class="col-12 col-md-6">
-          <div style="overflow: auto; height: 500px;" class="p-3 border-end">
-            <div class="d-flex justify-content-between">
-              <h2 class="text-dark mb-3 fw-bold">₹ {{ product.price }}</h2>
-              <hr style="height: 2px;width: 40px;rotate: 90deg;" />
-              <div style="cursor: pointer;font-size: 22px;color:black ;" class="d-flex">
-                <div>
-                  <i class="fa-regular navic p-2 me-2 fa-share-from-square" id="shareButton"></i>
-                </div>
-
-                {% if user.is_authenticated %}
-
-                <div class=" wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
-                  <i class="navic p-2 far fa-heart {% if product in user_wishlist %} text-danger {% endif %}"></i>
-                </div>
-
-                {% endif %}
-              </div>
-
-            </div>
-            <h4 class="text-uppercase fw-bold text-dark">{{ product.title }}</h4>
-            <h5 class="text-muted-custom mb-2">Brand: {{ product.brand }}</h5>
-            <h5 class="text-muted-custom mb-2">Condition: {{ product.condition }}</h5>
-            <p class="text-muted-custom">
-              <strong>Category:</strong> {{ product.category }}
-            </p>
-            <p class="text-muted-custom">
-              <strong>Published at:</strong> {{ product.created_at|date:'d M Y' }} <strong>{{
-                product.created_at|date:'h:i A' }}</strong>
-            </p>
-            <h5 class="mt-3">Description</h5>
-            <p>{{ product.description|linebreaksbr }}</p>
-            <h5>Posted in</h5>
-            <p>{{ product.location }}</p>
+  <!-- Navbar Start -->
+  {% include 'navbar.html' %}
+  <!-- Navbar end -->
+  <!-- start view product -->
+  <!-- Image crousel start -->
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    {% for image in product.images.all %}
+      <div class="carousel-indicators">
+        {% if image.image1 %}
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        {% endif %}
+        {% if image.image2 %}
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        {% endif %}
+        {% if image.image3 %}
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        {% endif %}
+        {% if image.image4 %}
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        {% endif %}
+      </div>
+      <div class="carousel-inner crouselbox">
+        {% if image.image1 %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ image.image1.url }}" class="d-block crouselimage" alt="..." />
           </div>
-        </div>
+        {% endif %}
 
-        <!-- Seller Details Section -->
-        <div class="col-12 col-md-6">
-          <hr />
-          <div class="page-content mt-3" id="page-content">
-            <div class="row d-flex justify-content-center">
-              <div class="col-12" style="overflow: auto; height: 450px;">
-                <div class="card user-card-full">
-                  <a class="text-dark" href="{% url 'viewSeller' product.seller.username %}">
-                    <div class="row align-items-center g-0">
-                      <!-- Profile Picture -->
-                      <div class="col-4 bg-c-lite-green user-profile d-flex justify-content-center align-items-center">
-                        <div style="width: 100px; height: 100px;" class="text-center text-white">
-                          <img
-                            src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png"
-                            class="img-fluid img-radius" alt="User Profile Image" />
-                        </div>
-                      </div>
-                      <!-- User Information -->
-                      <div class="col-8">
-                        <div class="px-3">
-                          <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name}}</h3>
+        {% if image.image2 %}
+          <div class="carousel-item">
+            <img src="{{ image.image2.url }}" class="d-block crouselimage" alt="..." />
+          </div>
+        {% endif %}
+        {% if image.image3 %}
+          <div class="carousel-item">
+            <img src="{{ image.image3.url }}" class="d-block crouselimage" alt="..." />
+          </div>
+        {% endif %}
+        {% if image.image4 %}
+          <div class="carousel-item">
+            <img src="{{ image.image4.url }}" class="d-block crouselimage" alt="..." />
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
 
-                          {% if product.seller.is_verified %}
-                          <div style="display:flex;align-items:center">
-                            <img width="20px" src="{% static 'img/approved.png' %}" alt="varified" />
-                            <p class="p-0 m-0" style="font-size: 14px; font-weight:600">Verified Seller</p>
-                          </div>
-                          {% else %}
-                          <p style="font-size: 14px; font-weight:600" class="text-muted small mb-2">Seller</p>
-                          {% endif %}
-                        </div>
-                      </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <!-- Image crousel end -->
+
+  <!-- product details section start -->
+  <div class="container p-2 mt-5">
+    <div class="card mb-2">
+      <!-- Header -->
+      <div class="card-header bg-primary text-white text-center py-3">
+        <h5 class="text-light mb-0">Product Details</h5>
+      </div>
+
+      {% if product %}
+        <!-- Card Body -->
+        <div class="card-body p-3">
+          <!-- Flex Row for Product and Seller Details -->
+          <div class="row d-flex flex-wrap">
+            <!-- Product Details Section -->
+            <div class="col-12 col-md-6">
+              <div style="overflow: auto; height: 500px;" class="p-3 border-end">
+                <div class="d-flex justify-content-between">
+                  <h2 class="text-dark mb-3 fw-bold">₹ {{ product.price }}</h2>
+                  <hr style="height: 2px;width: 40px;rotate: 90deg;" />
+                  <div style="cursor: pointer;font-size: 22px;color:black ;" class="d-flex">
+                    <div>
+                      <i class="fa-regular navic p-2 me-2 fa-share-from-square" id="shareButton"></i>
                     </div>
-                  </a>
-                </div>
-                {%if user.is_authenticated %}
 
-                <div class="text-center my-3 d-flex justify-content-center gap-4">
-                  <a href="tel:{{ product.seller.phone_number }}" class="btn btn-dark px-4 py-2"><i
-                      class="fas fa-phone-alt"></i> Call</a>
-                  <a id="msgs" class="btn btn-primary px-4 py-2" data-bs-toggle="modal" data-bs-target="#message"><i
-                      class="fas fa-envelope"></i> Message</a>
-
-
-                  <!-- Modal -->
-                  <div class="modal fade" id="message" tabindex="-1" aria-labelledby="messageLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Sent your Offer to {{ product.seller.first_name }}  </h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form action="{% url 'sentOffer' %}" method="post">
-                          {% csrf_token %}
-                        <div class="modal-body">
-                          <input type="text" hidden name="prodslug" value="{{ product.slug }}">
-                          <textarea name="firstchat" class="custom-input w-100" id="firstchat">Hi, I am {{request.user.first_name}} . I can be reached at +91{{request.user.phone_number}}. I am interested in your {{product.title}} ad posting.</textarea>
-                          
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-light border border-dark" data-bs-dismiss="modal">Close</button>
-                          <button type="submit"  class="btn btn-dark border border-dark">Sent</button>
-                        </div>
-                        </form>
+                    {% if user.is_authenticated %}
+                      <div class="wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
+                        <i class="navic p-2 far fa-heart {% if product in user_wishlist %} text-danger {% endif %}"></i>
                       </div>
-                    </div>
+                    {% endif %}
                   </div>
                 </div>
+                <h4 class="text-uppercase fw-bold text-dark">{{ product.title }}</h4>
+                <h5 class="text-muted-custom mb-2">Brand: {{ product.brand }}</h5>
+                <h5 class="text-muted-custom mb-2">Condition: {{ product.condition }}</h5>
+                <p class="text-muted-custom">
+                  <strong>Category:</strong> {{ product.category }}
+                </p>
+                <p class="text-muted-custom">
+                  <strong>Published at:</strong> {{ product.created_at|date:'d M Y' }} <strong>{{ product.created_at|date:'h:i A' }}</strong>
+                </p>
+                <h5 class="mt-3">Description</h5>
+                <p>{{ product.description|linebreaksbr }}</p>
+                <h5>Posted in</h5>
+                <p>{{ product.location }}</p>
+              </div>
+            </div>
 
-                {% else %}
+            <!-- Seller Details Section -->
+            <div class="col-12 col-md-6">
+              <hr />
+              <div class="page-content mt-3" id="page-content">
+                <div class="row d-flex justify-content-center">
+                  <div class="col-12" style="overflow: auto; height: 450px;">
+                    <div class="card user-card-full">
+                      <a class="text-dark" href="{% url 'viewSeller' product.seller.username %}">
+                        <div class="row align-items-center g-0">
+                          <!-- Profile Picture -->
+                          <div class="col-4 bg-c-lite-green user-profile d-flex justify-content-center align-items-center">
+                            <div style="width: 100px; height: 100px;" class="text-center text-white">
+                              <img src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" class="img-fluid img-radius" alt="User Profile Image" />
+                            </div>
+                          </div>
+                          <!-- User Information -->
+                          <div class="col-8">
+                            <div class="px-3">
+                              <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name }}</h3>
 
-                <div class="text-center my-3 d-flex justify-content-center gap-4">
-                  <p class="text-primary">Please Login to contact seller!</p>
+                              {% if product.seller.is_verified %}
+                                <div style="display:flex;align-items:center">
+                                  <img width="20px" src="{% static 'img/approved.png' %}" alt="varified" />
+                                  <p class="p-0 m-0" style="font-size: 14px; font-weight:600">Verified Seller</p>
+                                </div>
+                              {% else %}
+                                <p style="font-size: 14px; font-weight:600" class="text-muted small mb-2">Seller</p>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    {% if user.is_authenticated %}
+                      <div class="text-center my-3 d-flex justify-content-center gap-4">
+                        <a href="tel:{{ product.seller.phone_number }}" class="btn btn-dark px-4 py-2"><i class="fas fa-phone-alt"></i> Call</a>
+                        <a id="msgs" class="btn btn-primary px-4 py-2" data-bs-toggle="modal" data-bs-target="#message"><i class="fas fa-envelope"></i> Message</a>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="message" tabindex="-1" aria-labelledby="messageLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Sent your Offer to {{ product.seller.first_name }}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <form action="{% url 'sentOffer' %}" method="post">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                  <div class="textbox-container">
+                                    <label for="firstchat" class="textbox-label">Your Message:</label>
+                                    <textarea name="firstchat" class="textbox-input" placeholder="Enter your message here..." id="firstchat">Hi, I am {{ request.user.first_name }} . I can be reached at +91{{ request.user.phone_number }}. I am interested in your {{ product.title }} ad posting.</textarea>
+                                    <div class="textbox-error">Message must be at least 10 characters.</div>
+                                    <div class="character-count">0/200</div>
+                                    <input type="text" hidden name="prodslug" value="{{ product.slug }}" />
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-light border border-dark" data-bs-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-dark border border-dark">Sent</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% else %}
+                      <div class="text-center my-3 d-flex justify-content-center gap-4">
+                        <p class="text-primary">Please Login to contact seller!</p>
+                      </div>
+                    {% endif %}
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7627007.329080649!2d80.83809581952544!3d22.566008254437364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1740314721825!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                  </div>
                 </div>
-                {% endif %}
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7627007.329080649!2d80.83809581952544!3d22.566008254437364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1740314721825!5m2!1sen!2sin"
-                  width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"></iframe>
               </div>
             </div>
           </div>
         </div>
-      </div>
+
+        <!-- Call to Action -->
+      {% endif %}
     </div>
-
-    <!-- Call to Action -->
+    {% if user.is_authenticated %}
+      <a data-bs-toggle="modal" data-bs-target="#report" style="font-size: 12px;" class="btn btn-dark px-2 py-2"><i class="fas fa-exclamation-triangle"></i> REPORT THIS AD</a>
     {% endif %}
-  </div>
-  {% if user.is_authenticated %}
-  <a data-bs-toggle="modal" data-bs-target="#report" style="font-size: 12px;" class="btn btn-dark px-2 py-2"><i
-      class="fas fa-exclamation-triangle"></i> REPORT THIS AD</a>
-  {% endif %}
 
-  <div class="modal fade" id="report" tabindex="-1" aria-labelledby="reportLabel" aria-hidden="true">
-    <form method="post" action="{% url 'reportad' product.slug %} ">
-      {% csrf_token %}
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="width: 90%; margin: auto;">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Report Ad</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <!-- Radio Buttons -->
-            <div class="mb-3">
-              <label class="form-label">Select a reason:</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="reason" value="offensive" id="offensive" required />
-                <label class="text-dark form-check-label" for="offensive">Offensive Content</label>
+    <div class="modal fade" id="report" tabindex="-1" aria-labelledby="reportLabel" aria-hidden="true">
+      <form method="post" action="{% url 'reportad' product.slug %} ">
+        {% csrf_token %}
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="width: 90%; margin: auto;">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Report Ad</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- Radio Buttons -->
+              <div class="mb-3">
+                <label class="form-label">Select a reason:</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="offensive" id="offensive" required />
+                  <label class="text-dark form-check-label" for="offensive">Offensive Content</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="fraud" id="fraud" required />
+                  <label class="text-dark form-check-label" for="fraud">Fraud</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="duplicate" id="duplicate" required />
+                  <label class="text-dark form-check-label" for="duplicate">Duplicate Ad</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="reason" value="other" id="other" required />
+                  <label class="text-dark form-check-label" for="other">Other</label>
+                </div>
               </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="reason" value="fraud" id="fraud" required />
-                <label class="text-dark form-check-label" for="fraud">Fraud</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="reason" value="duplicate" id="duplicate" required />
-                <label class="text-dark form-check-label" for="duplicate">Duplicate Ad</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="reason" value="other" id="other" required />
-                <label class="text-dark form-check-label" for="other">Other</label>
+
+              <!-- Textarea with Character Counter -->
+              <div class="mb-2">
+                <label for="description" class="form-label">Additional Details (optional)</label>
+                <textarea class="form-control" name="description" id="description" rows="3" maxlength="500" oninput="updateCharCount()" placeholder="Provide additional details..."></textarea>
+                <p id="charCount" class="text-muted small">0/500 characters</p>
               </div>
             </div>
-
-            <!-- Textarea with Character Counter -->
-            <div class="mb-2">
-              <label for="description" class="form-label">Additional Details (optional)</label>
-              <textarea class="form-control" name="description" id="description" rows="3" maxlength="500"
-                oninput="updateCharCount()" placeholder="Provide additional details..."></textarea>
-              <p id="charCount" class="text-muted small">0/500 characters</p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="row w-100">
-              <div class="col-12">
-                <button type="submit" class="btn btn-dark border border-dark w-100">Send Complaint</button>
+            <div class="modal-footer">
+              <div class="row w-100">
+                <div class="col-12">
+                  <button type="submit" class="btn btn-dark border border-dark w-100">Send Complaint</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function () {
-    $('.wishlist-btn').click(function () {
-      let btn = $(this);
-      let productId = btn.data('product-id');
-
-      $.ajax({
-        type: 'POST',
-        url: '/toggle-wishlist/',
-        data: {
-          product_id: productId,
-          csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-        success: function (response) {
-          if (response.status === 'added') {
-            btn.find('i').addClass('text-danger'); // Highlight icon
-
-            // Add badge dynamically to the wishlist element
-            let wishlistElement = document.querySelector('.wishlisst');
-            if (wishlistElement) {
-              wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;""></p>';
+  <script>
+    $(document).ready(function () {
+      $('.wishlist-btn').click(function () {
+        let btn = $(this)
+        let productId = btn.data('product-id')
+    
+        $.ajax({
+          type: 'POST',
+          url: '/toggle-wishlist/',
+          data: {
+            product_id: productId,
+            csrfmiddlewaretoken: '{{ csrf_token }}' // Ensure this is correctly rendered by your backend
+          },
+          success: function (response) {
+            if (response.status === 'added') {
+              btn.find('i').addClass('text-danger') // Highlight icon
+    
+              // Add badge dynamically to the wishlist element
+              let wishlistElement = document.querySelector('.wishlisst')
+              if (wishlistElement) {
+                wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;"></p>'
+              }
+            } else if (response.status === 'removed') {
+              btn.find('i').removeClass('text-danger') // Remove highlight
             }
-          } else if (response.status === 'removed') {
-            btn.find('i').removeClass('text-danger'); // Remove highlight
+          },
+          error: function () {
+            alert('Something went wrong. Try again.')
           }
-        },
-        error: function () {
-          alert('Something went wrong. Try again.');
-        }
-      });
-    });
-  });
-
-  
-<script>
-  function updateCharCount() {
-    let textarea = document.getElementById('description')
-    let charCount = textarea.value.length
-    document.getElementById('charCount').innerText = `${charCount}/500 characters`
-
-    if (charCount > 500) {
-      textarea.value = textarea.value.substring(0, 500)
+        })
+      })
+    })
+    
+    function updateCharCount() {
+      let textarea = document.getElementById('description')
+      let charCount = textarea.value.length
+      document.getElementById('charCount').innerText = `${charCount}/500 characters`
+    
+      if (charCount > 500) {
+        textarea.value = textarea.value.substring(0, 500)
+      }
     }
-  }
-
-  document.getElementById('shareButton').addEventListener('click', function () {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: document.title,
-          text: 'Check out this page!',
-          url: window.location.href
-        })
-        .then(() => {
-          console.log('Thanks for sharing!')
-        })
-        .catch(console.error)
-    } else {
-      // Fallback: Copy to Clipboard
-      navigator.clipboard
-        .writeText(window.location.href)
-        .then(() => {
-          alert('Link copied to clipboard!')
-        })
-        .catch(console.error)
-    }
-  })
-
-
-</script>
-<!-- product details section end -->
+    
+    document.getElementById('shareButton').addEventListener('click', function () {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: document.title,
+            text: 'Check out this page!',
+            url: window.location.href
+          })
+          .then(() => {
+            console.log('Thanks for sharing!')
+          })
+          .catch(console.error)
+      } else {
+        // Fallback: Copy to Clipboard
+        navigator.clipboard
+          .writeText(window.location.href)
+          .then(() => {
+            alert('Link copied to clipboard!')
+          })
+          .catch(console.error)
+      }
+    })
+    
+    const enhancedTextbox = document.getElementById('firstchat')
+    const characterCount = document.querySelector('.character-count')
+    
+    enhancedTextbox.addEventListener('input', () => {
+      const textLength = enhancedTextbox.value.length
+      characterCount.textContent = `${textLength}/200`
+    
+      if (textLength < 10) {
+        enhancedTextbox.classList.add('err')
+      } else {
+        enhancedTextbox.classList.remove('err')
+      }
+    })
+  </script>
+  <!-- product details section end -->
 {% endblock %}

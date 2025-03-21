@@ -86,3 +86,62 @@ h6 {
     width: 95%;
   }
 }
+
+.textbox-container {
+  width: 100%; /* Wider for more content */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+  position: relative; /* For absolute positioning of the character count */
+}
+
+.textbox-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600; /* Slightly bolder */
+  color: #2c3e50; /* Darker, professional color */
+}
+
+.textbox-input {
+  width: 100%;
+  padding: 14px 20px; /* Increased padding */
+  border: 2px solid #e0e0e0; /* Thicker, lighter border */
+  border-radius: 10px; /* More rounded corners */
+  box-sizing: border-box;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  resize: vertical;
+  background-color: #f9f9f9; /* Light background */
+}
+
+.textbox-input:focus {
+  border-color: #3498db; /* Blue focus color */
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.textbox-input::placeholder {
+  color: #b0b0b0;
+  font-style: italic;
+}
+
+.textbox-error {
+  color: #e74c3c; /* Red error color */
+  font-size: 13px;
+  margin-top: 5px;
+  display: none;
+}
+
+.textbox-input.err {
+  border-color: #e74c3c;
+}
+
+.textbox-input.err + .textbox-error {
+  display: block;
+}
+
+.character-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 12px;
+  color: #777;
+}

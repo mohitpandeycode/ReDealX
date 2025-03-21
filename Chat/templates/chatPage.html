@@ -23,7 +23,7 @@
                     {% with chat.seller as other_user %}
                         <div class="contact" onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
                             <div class="imagechat">
-                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}https://avatar.iran.liara.run/public/24{% endif %}" alt="User Avatar" />
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}{% static 'img/userlogo.webp' %}{% endif %}" alt="User Avatar" />
                             </div>
                             <div class="chat-details">
                                 <div class="detailname">
@@ -31,7 +31,7 @@
                                     <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
                                 </div>
                                 <div class="newchat">
-                                    <p>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6 }}</p>
+                                     <p>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -40,11 +40,12 @@
                     {% with chat.buyer as other_user %}
                         <div class="contact" onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
                             <div class="imagechat">
-                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}https://avatar.iran.liara.run/public/24{% endif %}" alt="User Avatar" />
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}{% static 'img/userlogo.webp' %}{% endif %}" alt="User Avatar" />
                             </div>
                             <div class="chat-details">
                                 <div class="detailname">
                                     <p class="name">{{ other_user.first_name }} {{ other_user.last_name }}</p>
+                                    
                                     <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
                                 </div>
                                 <div class="newchat">
@@ -60,17 +61,20 @@
 
     <!-- Main Chat Window -->
     <main class="chat-window">
-        <header class="chat-header">
+        <header class="chat-header"style="display: flex; justify-content: space-between;aligh-items: center;">
             <div class="topname">
                 <div class="image-container">
-                    <img id="chat-user-image" src="https://avatar.iran.liara.run/public/24" alt="User Image" class="chat-user-image">
-                    <img src="https://avatar.iran.liara.run/public/24" alt="User Image" class="user-image">
+                    <img id="chat-user-image" src="{% static 'img/about1.png' %}" alt="User Image" class="chat-user-image">
+                    <img src="{% static 'img/userlogo.webp' %}" alt="User Image" class="user-image">
                 </div>
                 
                 <div class="chat-details">
                     <b><span id="chat-username">Select a chat</span></b>
                     <p id="prodinfo" class="m-0 p-0"></p>
                 </div>
+            </div>
+            <div>
+                <button type="button" class="btn-close" id="closechat" data-bs-dismiss="modal" aria-label="Close"></button></b>
             </div>
         </header>
         
@@ -113,13 +117,13 @@
         element.classList.add('active');
 
         // Default image if none is found
-        let displayImage = imageUrl && imageUrl !== 'None' ? imageUrl : "https://via.placeholder.com/50";
+        let displayImage = imageUrl && imageUrl !== 'None' ? imageUrl : "{% static 'img/userlogo.webp' %}";
     
         // Handle cases where title is undefined
         let displayTitle = title ? title : "No Product";
     
         // Correctly display user name and product title
-        document.getElementById('chat-username').innerText = first_name + " " + last_name;
+        document.getElementById('chat-username').innerText = first_name + " " + last_name + "🔹";
         document.getElementById('prodinfo').innerText = displayTitle + " - " + "₹" + price;
         document.getElementById('chat-user-image').src = displayImage;
     
@@ -181,5 +185,47 @@
         })
         .catch(error => console.error('Error sending message:', error));
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatElements = document.querySelectorAll('.contact'); // Select all chat elements
+        const closebutn = document.querySelector('#closechat');
+    
+        if (chatElements.length > 0) {
+            chatElements.forEach(chat => {
+                chat.addEventListener('click', function () {
+                    if (window.innerWidth < 800) {
+                        mySmallScreenFunction();
+                    }
+                });
+            });
+        } else {
+            console.error("No elements with class 'contact' found.");
+        }
+    
+        if (closebutn) {
+            closebutn.addEventListener('click', function () {
+                if (window.innerWidth < 800) {
+                    mycloseScreenFunction();
+                }
+            });
+        } else {
+            console.error("Element with ID 'closechat' not found.");
+        }
+    });
+    
+    function mySmallScreenFunction() {
+        document.querySelector('.chat-container')?.style.setProperty('height', '72vh');
+        document.querySelector('.sidebar')?.style.setProperty('display', 'none');
+        document.querySelector('.chat-window')?.style.setProperty('display', 'flex');
+        document.querySelector('.chat-window')?.style.setProperty('width', '100%');
+        document.querySelector('.chat-window')?.style.setProperty('height', '100%');
+        document.querySelector('.chat-input')?.style.setProperty('border-radius', '0px 0px 10px 10px');
+    }
+    
+    function mycloseScreenFunction() {
+        document.querySelector('.sidebar')?.style.setProperty('display', 'flex');
+        document.querySelector('.chat-window')?.style.setProperty('display', 'none');
+    }
+    
 </script>
 {% endblock %}

@@ -39,29 +39,30 @@
 
               <div class="d-flex align-items-center justify-content-center gap-2">
                 <a class="{% if request.path == '/wishlist/' %}active {% else %} text-muted{% endif %}" href="{% url 'wishlist' %}"><i class="far fa-heart icon navic p-2 wishlisst" style="border: none; font-size: 20px;"></i></a>
-                <a href="{% url 'chats' %}" class="{% if request.path == '/chat/' %}active {% else %} text-muted{% endif %}"><i class="far fa-comment icon navic p-2" id="comment" style="border: none; font-size: 20px;"></i></a>
+                <a href="{% url 'chats' %}" class="{% if request.path == '/chat/' %}active {% else %} text-muted{% endif %}"><i class="far fa-comment icon navic p-2" id="comment" style="border: none; font-size: 20px;"><p style="right:4px;" class="badgeic"></p></i></a>
                 
                 <div class="nav-item dropdown">
                   <i class="text-muted far fa-bell icon navic p-2 nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; font-size: 20px;margin-right: 0px;">{% if notifications %}<p class="badgeic"></p>{% endif %}</i>
-                  <ul class="dropdown-menu notification-box" style="right: -140px; padding: 0px;">
+                  <ul class="dropdown-menu notification-box p-1">
                     {% if notifications %}
                     {% for notification in notifications %}
-                      <li class="notification-item" 
-                          data-id="{{ notification.id }}" 
-                          onclick="markAsRead(this)">
-                        <a class="dropdown-item notify {% if notification.is_read %}text-muted {% endif %}" href="#">
-                          <img style="opacity: 0.8;" class="mx-2" width="25px" height="28px" 
-                               src="{% static 'img/notification.png' %}" alt="" /><b>
-                          {{ notification.message|safe }}</b>
-                          <p style="margin: 0px 45px;font-size: 12px;" class="text-muted">{{notification.created_at|custom_timesince}}</p>
-                        </a>
-                      </li>
+                        <li class="notification-item" data-id="{{ notification.id }}" onclick="markAsRead(this)">
+                            <a class="dropdown-item notify {% if notification.is_read %} text-muted {% endif %}" href="#">
+                                <div class="notify-content">
+                                    <img class="notification-icon" src="{% static 'img/notification.png' %}" alt="Notification Icon" />
+                                    <div class="notify-text">
+                                        <b>{{ notification.message|safe }}</b>
+                                        <p class="notification-time">{{ notification.created_at|custom_timesince }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
                     {% endfor %}
                   {% else %}
                     <li>
                       <a class="dropdown-item notify" href="#">
                         <img style="opacity: 0.8;" class="mx-2" width="25px" height="28px" 
-                             src="{% static 'img/notification.png' %}" alt="" />
+                             src="{% static 'img/notification.png' %}" alt="notify" />
                         No new notifications yet
                       </a>
                     </li>
@@ -73,7 +74,7 @@
 <!-- user profile section -->
               <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" />
+                  <img style="width: 40px; height: 40px; border-radius: 50%;" src="{% static 'img/userlogo.webp' %}" alt="yourImage" />
                   <i class="mx-1 fas fa-chevron-down"></i>
                 </button>
                 <ul class="dropdown-menu p-2 dropdown-menu-light">
@@ -131,7 +132,7 @@
           <div class="nav-item navlink smallnav">
             <li>
               <p class="fs-5 mb-2 dropdown-item">
-                <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://static.vecteezy.com/system/resources/previews/026/418/808/large_2x/man-head-user-profile-character-free-png.png" alt="" /> <strong class="text-dark">{{ user.first_name }}</strong>
+                <img style="width: 40px; height: 40px; border-radius: 50%;" src="{% static 'img/userlogo.webp' %}" alt="userImage" /> <strong class="text-dark">{{ user.first_name }}</strong>
               </p>
             </li>
             <hr class="m-1" />

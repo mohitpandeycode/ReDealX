@@ -382,27 +382,57 @@
     height: 10px;
     border-radius: 50%;
 }
-
 .notification-box {
     width: 300px;
     max-height: 220px;
-    overflow: auto;
+    overflow-y: auto;
     overflow-x: hidden;
-    font-size: 14px;
+    font-size: 12px;
     box-shadow: 0 10px 8px 0 #00000036;
-    box-sizing: border-box;
+    position: absolute;
+    right: -140px;
+}
 
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+}
+
+.notify-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px; /* Space between icon and text */
+}
+
+.notification-icon {
+    width: 25px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.notify-text {
+    flex: 1; /* Allow text to take available space */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .notify {
-    padding: 10px 2px;
+    padding: 5px 5px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.211);
     background-color: #dadada36;
 }
 
-/* Hover effect for dropdown-item */
+/* Hover effect */
 .notify:hover {
     background-color: #c8f8f6 !important;
+}
+
+/* Time styling */
+.notification-time {
+    margin: 0;
+    font-size: 12px;
+    color: gray;
 }
 
 .navbar .dropdown-toggle::after {

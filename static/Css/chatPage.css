@@ -1,12 +1,10 @@
-
-
 .chat-container {
     display: flex;
     width: 85%;
-    margin:10px auto;
+    margin: 10px auto;
     height: 80vh;
     border: 1px solid rgba(14, 4, 5, 0.2);
-    border-radius:10px ;
+    border-radius: 10px;
 }
 
 .sidebar {
@@ -16,7 +14,7 @@
     padding: 8px;
     display: flex;
     flex-direction: column;
-    border-radius:10px 0 0 10px ;
+    border-radius: 10px 0 0 10px;
     border-right: 1px solid rgba(14, 4, 5, 0.2);
 }
 
@@ -32,7 +30,7 @@
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    
+
 }
 
 .contact {
@@ -69,7 +67,7 @@
 .name {
     font-weight: bold;
     margin: 0;
-    font-size:15px;
+    font-size: 15px;
 }
 
 .date {
@@ -112,13 +110,15 @@
     background: white;
     padding: 15px;
     border-bottom: 1px solid #ddd;
-    border-radius: 0 10px 10px  0;
+    border-radius: 0 10px 10px 0;
 }
 
 .topname {
     display: flex;
-    align-items: center;  /* Align image and text in the same row */
-    gap: 10px;  /* Space between image and text */
+    align-items: center;
+    /* Align image and text in the same row */
+    gap: 10px;
+    /* Space between image and text */
 }
 
 .image-container {
@@ -126,15 +126,16 @@
     display: flex;
     align-items: center;
 }
+
 .image-container {
     position: relative;
     width: 50px;
     height: 50px;
     border-radius: 50%;
- /* Important for rounding the big image */
+    /* Important for rounding the big image */
 }
 
-.chat-user-image{
+.chat-user-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -154,13 +155,15 @@
 }
 
 .big-image {
-    width: 50px; /* Adjust size */
+    width: 50px;
+    /* Adjust size */
     height: 50px;
     border-radius: 10px;
 }
 
 .small-image {
-    width: 30px; /* Smaller overlay */
+    width: 30px;
+    /* Smaller overlay */
     height: 30px;
     position: absolute;
     bottom: -6px;
@@ -239,14 +242,40 @@
     cursor: pointer;
 }
 
-  @media (max-width: 606px) {
-    .chat-container{
+
+@media (max-width: 606px) {
+    .chat-container {
         width: 95%;
     }
-    .sidebar{
+
+    .sidebar {
         width: 30%;
     }
+
     .chat-window {
         width: 30%;
     }
-        }
+  
+}
+
+#closechat{
+    display: none;
+}
+
+@media (max-width: 839px) {
+ .sidebar{
+    width:100%
+ }
+    .chat-window{
+        display: none;
+    }
+    #closechat{
+        display: block;
+    }
+    
+}
+
+#btn2{
+    display: none;
+}
+
