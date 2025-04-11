@@ -23,7 +23,7 @@
                     {% with chat.seller as other_user %}
                         <div class="contact" onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
                             <div class="imagechat">
-                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}{% static 'img/userlogo.webp' %}{% endif %}" alt="User Avatar" />
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %} https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }} {% endif %}" alt="User Avatar" />
                             </div>
                             <div class="chat-details">
                                 <div class="detailname">
@@ -40,7 +40,7 @@
                     {% with chat.buyer as other_user %}
                         <div class="contact" onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
                             <div class="imagechat">
-                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}{% static 'img/userlogo.webp' %}{% endif %}" alt="User Avatar" />
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %} https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }} {% endif %}" alt="User Avatar" />
                             </div>
                             <div class="chat-details">
                                 <div class="detailname">
@@ -118,6 +118,7 @@
 
         // Default image if none is found
         let displayImage = imageUrl && imageUrl !== 'None' ? imageUrl : "{% static 'img/userlogo.webp' %}";
+    
     
         // Handle cases where title is undefined
         let displayTitle = title ? title : "No Product";

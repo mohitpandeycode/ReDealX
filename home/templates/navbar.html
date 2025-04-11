@@ -74,7 +74,7 @@
 <!-- user profile section -->
               <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img style="width: 40px; height: 40px; border-radius: 50%;" src="{% static 'img/userlogo.webp' %}" alt="yourImage" />
+                  <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://api.dicebear.com/8.x/bottts/svg?seed={{ request.user.first_name|slugify }}{{ request.user.id }}" alt="yourImage" />
                   <i class="mx-1 fas fa-chevron-down"></i>
                 </button>
                 <ul class="dropdown-menu p-2 dropdown-menu-light">
@@ -132,7 +132,8 @@
           <div class="nav-item navlink smallnav">
             <li>
               <p class="fs-5 mb-2 dropdown-item">
-                <img style="width: 40px; height: 40px; border-radius: 50%;" src="{% static 'img/userlogo.webp' %}" alt="userImage" /> <strong class="text-dark">{{ user.first_name }}</strong>
+                <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }}
+" alt="userImage" /> <strong class="text-dark">{{ user.first_name }}</strong>
               </p>
             </li>
             <hr class="m-1" />
