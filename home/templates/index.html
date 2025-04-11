@@ -13,7 +13,7 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
   <!-- Header Start -->
   <div class="container-fluid d-lg-block header mt-1 bg-white p-">
     <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
-      <div class="col-md-6 p-2 p-lg-5 mt-lg-5">
+      <div class="col-md-6 p-2 mt-lg-5">
         <h1 style="color: black;" class="display-6 animated fadeIn mb-4">Your One-Stop Marketplace for <span class="text-primary">Affordable pre-owned</span> Mobiles, Electronics, and More!</h1>
         <p class="animated fadeIn mb-4 pb-2">
           Discover affordable, pre-owned mobiles, electronics, furniture, appliances, property, and more! Buy and sell with ease in a trusted marketplace, where you’ll find great deals on quality items in excellent condition. Your perfect product is just a click away <i class="far fa-hand-pointer"></i>
@@ -82,15 +82,15 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
           {% endfor %}
         {% endif %}
 
-        <div class="col-lg-2 col-4 col-sm-2 col-md-2 wow fadeInUp" data-wow-delay="0.3s">
+        <div id="showmore" class="col-lg-2 col-4 col-sm-2 col-md-2 wow fadeInUp" data-wow-delay="0.3s">
           <a class="cat-item d-block bg-warning text-center rounded p-2">
             <div class="rounded p-2">
-              <div class="icon">
+              <div class="icon showmoreicon">
                 <i class="fas fa-chevron-down fa-2x"></i>
               </div>
             </div>
           </a>
-          <h6 class="text-center">Show More</h6>
+          <h6 id="txtsho" class="text-center">Show More</h6>
         </div>
       </div>
     </div>
@@ -201,7 +201,7 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
                 <h1 class="mb-3">Contact With Our Certified Agent</h1>
                 <p>Connect with our certified agent for professional assistance. We ensure a seamless experience, prioritizing your needs.</p>
               </div>
-              <a href="" class="btn btn-primary py-3 px-4 me-2"><i class="fa fa-phone-alt me-2"></i>Contact Us</a>
+              <a href="{% url 'helpcenter' %}" class="btn btn-primary py-3 px-4 me-2"><i class="fa fa-phone-alt me-2"></i>Contact Us</a>
             </div>
           </div>
         </div>
@@ -243,5 +243,13 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
           });
         });
       });
+      let audio = new Audio('{% static "soundeffect/alert.mp3" %}');
+      document.getElementById('showmore').addEventListener('click',()=>{
+        audio.play();
+        document.querySelector('.showmoreicon').innerHTML = ''
+        document.querySelector('.showmoreicon').innerHTML = '<i class="fa-solid fa-xmark fa-2x"></i>'
+        document.querySelector('#txtsho').innerText = 'No more categories'
+        document.querySelector('#txtsho').classList.add('text-danger')
+      })
     </script>
 {% endblock %}

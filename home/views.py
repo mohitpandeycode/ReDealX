@@ -485,6 +485,10 @@ def mark_notification_as_read(request):
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
 
+# Help center Page
+def helpCenter(request):
+    return render(request, 'helpPage.html')
+
 
 # chats page
 @login_required

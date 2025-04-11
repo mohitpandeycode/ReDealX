@@ -18,6 +18,7 @@ urlpatterns = [
     path('delete-post?select?ad-view&delete/<slug>/', views.deleteAd, name="deletead"),
     path('settings/privacy/', views.settingsPage, name="settings"),
     path('delete/useraccount/', views.deleteAccount, name="deleteaccount"),
+    path('redealX support/help-center/', views.helpCenter, name="helpcenter"),
     path('chat/', include('Chat.urls')),  
 
 
