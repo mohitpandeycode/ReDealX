@@ -43,7 +43,7 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-# Authentication handler (unchanged)
+# Authentication handler
 def handle_user_auth(request):
     if request.method == "POST":
         form_type = request.POST.get("form_type")
