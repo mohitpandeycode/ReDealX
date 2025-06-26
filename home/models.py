@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from cloudinary.models import CloudinaryField
 import uuid
 
 # Custom User Model
 class CustomUser(AbstractUser):
-    phone_number = models.IntegerField(unique=True, blank=True, null=True)
+    phone_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='user_profiles/', blank=True, null=True)
     email = models.EmailField(default='', max_length=254, null=True, blank=True)
@@ -25,8 +26,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-def user_directory_path(instance, filename):
-    return f'product_images/{instance.user.username}/{filename}'
 
 # Product Model
 class Product(models.Model):
@@ -57,12 +56,12 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 class ProductImages(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')  # Added related_name
-    image1 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
-    image2 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
-    image3 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
-    image4 = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='uploaded_images')  # Added related_name
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image1 = CloudinaryField('image', blank=True, null=True)  # use CloudinaryField
+    image2 = CloudinaryField('image', blank=True, null=True)
+    image3 = CloudinaryField('image', blank=True, null=True)
+    image4 = CloudinaryField('image', blank=True, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='uploaded_images')
 
     def __str__(self):
         return f"{self.product.title} image uploaded by {self.user.username}"
