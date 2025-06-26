@@ -1,0 +1,25 @@
+@media (max-width: 780px) {
+    .adsbox {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hr {
+        display: none;
+    }
+}
+
+.adsinfo {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.adcard {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: none;
+    border-bottom: 1px solid blue;
+    border-left: 5px solid #0000ffad;
+}
