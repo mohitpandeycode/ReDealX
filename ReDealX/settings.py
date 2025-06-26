@@ -140,6 +140,8 @@ CLODINARY_STORAGE = {
     'API_SECRET': env('CLOUDINARY_API_SECRET'),
 }
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # MEDIA_ROOT = BASE_DIR /"media"
 # MEDIA_URL = '/media/'
 
