@@ -299,7 +299,7 @@
         navigator
           .share({
             title: document.title,
-            text: 'Check out this page!',
+            text: 'Check out this Product now<br>{{ product.title }}',
             url: window.location.href
           })
           .then(() => {
