@@ -9,10 +9,6 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()  # Get the custom user model
 
-# Signal for user login
-@receiver(user_logged_in)
-def user_logged_in_notification(sender, request, user, **kwargs):
-    Notification.objects.create(user=user, message="You have successfully logged in.")
 
 @receiver(post_save, sender=User)
 def user_created_notification(sender, instance, created, **kwargs):
@@ -22,6 +18,7 @@ def user_created_notification(sender, instance, created, **kwargs):
             user=instance,
             message=f"Welcome to ReDealX <span style='color: blue; font-weight: bold;'>{name}</span>."
         )
+        
 # Signal for product ad posted
 @receiver(post_save, sender=Product)
 def product_posted_notification(sender, instance, created, **kwargs):
