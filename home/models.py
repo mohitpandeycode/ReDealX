@@ -36,8 +36,9 @@ class Product(models.Model):
     location = models.TextField(default='', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products')  # Added related_name
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products')
     category = models.ForeignKey(Category, related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
+    other_category = models.CharField(max_length=200, default='', blank=True)
     slug = models.SlugField(unique=True, blank=True)
     condition_choices = [
         ('new', 'New'),
@@ -46,6 +47,7 @@ class Product(models.Model):
     condition = models.CharField(max_length=20, choices=condition_choices, default='used')
     views = models.IntegerField(default=0, null=True, blank=True)
     likes = models.IntegerField(default=0, null=True, blank=True)
+    showNumber = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

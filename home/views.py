@@ -175,7 +175,7 @@ def sellItem(request):
         # Get form inputs
         cate_name = request.POST.get('category')
         category_instance = Category.objects.filter(name=cate_name).first()
-
+        other_category = request.POST.get('otherCategory')
         brand = request.POST.get('brand')
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -183,22 +183,25 @@ def sellItem(request):
         price = request.POST.get('price')
         location = request.POST.get('location')
         images = [request.FILES.get(f'img{i}') for i in range(1, 5)]
+        show_number = request.POST.get('show_phone')
 
         # Validate category
         if not category_instance:
             messages.error(request, "Category not found.")
-            return redirect('sell_item')
+            return redirect('/sell-item')
 
         # Create product
         product = Product.objects.create(
             category=category_instance,
+            other_category = other_category,
             brand=brand,
             title=title,
             description=description,
             price=price,
             location=location,
             condition=condition,
-            seller=request.user
+            seller=request.user,
+            showNumber=show_number == 'on'
         )
 
         # Create associated images

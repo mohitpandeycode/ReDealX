@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>403 - Access Denied</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: white;
+        font-family: system-ui, sans-serif;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        font-size: 1.5rem;
+        gap: 1.5rem;
+        padding: 2rem;
+      }
+      
+      .message {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .code {
+        font-weight: bold;
+        font-size: 2rem;
+        padding-right: 10px;
+        border-right: 1px solid #444;
+      }
+      
+      a.button {
+        margin-top: 1rem;
+        display: inline-block;
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #444;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+      
+      a.button:hover {
+        background-color: #666;
+      }
+      
+      @media (max-width: 600px) {
+        .message {
+          flex-direction: column;
+          border-right: none;
+          border-top: 1px solid #444;
+          padding-top: 1rem;
+        }
+      
+        .code {
+          padding-right: 0;
+          border-right: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="message">
+        <div class="code">403</div>
+        <div>You don’t have permission to view this page.</div>
+      </div>
+      <a class="button" href="/">Back to Home</a>
+    </div>
+  </body>
+</html>

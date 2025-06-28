@@ -29,7 +29,7 @@
         </div>
         <div class="totalads">
           <p class="mb-0 text-dark">
-            <b>{{ allprod.count }}{{products_qs.count}}{{ products.count }}</b> ads in your city &#9660;
+            <b>{{ allprod.count }}{{ products_qs.count }}{{ products.count }}</b> ads in your city &#9660;
           </p>
         </div>
         <hr class="mb-3 mt-0" />
@@ -42,24 +42,30 @@
                     <div class="position-relative overflow-hidden">
                       <p style="position: absolute; bottom: -10px;right: 20px;font-size: 15px;font-weight: 900;color: white;font-family: cursive;  filter: opacity(0.8);">RDL</p>
                       <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg" src="{{ product.images.first.image1.url }}?q_auto,f_auto" alt="Product Image" onerror="src='{% static 'img/onerrorimage.webp' %}'" /></a>
-                      
-                      {% if user.is_authenticated %}   
-                      {% if product.id in user_wishlist %}
-                      <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
-                        <i class="fs-5 fas fa-heart text-danger"></i>
-                      </div>
-                      {% else %}
-                      <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
-                        <i class="fs-5 fas fa-heart"></i>
-                      </div>
-                      {% endif %}               
+
+                      {% if user.is_authenticated %}
+                        {% if product.id in user_wishlist %}
+                          <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
+                            <i class="fs-5 fas fa-heart text-danger"></i>
+                          </div>
+                        {% else %}
+                          <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
+                            <i class="fs-5 fas fa-heart"></i>
+                          </div>
+                        {% endif %}
                       {% endif %}
                     </div>
                     <a href="{% url 'viewproduct' product.slug %}">
                       <div class="p-2 pb-0">
                         <div style="display: flex;justify-content: space-between; align-items: center;">
                           <h5 class="priceelemnt text-primary mb-1">₹ {{ product.price }}</h5>
-                          <p class="categoryp px-2 py-1 rounded mb-1">{{ product.category|truncatechars:8 }}</p>
+                          <p class="categoryp px-2 py-1 rounded mb-1">
+                            {% if product.category.name == 'Others' %}
+                              {{ product.other_category|truncatechars:8 }}
+                            {% else %}
+                              {{ product.category|truncatechars:8 }}
+                            {% endif %}
+                          </p>
                         </div>
                         <a class="titleitem d-block h6 mb-1" href="{% url 'viewproduct' product.slug %}">{{ product.title|slice:':30' }}</a>
                         <p class="descitem">{{ product.description|slice:':45' }}...</p>
@@ -129,13 +135,13 @@
   </div>
 
   <!-- end products -->
-  
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>  
+  <script>
     $(document).ready(function () {
       $('.wishlist-btn').click(function () {
-        let btn = $(this);
-        let productId = btn.data('product-id');
+        let btn = $(this)
+        let productId = btn.data('product-id')
     
         $.ajax({
           type: 'POST',
@@ -146,22 +152,22 @@
           },
           success: function (response) {
             if (response.status === 'added') {
-              btn.find('i').addClass('text-danger'); // Highlight icon
+              btn.find('i').addClass('text-danger') // Highlight icon
     
               // Add badge dynamically to the wishlist element
-              let wishlistElement = document.querySelector('.wishlisst');
+              let wishlistElement = document.querySelector('.wishlisst')
               if (wishlistElement) {
-                wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;""></p>';
+                wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;"></p>'
               }
             } else if (response.status === 'removed') {
-              btn.find('i').removeClass('text-danger'); // Remove highlight
+              btn.find('i').removeClass('text-danger') // Remove highlight
             }
           },
           error: function () {
-            alert('Something went wrong. Try again.');
+            alert('Something went wrong. Try again.')
           }
-        });
-      });
-    });
+        })
+      })
+    })
   </script>
 {% endblock %}

@@ -2,10 +2,8 @@
 {% load static %}
 
 {% block title %}
-ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India with ReDealX Online Classified Advertising
+  ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India with ReDealX Online Classified Advertising
 {% endblock %}
-
-
 
 {% block body %}
   <!-- Navbar Start -->
@@ -16,12 +14,12 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
   <div class="container-fluid d-lg-block header mt-1 bg-white p-">
     <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
       <div class="col-md-6 p-2 mt-lg-5">
-        <h1 style="color: black;" class="display-6 animated fadeIn mb-4">Your One-Stop Marketplace for <span class="text-primary">Affordable pre-owned</span> Mobiles, Electronics, and More!</h1>
-        <p class="animated fadeIn mb-4 pb-2">
+        <h3 style="color: black;" class="display-6 animated fadeIn mb-4">Your One-Stop Marketplace for <span class="text-primary">Affordable pre-owned</span> Mobiles, Electronics, and More!</h3>
+        <p class="animated headfont fadeIn mb-4 pb-2">
           Discover affordable, pre-owned mobiles, electronics, furniture, appliances, property, and more! Buy and sell with ease in a trusted marketplace, where you’ll find great deals on quality items in excellent condition. Your perfect product is just a click away <i class="far fa-hand-pointer"></i>
         </p>
       </div>
-      <div class="col-md-6 animated fadeIn">
+      <div class="col-md-6 animated fadeIn" style="border: 5px solid white;">
         <div class="owl-carousel header-carousel">
           <div class="owl-carousel-item">
             <img class="img-fluid" src="{% static 'img/hero9.jpg' %}" alt="" />
@@ -64,11 +62,11 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
   <!-- Header End -->
 
   <!-- Category Start -->
-  <div class="container-xxl py-5">
+  <div class="container-xxl py-4">
     <div class="container p-3">
-      <div class="text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-        <h1 class="mb-3">Product Category</h1>
-        <p>Explore the product categories, featuring a variety of options from top-rated sellers</p>
+      <div class="text-start mb-4 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+        <h3 class="mb-3">Product Category</h3>
+        <p class="aboutbody">Explore the product categories, featuring a variety of options from top-rated sellers</p>
       </div>
       <div class="catname row g-1">
         {% if categories %}
@@ -101,12 +99,12 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
   <!-- Category End -->
 
   <!-- Product List Start -->
-  <div class="container-xxl py-5">
+  <div class="container-xxl py-4">
     <div class="container p-3">
       <div class="row g-0 gx-0 align-items-end">
         <div class="col-lg-6">
           <div class="text-start mx-auto mb-1 mb-lg-5 wow slideInLeft" data-wow-delay="0.1s">
-            <h1 class="mb-3">Fresh Recommendations</h1>
+            <h3 class="mb-3">Fresh Recommendations</h3>
           </div>
         </div>
       </div>
@@ -119,17 +117,17 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
                   <div class="property-item rounded overflow-hidden" Style="border:1px solid #80808075">
                     <div class="position-relative overflow-hidden">
                       <p style="position: absolute; bottom: -10px;right: 20px;font-size: 15px;font-weight: 900;color: white;font-family: cursive;  filter: opacity(0.8);">RDL</p>
-                      <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg" src="{{ product.images.first.image1.url }}?q_auto,f_auto" alt="Product Image" onerror="src='{% static "img/onerrorimage.webp" %}'" /></a>
-                      {% if user.is_authenticated %}   
-                      {% if product.id in user_wishlist %}
-                      <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
-                        <i class="fs-5 fas fa-heart text-danger"></i>
-                      </div>
-                      {% else %}
-                      <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
-                        <i class="fs-5 fas fa-heart"></i>
-                      </div>
-                      {% endif %}               
+                      <a href="{% url 'viewproduct' product.slug %}"><img class="img-thumbnail prodimg" src="{{ product.images.first.image1.url }}?q_auto,f_auto" alt="Product Image" onerror="src='{% static 'img/onerrorimage.webp' %}'" /></a>
+                      {% if user.is_authenticated %}
+                        {% if product.id in user_wishlist %}
+                          <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
+                            <i class="fs-5 fas fa-heart text-danger"></i>
+                          </div>
+                        {% else %}
+                          <div class="bg-light rounded text-dark position-absolute end-0 top-0 m-2 pt-1 px-2 wishlist-btn" data-product-id="{{ product.id }}" style="cursor: pointer;">
+                            <i class="fs-5 fas fa-heart"></i>
+                          </div>
+                        {% endif %}
                       {% endif %}
                       <div class="bg-warning rounded-top text-dark position-absolute start-0 small bottom-0 mx-2 pt-1 px-1">Featured</div>
                     </div>
@@ -137,7 +135,13 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
                       <div class="p-2 pb-0">
                         <div style="display: flex;justify-content: space-between; align-items: center;">
                           <h5 class="priceelemnt text-primary mb-1">₹ {{ product.price }}</h5>
-                          <p class="categoryp px-2 py-1 rounded mb-1">{{ product.category|truncatechars:8 }}</p>
+                          <p class="categoryp px-2 py-1 rounded mb-1">
+                            {% if product.category.name == 'Others' %}
+                              {{ product.other_category|truncatechars:8 }}
+                            {% else %}
+                              {{ product.category|truncatechars:8 }}
+                            {% endif %}
+                          </p>
                         </div>
                         <a class="titleitem d-block h6 mb-1" href="{% url 'viewproduct' product.slug %}">{{ product.title|slice:':30' }}</a>
                         <p class="descitem">{{ product.description|slice:':35' }}...</p>
@@ -153,7 +157,7 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
             {% endif %}
 
             <div class="col-12 mt-5 text-center wow fadeInUp" data-wow-delay="0.1s">
-              <a class="btn btn-primary py-3 px-5" href="{% url 'allprod' %}">Discover More</a>
+              <a style="box-shadow: 2px 2px 2px #02371db8;" class="btn btn-primary py-2 px-3" href="{% url 'allprod' %}">Discover More</a>
             </div>
           </div>
         </div>
@@ -163,7 +167,7 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
   <!-- Property List End -->
   <hr />
   <!-- About Start -->
-  <div class="container-xxl py-5">
+  <div class="container-xxl py-4">
     <div class="container p-3">
       <div class="row g-lg-5 align-items-center">
         <div class="col-lg-5 pb-4 wow fadeIn" data-wow-delay="0.1s">
@@ -172,15 +176,15 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
           </div>
         </div>
         <div class="col-lg-7 wow fadeIn" data-wow-delay="0.5s">
-          <h1 class="mb-4">#1 Place To Find The Perfect Product Where Quality Meets Affordability</h1>
-          <p class="mb-4">At ReDealX, we offer an easy way to find high-quality second-hand goods at unbeatable prices. With a wide variety of items across categories, you'll always find great deals that fit your budget. Shop confidently with secure transactions and help reduce waste by buying pre-loved products.</p>
-          <p>
+          <h3 class="mb-4 abouthead">#1 Place To Find The Perfect Product Where Quality Meets Affordability</h3>
+          <p class="mb-3 aboutbody">At ReDealX, we offer an easy way to find high-quality second-hand goods at unbeatable prices. With a wide variety of items across categories, you'll always find great deals that fit your budget. Shop confidently with secure transactions and help reduce waste by buying pre-loved products.</p>
+          <p class="aboutbody">
             <i class="fa fa-check text-primary me-2"></i>Wide selection of products across various categories
           </p>
-          <p>
+          <p class="aboutbody">
             <i class="fa fa-check text-primary me-2"></i>Unbeatable prices on quality pre-loved items
           </p>
-          <p>
+          <p class="aboutbody">
             <i class="fa fa-check text-primary me-2"></i>Direct payments between buyers and sellers
           </p>
         </div>
@@ -190,20 +194,20 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
   <!-- About End -->
 
   <!-- Call to Action Start -->
-  <div class="container-xxl py-5">
-    <div class="container p-3">
-      <div class="bg-light rounded p-3">
+  <div class="container-xxl py-4">
+    <div class="container p-2">
+      <div class="bg-light rounded p-2">
         <div class="bg-white rounded p-2" style="border: 1px dashed rgba(0, 185, 142, .3)">
           <div class="row g-5 align-items-center">
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-              <img class="img-fluid rounded w-75" src="{% static 'img/contactus.png' %}" alt="" />
+              <img class="img-fluid contactimg rounded w-75" src="{% static 'img/contactus.png' %}" alt="" />
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
               <div class="mb-4">
-                <h1 class="mb-3">Contact With Our Certified Agent</h1>
-                <p>Connect with our certified agent for professional assistance. We ensure a seamless experience, prioritizing your needs.</p>
+                <h3 class="mb-3 abouthead">Contact With Our Certified Agent</h3>
+                <p class="aboutbody">Connect with our certified agent for professional assistance. We ensure a seamless experience, prioritizing your needs.</p>
               </div>
-              <a href="{% url 'helpcenter' %}" class="btn btn-primary py-3 px-4 me-2"><i class="fa fa-phone-alt me-2"></i>Contact Us</a>
+              <a style="box-shadow: 2px 2px 2px #02371db8;" href="{% url 'helpcenter' %}" class="btn btn-primary py-2 px-3 me-2"><i class="fa fa-phone-alt me-2"></i>Contact Us</a>
             </div>
           </div>
         </div>
@@ -213,42 +217,42 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
   <!-- Call to Action End -->
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>  
-      $(document).ready(function () {
-        $('.wishlist-btn').click(function () {
-          let btn = $(this);
-          let productId = btn.data('product-id');
-      
-          $.ajax({
-            type: 'POST',
-            url: '/toggle-wishlist/',
-            data: {
-              product_id: productId,
-              csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            success: function (response) {
-              if (response.status === 'added') {
-                btn.find('i').addClass('text-danger'); // Highlight icon
-      
-                // Add badge dynamically to the wishlist element
-                let wishlistElement = document.querySelector('.wishlisst');
-                if (wishlistElement) {
-                  wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;""></p>';
-                }
-              } else if (response.status === 'removed') {
-                btn.find('i').removeClass('text-danger'); // Remove highlight
+  <script>
+    $(document).ready(function () {
+      $('.wishlist-btn').click(function () {
+        let btn = $(this)
+        let productId = btn.data('product-id')
+    
+        $.ajax({
+          type: 'POST',
+          url: '/toggle-wishlist/',
+          data: {
+            product_id: productId,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          success: function (response) {
+            if (response.status === 'added') {
+              btn.find('i').addClass('text-danger') // Highlight icon
+    
+              // Add badge dynamically to the wishlist element
+              let wishlistElement = document.querySelector('.wishlisst')
+              if (wishlistElement) {
+                wishlistElement.innerHTML = '<p class="badgeic" style="right: 5px;"></p>'
               }
-            },
-            error: function () {
-              alert('Something went wrong. Try again.');
+            } else if (response.status === 'removed') {
+              btn.find('i').removeClass('text-danger') // Remove highlight
             }
-          });
-        });
-      });
-      document.getElementById('showmore').addEventListener('click',()=>{
-        document.querySelector('.showmoreicon').innerHTML = '<i class="fa-solid fa-xmark fa-2x"></i>'
-        document.querySelector('#txtsho').innerText = 'No more categories yet'
-        document.querySelector('#txtsho').classList.add('text-danger')
+          },
+          error: function () {
+            alert('Something went wrong. Try again.')
+          }
+        })
       })
-    </script>
+    })
+    document.getElementById('showmore').addEventListener('click', () => {
+      document.querySelector('.showmoreicon').innerHTML = '<i class="fa-solid fa-xmark fa-2x"></i>'
+      document.querySelector('#txtsho').innerText = 'No more categories yet'
+      document.querySelector('#txtsho').classList.add('text-danger')
+    })
+  </script>
 {% endblock %}

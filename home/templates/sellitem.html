@@ -22,16 +22,19 @@
       {% csrf_token %}
       <div class="mb-3">
         <label for="category" class="custom-label">Category</label>
-        <select class="form-control custom-input" name="category" id="category" required oninput="checkForm()">
+        <select class="form-control custom-input" name="category" id="category" required oninput="checkForm()" onchange="handleCategoryChange()">
           <option value="">Select Category</option>
           {% for category in categories %}
-            <option value="{{ category.name }}">{{ category.name }}</option>
+          <option value="{{ category.name }}">{{ category.name }}</option>
           {% endfor %}
         </select>
       </div>
+      <div class="mb-3" id="othercategorybox" style="display:none;">
+        <input type="text" class="form-control custom-input" name="otherCategory" id="otherCategory" placeholder="Enter Category Name"/>
+      </div>
       <div class="mb-3">
         <label for="modelName" class="custom-label">Brand</label>
-        <input type="text" class="form-control custom-input" name="brand" id="modelName" placeholder="Enter brand name" required oninput="checkForm()" />
+        <input type="text" class="form-control custom-input" name="brand" id="brandName" placeholder="Enter brand name" required oninput="checkForm()" />
       </div>
       <div class="mb-3">
         <label for="title" class="custom-label">Ad Title</label>
@@ -51,11 +54,11 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="price" class="custom-label">SET A PRICE</label>
+        <label for="price" class="custom-label">Set Price</label>
         <input type="number" class="form-control custom-input" name="price" id="price" placeholder="₹ " required oninput="checkForm()" />
       </div>
       <div class="mb-3">
-        <label class="custom-label">Upload Images <span>(insert maxmimum of 5MP image)</span></label>
+        <label class="custom-label">Upload Images <span style="font-weight: 400; font-size: 14px;color: red;">(max size: 5MP)</span></label>
         <div class="image-upload-row">
           <div class="image-upload">
             <input type="file" id="image1" name="img1" accept="image/*" required onchange="previewImage(event, 1); checkForm()" />
@@ -120,6 +123,10 @@
             </div>
           </div>
         </div>
+        <div style="color: black;font-weight: 500;">
+          <label for="show_phone" class="f-w-700 mb-1">Show your number to call : </label>
+          <input type="checkbox" class="form-check-input" name="show_phone" id="show_phone"/>
+        </div>
         <hr />  
         <div id="postbtn">
           <button type="submit" class="btn btn-primary custom-btn-submit w-100" id="postButton" disabled>Post Now</button>
@@ -130,6 +137,18 @@
     </form>
   </div>
   <script>
+    // other category tab
+    function handleCategoryChange() {
+    const categorySelect = document.getElementById('category');
+    const otherCategory = document.getElementById('othercategorybox');
+
+
+    if (categorySelect.value === 'Others') {
+     otherCategory.style.display = 'block';
+    }
+  }
+
+
     // Preview and Reset functions
     function previewImage(event, index) {
       const file = event.target.files[0]

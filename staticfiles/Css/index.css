@@ -30,7 +30,7 @@
 
 /* catogory bar */
 
-*{
+* {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -55,9 +55,9 @@
     transition: all 0.3s ease;
     /* Smooth transition for all effects */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    
-    
-    
+
+
+
 }
 
 .gradient-btn:hover {
@@ -135,29 +135,30 @@
 }
 
 /* featurd products */
-  .custom-col-5 {
-  width: 20%;
-  padding: 0 0.3rem;
-  margin-bottom: 0.5rem;
-  float: left;
+.custom-col-5 {
+    width: 20%;
+    padding: 0 0.3rem;
+    margin-bottom: 0.5rem;
+    float: left;
 }
 
 @media (max-width: 992px) {
-  .custom-col-5 {
-    width: 33.33%; /* 3 per row on tablets */
-  }
+    .custom-col-5 {
+        width: 33.33%;
+        /* 3 per row on tablets */
+    }
 }
 
 @media (max-width: 768px) {
-  .custom-col-5 {
-    width: 50%;
-  }
+    .custom-col-5 {
+        width: 50%;
+    }
 }
 
 @media (max-width: 576px) {
-  .custom-col-5 {
-    width: 50%; 
-  }
+    .custom-col-5 {
+        width: 50%;
+    }
 }
 
 
@@ -327,35 +328,35 @@
     position: absolute;
     left: 20%;
     top: 20%;
-  }
-  
-  .error__icon {
+}
+
+.error__icon {
     width: 20px;
     height: 20px;
     transform: translateY(-2px);
     margin-right: 8px;
-  }
-  
-  .error__icon path {
+}
+
+.error__icon path {
     fill: #EF665B;
-  }
-  
-  .error__title {
+}
+
+.error__title {
     font-weight: 500;
     font-size: 14px;
     color: #71192F;
-  }
-  
-  .error__close {
+}
+
+.error__close {
     width: 20px;
     height: 20px;
     cursor: pointer;
     margin-left: auto;
-  }
-  
-  .error__close path {
+}
+
+.error__close path {
     fill: #71192F;
-  }
+}
 
 /*** Navbar ***/
 .nav-bar {
@@ -408,6 +409,7 @@
     height: 10px;
     border-radius: 50%;
 }
+
 .notification-box {
     width: 300px;
     max-height: 220px;
@@ -427,7 +429,8 @@
 .notify-content {
     display: flex;
     align-items: flex-start;
-    gap: 10px; /* Space between icon and text */
+    gap: 10px;
+    /* Space between icon and text */
 }
 
 .notification-icon {
@@ -437,7 +440,8 @@
 }
 
 .notify-text {
-    flex: 1; /* Allow text to take available space */
+    flex: 1;
+    /* Allow text to take available space */
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
@@ -640,7 +644,7 @@
 .header {
     position: relative;
     margin-top: 0px;
-    padding-top:20px;
+    padding-top: 20px;
     text-align: center;
     background: linear-gradient(90deg, rgba(0, 49, 84, .8) var(--gradient-percent), rgb(51, 120, 169) 100%);
     color: white;
@@ -789,6 +793,11 @@
     color: #000000 !important;
 }
 
+.cat-item:hover div {
+    color: #000000 !important;
+    background: #00b98e54 !important;
+}
+
 
 /*** Property List ***/
 .nav-pills .nav-item .btn {
@@ -829,9 +838,9 @@ small {
 
 
 .prodimg {
-    width: 100%; 
-    height: 30vh; 
-    object-fit: cover; 
+    width: 100%;
+    height: 30vh;
+    object-fit: cover;
 
 
 }
@@ -850,10 +859,38 @@ small {
         font-size: 14px;
     }
 
+    .abouthead {
+        font-size: 16px;
+    }
+
+    .aboutbody {
+        font-size: 12px;
+    }
+
+
+    .display-6 {
+        font-size: calc(1.3rem + 1vw);
+    }
+
     .titleitem {
         font-size: 12px;
     }
 
+    .contactimg{
+        width: 100% !important;
+    }
+    .owl-carousel-item{
+        height: 250px;
+    }
+    .owl-carousel-item img{
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .headfont{
+        font-size: 14px;
+    }
     .descitem {
         font-size: 10px;
         white-space: nowrap;
@@ -911,9 +948,9 @@ small {
         border: 1px solid #5bef92;
         box-shadow: 0px 0px 5px -3px #111;
         padding: 13px;
-    
+
     }
-    
+
 
 
     .searchbox input:placeholder-shown {
@@ -931,6 +968,7 @@ small {
 }
 
 .searchbox {
+    border-radius: 0px 0px 10px 10px;
     box-shadow: 0px 0px 20px 0px #000000;
 }
 

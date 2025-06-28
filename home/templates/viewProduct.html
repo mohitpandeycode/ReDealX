@@ -101,7 +101,12 @@
                 <h5 class="text-muted-custom mb-2">Brand: {{ product.brand }}</h5>
                 <h5 class="text-muted-custom mb-2">Condition: {{ product.condition }}</h5>
                 <p class="text-muted-custom">
-                  <strong>Category:</strong> {{ product.category }}
+                  <strong>Category:</strong>
+                  {% if product.category.name == 'Others' %}
+                    {{ product.other_category|truncatechars:8 }}
+                  {% else %}
+                    {{ product.category|truncatechars:8 }}
+                  {% endif %}
                 </p>
                 <p class="text-muted-custom">
                   <strong>Published at:</strong> {{ product.created_at|date:'d M Y' }} <strong>{{ product.created_at|date:'h:i A' }}</strong>
@@ -148,7 +153,9 @@
                     </div>
                     {% if user.is_authenticated %}
                       <div class="text-center my-3 d-flex justify-content-center gap-4">
-                        <a href="tel:{{ product.seller.phone_number }}" class="btn btn-dark px-4 py-2"><i class="fas fa-phone-alt"></i> Call</a>
+                        {% if product.showNumber %}
+                          <a href="tel:{{ product.seller.phone_number }}" class="btn btn-dark px-4 py-2"><i class="fas fa-phone-alt"></i> Call</a>
+                        {% endif %}
                         <a id="msgs" class="btn btn-primary px-4 py-2" data-bs-toggle="modal" data-bs-target="#message"><i class="fas fa-envelope"></i> Message</a>
 
                         <!-- Modal -->
