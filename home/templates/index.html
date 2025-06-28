@@ -5,6 +5,8 @@
 ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India with ReDealX Online Classified Advertising
 {% endblock %}
 
+
+
 {% block body %}
   <!-- Navbar Start -->
   {% include 'navbar.html' %}
@@ -110,10 +112,10 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
       </div>
       <div class="tab-content">
         <div id="tab-1" class="tab-pane fade show p-0 active">
-          <div class="row g-3">
+          <div class="row g-2">
             {% if products %}
               {% for product in products %}
-                <div class="col-lg-3 col-6 col-sm-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="custom-col-5 wow fadeInUp" data-wow-delay="0.1s">
                   <div class="property-item rounded overflow-hidden" Style="border:1px solid #80808075">
                     <div class="position-relative overflow-hidden">
                       <p style="position: absolute; bottom: -10px;right: 20px;font-size: 15px;font-weight: 900;color: white;font-family: cursive;  filter: opacity(0.8);">RDL</p>
@@ -243,12 +245,9 @@ ReDealX - Free classifieds in India, Buy and Sell for free anywhere in India wit
           });
         });
       });
-      let audio = new Audio('{% static "soundeffect/alert.mp3" %}');
       document.getElementById('showmore').addEventListener('click',()=>{
-        audio.play();
-        document.querySelector('.showmoreicon').innerHTML = ''
         document.querySelector('.showmoreicon').innerHTML = '<i class="fa-solid fa-xmark fa-2x"></i>'
-        document.querySelector('#txtsho').innerText = 'No more categories'
+        document.querySelector('#txtsho').innerText = 'No more categories yet'
         document.querySelector('#txtsho').classList.add('text-danger')
       })
     </script>

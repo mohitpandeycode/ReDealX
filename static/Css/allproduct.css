@@ -7,6 +7,32 @@
 }
 
 
+/* all product products */
+  .custom-col-5 {
+  width: 20%;
+  padding: 0 0.5rem;
+  margin-bottom: 1rem;
+  float: left;
+}
+
+@media (max-width: 992px) {
+  .custom-col-5 {
+    width: 33.33%; /* 3 per row on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-col-5 {
+    width: 50%;
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-col-5 {
+    width: 50%; 
+  }
+}
+
 .wrapper{
 
     height: 20vh;

@@ -12,29 +12,33 @@ from django.utils.timezone import now
 from datetime import timedelta
 import random
 from django.core.paginator import Paginator
+from django.db.models.functions import Random
+from django.db.models import Prefetch, F
+
 
 # Home page
 def index(request):
-    if 'address' in request.GET or 'prod' in request.GET:
-        search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
-    
-    products = Product.objects.order_by('?').prefetch_related('images')[:16]
-    categories = Category.objects.order_by('?')[:5]
-
+    # Handle login/signup early
     auth_response = handle_user_auth(request)
     if auth_response:
         return auth_response
-    
+
+    # Handle search
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)
+        return render(request, "allProducts.html", {'products': search_results})
+
+    # Random but optimized product/category fetch
+    products = Product.objects.annotate(rand=Random()).order_by('rand').prefetch_related('images')[:16]
+    categories = Category.objects.annotate(rand=Random()).order_by('rand')[:5]
+
+    # Wishlist + notifications
     user_wishlist = []
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
-    
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')[:10]
+
     context = {
         'products': products,
         'categories': categories,
@@ -43,54 +47,64 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-# Authentication handler
+# Handle user authentication (login/signup)
 def handle_user_auth(request):
-    if request.method == "POST":
-        form_type = request.POST.get("form_type")
-        
-        if form_type == "signup":
-            first_name = request.POST.get('fname')
-            last_name = request.POST.get('lname')
-            username = request.POST.get('username')
-            email = request.POST.get('email')
-            phone = request.POST.get('phone')
-            password = request.POST.get('password')
-            cpassword = request.POST.get('cpassword')
-            
-            if password != cpassword:
-                messages.error(request, "Passwords do not match.")
-                return redirect(request.path)
-            if CustomUser.objects.filter(username=username).exists():
-                messages.warning(request, "Username already taken. Sign in again!!!")
-                return redirect(request.path)
-            if CustomUser.objects.filter(phone_number=phone).exists():
-                messages.warning(request, "User from this number is already signed in.")
-                return redirect(request.path)
+    if request.method != "POST":
+        return None  # Only handle POST here
 
-            user = CustomUser.objects.create_user(username, email, password)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.phone_number = phone
-            user.save()
-            messages.success(request, "Account created successfully.")
+    form_type = request.POST.get("form_type")
+
+    if form_type == "signup":
+        first_name = request.POST.get('fname', '').strip()
+        last_name = request.POST.get('lname', '').strip()
+        username = request.POST.get('username', '').strip().lower()
+        email = request.POST.get('email', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        password = request.POST.get('password', '')
+        cpassword = request.POST.get('cpassword', '')
+
+        if password != cpassword:
+            messages.error(request, "Passwords do not match.")
             return redirect(request.path)
 
-        elif form_type == "login":
-            username = request.POST.get('lusername')
-            password = request.POST.get('lpassword')
-            
-            if not CustomUser.objects.filter(username=username).exists():
-                messages.error(request, 'Invalid Username!')
-                return redirect(request.path)
-
-            user = auth.authenticate(request, username=username, password=password)
-            if user is None:
-                messages.error(request, 'Invalid Password!')
-                return redirect(request.path)
-            
-            auth.login(request, user)
-            messages.success(request, "Logged in successfully.")
+        if CustomUser.objects.filter(username=username).exists():
+            messages.warning(request, "Username already taken. Sign in again!")
             return redirect(request.path)
+
+        if CustomUser.objects.filter(phone_number=phone).exists():
+            messages.warning(request, "User with this phone number already exists.")
+            return redirect(request.path)
+
+        user = CustomUser.objects.create_user(username, email, password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.phone_number = phone
+        user.save()
+
+        messages.success(request, "Account created successfully.")
+        return redirect(request.path)
+
+    elif form_type == "login":
+        username = request.POST.get('lusername', '').strip().lower()
+        password = request.POST.get('lpassword', '')
+
+        try:
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            messages.error(request, 'Invalid Username!')
+            return redirect(request.path)
+
+        user = auth.authenticate(request, username=username, password=password)
+        if user is None:
+            messages.error(request, 'Invalid Password!')
+            return redirect(request.path)
+
+        auth.login(request, user)
+        messages.success(request, "Logged in successfully.")
+        return redirect(request.path)
+
+    return None
+
 
 # Logout
 @login_required
@@ -99,51 +113,66 @@ def handle_logout(request):
     messages.success(request, "You're logged out")
     return redirect("/")
 
-# All products
+
+# All products page
 def allproducts(request):
+    # Handle authentication (POST)
+    auth_response = handle_user_auth(request)
+    if auth_response:
+        return auth_response
+
+    # Handle search (GET)
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
+        return render(request, "allProducts.html", {'products': search_results}) if search_results.exists() else render(request, "allProducts.html")
 
+    # Fetch all products and sort
     all_products = Product.objects.all().order_by('-created_at').prefetch_related('images')
     two_months_ago = now() - timedelta(days=60)
+    
     recent_products = list(all_products.filter(created_at__gte=two_months_ago))
     random.shuffle(recent_products)
-    first_50_products = recent_products[:50]
-    remaining_products = all_products.exclude(id__in=[p.id for p in first_50_products])
-    products = first_50_products + list(remaining_products)
+    
+    first_50 = recent_products[:50]
+    remaining = all_products.exclude(id__in=[p.id for p in first_50])
+    final_products = first_50 + list(remaining)
 
-    paginator = Paginator(products, 60)
+    # Paginate the final product list
+    paginator = Paginator(final_products, 60)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # User-specific data
     user_wishlist = []
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')[:10]
 
-    context = {'products': page_obj, 'allprod': all_products, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
-    
-    auth_response = handle_user_auth(request)
-    if auth_response:
-        return auth_response
-    
+    # Final context
+    context = {
+        'products': page_obj,
+        'allprod': all_products,
+        'user_wishlist': list(user_wishlist),
+        'notifications': notifications,
+    }
+
     return render(request, 'allProducts.html', context)
+
 
 # Sell item
 def sellItem(request):
+    # Check for signup/login handling
     auth_response = handle_user_auth(request)
     if auth_response:
         return auth_response
 
+    # Load choices and categories
     condition_choices = Product.condition_choices
-    category = Category.objects.all()
+    categories = Category.objects.all()
 
     if request.method == "POST":
+        # Get form inputs
         cate_name = request.POST.get('category')
         category_instance = Category.objects.filter(name=cate_name).first()
 
@@ -153,114 +182,172 @@ def sellItem(request):
         condition = request.POST.get('condition')
         price = request.POST.get('price')
         location = request.POST.get('location')
-        image1 = request.FILES.get('img1')
-        image2 = request.FILES.get('img2')
-        image3 = request.FILES.get('img3')
-        image4 = request.FILES.get('img4')
+        images = [request.FILES.get(f'img{i}') for i in range(1, 5)]
 
-        if category_instance:
-            product = Product.objects.create(
-                category=category_instance,
-                brand=brand,
-                title=title,
-                description=description,
-                price=price,
-                location=location,
-                condition=condition,
-                seller=request.user
-            )
-            ProductImages.objects.create(
-                product=product,
-                image1=image1,
-                image2=image2,
-                image3=image3,
-                image4=image4,
-                user=request.user
-            )
-            messages.success(request, "Product added successfully.")
-            return redirect('/allproducts/')
-        else:
+        # Validate category
+        if not category_instance:
             messages.error(request, "Category not found.")
             return redirect('sell_item')
-    
+
+        # Create product
+        product = Product.objects.create(
+            category=category_instance,
+            brand=brand,
+            title=title,
+            description=description,
+            price=price,
+            location=location,
+            condition=condition,
+            seller=request.user
+        )
+
+        # Create associated images
+        ProductImages.objects.create(
+            product=product,
+            image1=images[0],
+            image2=images[1],
+            image3=images[2],
+            image4=images[3],
+            user=request.user
+        )
+
+        messages.success(request, "Product added successfully.")
+        return redirect('/allproducts/')
+
+    # Collect user data for context
     user_wishlist = []
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')[:10]
 
-    context = {'condition_choices': condition_choices, 'categories': category, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
+    context = {
+        'condition_choices': condition_choices,
+        'categories': categories,
+        'user_wishlist': list(user_wishlist),
+        'notifications': notifications
+    }
+
     return render(request, 'sellitem.html', context)
+
 
 # Search products
 def search_products(request):
-    address = request.GET.get('address')
-    product = request.GET.get('prod')
+    address_query = request.GET.get('address')
+    product_query = request.GET.get('prod')
+
+    # Initial queryset with prefetch for related images
     products = Product.objects.all().prefetch_related('images')
 
-    if address:
-        products = products.filter(location__icontains=address)
-    if product:
-        products = products.filter(
-            Q(brand__icontains=product) |
-            Q(title__icontains=product) |
-            Q(description__icontains=product) |
-            Q(category__name__icontains=product)
-        )
-    
-    user_wishlist = []
-    notifications = ''
-    if request.user.is_authenticated:
-        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+    # Apply address filter
+    if address_query:
+        products = products.filter(location__icontains=address_query)
 
+    # Apply product-related filters
+    if product_query:
+        products = products.filter(
+            Q(brand__icontains=product_query) |
+            Q(title__icontains=product_query) |
+            Q(description__icontains=product_query) |
+            Q(category__name__icontains=product_query)
+        )
+
+    # Just return the queryset, caller will handle rendering and context
     return products
+
 
 # Products by category
 def prodbyCategory(request, category):
-    if 'address' in request.GET or 'prod' in request.GET:
-        search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
-    
-    products = Product.objects.filter(category__name=category).prefetch_related('images')
-    
-    user_wishlist = []
-    notifications = ''
-    if request.user.is_authenticated:
-        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
-    
-    context = {'products': products, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
-    return render(request, 'allProducts.html', context)
-
-# Product details
-def view_Product(request, slug):
-    if 'address' in request.GET or 'prod' in request.GET:
-        search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
-    
+     # Check for signup/login handling
     auth_response = handle_user_auth(request)
     if auth_response:
         return auth_response
-        
-    product = Product.objects.prefetch_related('images').get(slug=slug)
-    product.views += 1
-    product.save()
     
-    user_wishlist = []
-    notifications = ''
-    if request.user.is_authenticated:
-        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+    # Handle search (fallback if user uses search bar)
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)
+        return render(request, "allProducts.html", {
+            'products': search_results if search_results.exists() else [],
+        })
 
-    context = {'product': product, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
+    # Fetch the category object or return 404
+    category_obj = get_object_or_404(Category, name__iexact=category)
+
+    # Get all products under the category
+    products_qs = Product.objects.filter(category=category_obj)\
+        .prefetch_related(Prefetch('images'))\
+        .order_by('-created_at')
+
+    # Pagination setup: 60 products per page
+    paginator = Paginator(products_qs, 60)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Authenticated user data
+    user_wishlist = []
+    notifications = []
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user)\
+            .values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False)\
+            .order_by('-created_at')[:10]
+
+    context = {
+        'products': page_obj,  # paginated object
+        'user_wishlist': list(user_wishlist),
+        'notifications': notifications,
+        'selected_category': category_obj.name,
+        'paginator': paginator,
+        'page_obj': page_obj,
+        'products_qs': products_qs
+    }
+
+    return render(request, 'allProducts.html', context)
+
+
+
+# View product details
+def view_Product(request, slug):
+    # Handle auth (signup/login)
+    auth_response = handle_user_auth(request)
+    if auth_response:
+        return auth_response
+    
+    #  Handle search
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)
+        return render(request, "allProducts.html", {
+            'products': search_results if search_results.exists() else [],
+        })
+
+
+
+    #  Get the product or return 404 (safer than .get())
+    product = get_object_or_404(
+        Product.objects.prefetch_related('images'),
+        slug=slug
+    )
+
+    # Increment view count using F expression (no race condition)
+    Product.objects.filter(pk=product.pk).update(views=F('views') + 1)
+
+    #  Authenticated user extras
+    user_wishlist = []
+    notifications = []
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(user=request.user)\
+            .values_list('product_id', flat=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False)\
+            .order_by('-created_at')[:10]
+
+    #Context
+    context = {
+        'product': product,
+        'user_wishlist': list(user_wishlist),
+        'notifications': notifications,
+    }
     return render(request, 'viewProduct.html', context)
+
 
 # Report ad
 @login_required
@@ -290,16 +377,12 @@ def reportad(request, slug):
 # Profile page
 @login_required
 def profilePage(request):
+       #  Handle search
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
-    
-    auth_response = handle_user_auth(request)
-    if auth_response:
-        return auth_response
+        return render(request, "allProducts.html", {
+            'products': search_results if search_results.exists() else [],
+        })
 
     product_ads = Product.objects.filter(seller=request.user).prefetch_related('images')
     
@@ -307,7 +390,7 @@ def profilePage(request):
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')[:10]
 
     context = {'products': product_ads, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
     return render(request, 'profilePage.html', context)
@@ -315,12 +398,12 @@ def profilePage(request):
 # Ads page
 @login_required
 def adsPage(request):
+    #  Handle search
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
+        return render(request, "allProducts.html", {
+            'products': search_results if search_results.exists() else [],
+        })
     
     auth_response = handle_user_auth(request)
     if auth_response:
@@ -332,7 +415,7 @@ def adsPage(request):
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')[:10]
 
     context = {'products': product_ads, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
     return render(request, 'adsPage.html', context)
@@ -403,48 +486,73 @@ def deleteAccount(request):
 
 # Seller profile
 def viewSeller(request, slug):
-    if 'address' in request.GET or 'prod' in request.GET:
-        search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
-    
+    # Check for auth redirect (login/signup)
     auth_response = handle_user_auth(request)
     if auth_response:
         return auth_response
     
-    seller = CustomUser.objects.get(username=slug)
-    products = Product.objects.filter(seller=seller).prefetch_related('images')
-    
-    user_wishlist = []
-    notifications = ''
-    if request.user.is_authenticated:
-        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+    # Handle search queries first
+    if 'address' in request.GET or 'prod' in request.GET:
+        search_results = search_products(request)
+        return render(request, "allProducts.html", {
+            'products': search_results if search_results.exists() else [],
+        })
 
-    context = {'seller': seller, 'products': products, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
+    # Get seller or 404
+    seller = get_object_or_404(CustomUser, username=slug)
+
+    # Fetch seller's products efficiently
+    products = Product.objects.filter(seller=seller).prefetch_related('images')
+
+    # Handle user data
+    user_wishlist = []
+    notifications = []
+    if request.user.is_authenticated:
+        user_wishlist = WishlistItem.objects.filter(
+            user=request.user
+        ).values_list('product_id', flat=True)
+
+        notifications = Notification.objects.filter(
+            user=request.user, is_read=False
+        ).order_by('-created_at')[:10]  # limit notifications
+
+    context = {
+        'seller': seller,
+        'products': products,
+        'user_wishlist': list(user_wishlist),
+        'notifications': notifications
+    }
     return render(request, 'sellerprofile.html', context)
 
 # Wishlist
 @login_required
 def wishlist(request):
+    # Handle search queries early
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)
-        if search_results.exists():
-            return render(request, "allProducts.html", {'products': search_results})
-        else:
-            return render(request, "allProducts.html")
-    
-    products = WishlistItem.objects.filter(user=request.user).order_by('-created_at').prefetch_related('product__images')
-    
-    user_wishlist = []
-    notifications = ''
-    if request.user.is_authenticated:
-        user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        return render(request, "allProducts.html", {
+            'products': search_results if search_results.exists() else [],
+        })
 
-    context = {'products': products, 'user_wishlist': list(user_wishlist), 'notifications': notifications}
+    # Fetch wishlist items and prefetch product images
+    products = WishlistItem.objects.filter(
+        user=request.user
+    ).select_related('product').prefetch_related('product__images').order_by('-created_at')
+
+    # Fetch wishlist product IDs and notifications for UI rendering
+    user_wishlist = WishlistItem.objects.filter(
+        user=request.user
+    ).values_list('product_id', flat=True)
+
+    notifications = Notification.objects.filter(
+        user=request.user, is_read=False
+    ).order_by('-created_at')[:10]
+
+    context = {
+        'products': products,
+        'user_wishlist': list(user_wishlist),
+        'notifications': notifications
+    }
     return render(request, 'wishlist.html', context)
 
 # Toggle wishlist
@@ -508,7 +616,7 @@ def chatsPage(request):
     notifications = ''
     if request.user.is_authenticated:
         user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')[:10]
 
     context = {'user_wishlist': list(user_wishlist), 'notifications': notifications}
     return render(request, 'chatPage.html', context)

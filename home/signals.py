@@ -6,6 +6,34 @@ from django.contrib.auth.models import User
 from home.models import Product
 from Chat.models import Message
 from django.contrib.auth import get_user_model
+from django.db.models.signals import pre_save
+from .models import ProductImages
+from cloudinary.uploader import upload
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+def compress_and_upload(image):
+    result = upload(image, transformation=[
+        {"width": 800, "crop": "limit"},
+        {"quality": "auto"},
+        {"fetch_format": "auto"}
+    ])
+    return result["public_id"]
+
+@receiver(pre_save, sender=ProductImages)
+def compress_images_before_save(sender, instance, **kwargs):
+    # Check if image1 is a file, not already a public_id (i.e., not already uploaded)
+    if isinstance(instance.image1, InMemoryUploadedFile):
+        instance.image1 = compress_and_upload(instance.image1)
+
+    if isinstance(instance.image2, InMemoryUploadedFile):
+        instance.image2 = compress_and_upload(instance.image2)
+
+    if isinstance(instance.image3, InMemoryUploadedFile):
+        instance.image3 = compress_and_upload(instance.image3)
+
+    if isinstance(instance.image4, InMemoryUploadedFile):
+        instance.image4 = compress_and_upload(instance.image4)
+
 
 User = get_user_model()  # Get the custom user model
 
