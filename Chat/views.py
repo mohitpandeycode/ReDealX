@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Chat, Message
 from home.models import Product, CustomUser
 from django.http import JsonResponse,HttpResponseNotFound
+from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 
@@ -16,7 +18,6 @@ import json
 # chats page
 @login_required
 def chatsPage(request):
-    # Handle search and authentication if needed
     if 'address' in request.GET or 'prod' in request.GET:
         search_results = search_products(request)
         return render(request, "allProducts.html", {'products': search_results} if search_results.exists() else {})
@@ -25,25 +26,56 @@ def chatsPage(request):
     if auth_response:
         return auth_response
 
-    # Fetch chats where the user is either the buyer or seller
     user_chats = Chat.objects.filter(
         Q(buyer=request.user) | Q(seller=request.user)
-    ).prefetch_related("messages").order_by('-created_at')
+    ).select_related("buyer", "seller", "product") \
+     .prefetch_related("messages", "product__images") \
+     .order_by('-created_at')
 
-    # Fetch unread notifications
     notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
-
-    # Fetch user wishlist items
     user_wishlist = WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
 
-    context = {
+    return render(request, 'chatPage.html', {
         'chats': user_chats,
         'notifications': notifications,
         'user_wishlist': list(user_wishlist)
-    }
-    return render(request, 'chatPage.html', context)
+    })
 
 
+@login_required
+def get_messages(request, chat_id):
+    chat = Chat.objects.filter(id=chat_id).first()
+    if not chat:
+        return HttpResponseNotFound('<h1>Chat Not Found</h1>')
+
+    # Pagination: limit and offset
+    limit = int(request.GET.get('limit', 40))
+    offset = int(request.GET.get('offset', 0))
+
+    messages = chat.messages.order_by('-timestamp')[offset:offset+limit]
+    messages = list(reversed(messages))
+
+    return JsonResponse({
+        'messages': [{'sender_id': msg.sender.id, 'text': msg.text, 'timestamp': msg.timestamp.strftime('%Y-%m-%d %H:%M:%S')} for msg in messages]
+    })
+
+
+@login_required
+def send_message(request, chat_id):
+    if request.method == "POST":
+        chat = get_object_or_404(Chat, id=chat_id)
+
+        if request.user != chat.buyer and request.user != chat.seller:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+        data = json.loads(request.body)
+        message_text = data.get("text", "").strip()
+
+        if message_text:
+            Message.objects.create(chat=chat, sender=request.user, text=message_text)
+            return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})
 
 
 @login_required
@@ -66,44 +98,7 @@ def sentOffer(request):
         if created and message_text:
             Message.objects.create(chat=chat, sender=buyer, text=message_text)
 
-        return redirect('chats')  # Redirect to the chats page (Ensure this URL name is correct)
+        return redirect('chats') 
     
     return redirect('home')  # Redirect in case of GET request
 
-
-
-@login_required
-def get_messages(request, chat_id):
-    print(f"🔍 Fetching messages for chat ID: {chat_id}")
-
-    chat = Chat.objects.filter(id=chat_id).first()
-    
-    if not chat:
-        print(f"❌ Chat with ID {chat_id} not found!")  # Debugging
-        return HttpResponseNotFound('<h1>Chat Not Found</h1>')  # Ensures no HTML is returned
-
-    messages = chat.messages.all().order_by('timestamp')
-
-    return JsonResponse({
-        'messages': [{'sender_id': msg.sender.id, 'text': msg.text} for msg in messages]
-    })
-
-
-@csrf_exempt
-@login_required
-def send_message(request, chat_id):
-    if request.method == "POST":
-        chat = get_object_or_404(Chat, id=chat_id)
-        
-        # Ensure user is part of this chat
-        if request.user != chat.buyer and request.user != chat.seller:
-            return JsonResponse({'error': 'Unauthorized'}, status=403)
-
-        data = json.loads(request.body)
-        message_text = data.get("text", "").strip()
-
-        if message_text:
-            Message.objects.create(chat=chat, sender=request.user, text=message_text)
-            return JsonResponse({'success': True})
-    
-    return JsonResponse({'success': False})

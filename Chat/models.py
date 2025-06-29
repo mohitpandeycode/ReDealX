@@ -24,5 +24,10 @@ class Message(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['chat', 'timestamp']),
+        ]
+
     def __str__(self):
         return f"Message from {self.sender.username}"
