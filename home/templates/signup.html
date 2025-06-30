@@ -1,77 +1,103 @@
 {% load static %}
-    <div class="container">
-        <div class="p-2 me-0 text-center">
-            <img class="img-fluid" src="{% static 'img/logo.png' %}" alt="Icon" style="width: 40px; height: 35px;" />
-          </div>
-        <div class="form-container">
-            <div class="form-title">Create Your Account</div>
-            <form method="post">
-                <!-- First and Last Name -->
-                {% csrf_token %}
-                <input type="hidden" name="form_type" value="signup">
-                <div class="row">
-                    <div class="col-md-6 mb-1">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" name="fname" class="form-control fmc" id="firstName" required>
-                    </div>
-                    <div class="col-md-6 mb-1">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" name="lname" class="form-control fmc" id="lastName" required>
-                    </div>
-                </div>
-                <!-- Username -->
-                <div class="mb-1">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control fmc" id="username" placeholder="Enter username" required>
-                </div>
-                <!-- Email -->
-                <div class="mb-1">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control fmc" id="email" placeholder="example@email.com" required>
-                </div>
-                <!-- Phone Number -->
-                <div class="mb-1">
-                    <label for="phoneNumber" class="form-label">Phone Number</label>
-                    <input type="tel" name="phone" class="form-control fmc" id="phoneNumber" placeholder="123-456-7890" required>
-                </div>
-                <!-- Password -->
-                <div class="mb-1" style="position: relative;">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control fmc" id="password" placeholder="Enter password" required>
-                    <span  style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('password', this)"><i class="bi bi-eye"></i></span>
-                </div>
-                <!-- Confirm Password -->
-                <div class="mb-1" style="position: relative;">
-                    <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" name="cpassword" class="form-control fmc" id="cpas" placeholder="Re-enter password" required>
-                    <span  style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('cpas', this)"><i class="bi bi-eye"></i></span>
-                </div>
-                <!-- Submit Button -->
-                <div class="d-grid mt-3">
-                    <p style="font-size: 12px;color: red;">Always remeber the Username and Password for further Login!</p>
-                    <button type="submit" class="btn btn-submit">Sign Up</button>
-                </div>
-                
-            </form>
-           
-            <div class="form-footer">
-                Already a member? <a data-bs-toggle="modal" data-bs-target="#login" data-bs-dismiss="modal" aria-label="Close" href="">Log in</a>       
-            </div>
+<div class="container">
+  <div class="p-2 me-0 text-center">
+    <img class="img-fluid" src="{% static 'img/logo.png' %}" alt="Icon" style="width: 40px; height: 35px;" />
+  </div>
+  <div class="form-container">
+    <div class="form-title">Create Your Account</div>
+    <form method="post">
+      <!-- First and Last Name -->
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="signup" />
+      <div class="row">
+        <div class="col-md-6 mb-1">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" name="fname" class="form-control fmc" id="firstName" required />
         </div>
+        <div class="col-md-6 mb-1">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" name="lname" class="form-control fmc" id="lastName" required />
+        </div>
+      </div>
+      <!-- Username -->
+      <div class="mb-1">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control fmc" id="username" placeholder="Enter username" required />
+      </div>
+      <!-- Email -->
+      <div class="mb-1">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" name="email" class="form-control fmc" id="email" placeholder="example@email.com" required />
+      </div>
+      <!-- Phone Number -->
+      <div class="mb-1">
+        <label for="phoneNumber" class="form-label">Phone Number</label>
+        <input type="tel" name="phone" class="form-control fmc" id="phoneNumber" placeholder="123-456-7890" required />
+      </div>
+      <!-- Password -->
+      <div class="mb-1" style="position: relative;">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control fmc" id="password" placeholder="Enter password" required />
+        <span style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('password', this)"><i class="bi bi-eye"></i></span>
+      </div>
+      <!-- Confirm Password -->
+      <div class="mb-1" style="position: relative;">
+        <label for="confirmPassword" class="form-label">Confirm Password</label>
+        <input type="password" name="cpassword" class="form-control fmc" id="cpas" placeholder="Re-enter password" required />
+        <span style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('cpas', this)"><i class="bi bi-eye"></i></span>
+      </div>
+      <!-- Submit Button -->
+      <div class="d-grid mt-3">
+        <p style="font-size: 12px;color: red;">Always remeber the Username and Password for further Login!</p>
+        <button type="submit" class="btn btn-submit">Sign Up</button>
+      </div>
+    </form>
+
+    <div class="form-footer">
+      Already a member? <a data-bs-toggle="modal" data-bs-target="#login" data-bs-dismiss="modal" aria-label="Close" href="">Log in</a>
     </div>
-    <script>
-        function togglePasswordVisibility(fieldId, toggleElement) {
-            const passwordField = document.getElementById(fieldId)
-            const icon = toggleElement.querySelector('i')
-            if (passwordField.type === 'password') {
-              passwordField.type = 'text'
-              icon.classList.remove('bi-eye')
-              icon.classList.add('bi-eye-slash')
-            } else {
-              passwordField.type = 'password'
-              icon.classList.remove('bi-eye-slash')
-              icon.classList.add('bi-eye')
-            }
-          }
-          
-    </script>
+  </div>
+</div>
+<script>
+  function togglePasswordVisibility(fieldId, toggleElement) {
+    const passwordField = document.getElementById(fieldId)
+    const icon = toggleElement.querySelector('i')
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text'
+      icon.classList.remove('bi-eye')
+      icon.classList.add('bi-eye-slash')
+    } else {
+      passwordField.type = 'password'
+      icon.classList.remove('bi-eye-slash')
+      icon.classList.add('bi-eye')
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    const formFields = ['firstName', 'lastName', 'username', 'email', 'phoneNumber']
+  
+    // Load values from sessionStorage on page load
+    formFields.forEach((id) => {
+      const savedValue = sessionStorage.getItem(id)
+      if (savedValue) {
+        const field = document.getElementById(id)
+        if (field) field.value = savedValue
+      }
+    })
+  
+    // Save values to sessionStorage on input
+    formFields.forEach((id) => {
+      const field = document.getElementById(id)
+      if (field) {
+        field.addEventListener('input', () => {
+          sessionStorage.setItem(id, field.value)
+        })
+      }
+    })
+  
+    //Clear saved data after successful form submission
+    document.querySelector('form').addEventListener('submit', function () {
+      formFields.forEach((id) => sessionStorage.removeItem(id))
+    })
+  })
+</script>

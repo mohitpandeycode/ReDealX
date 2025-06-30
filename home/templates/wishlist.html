@@ -55,10 +55,10 @@
                                 <div style="display: flex;justify-content: space-between; align-items: center;">
                                   <h5 class="priceelemnt text-primary mb-1">₹ {{ product.product.price }}</h5>
                                   <p class="categoryp px-2 py-1 rounded mb-1">
-                                    {% if product.category.name == 'Others' %}
-                                      {{ product.other_category|truncatechars:8 }}
+                                    {% if product.product.category.name == 'Others' %}
+                                      {{ product.product.other_category|truncatechars:8 }}
                                     {% else %}
-                                      {{ product.category|truncatechars:8 }}
+                                      {{ product.product.category|truncatechars:8 }}
                                     {% endif %}
                                   </p>
                                 </div>
