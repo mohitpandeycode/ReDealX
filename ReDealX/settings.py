@@ -93,6 +93,8 @@ DATABASES = {
     'default': dj_database_url.config(default=DATABSE_URL,conn_max_age=600)
 }
 
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
