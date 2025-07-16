@@ -5,64 +5,106 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'Css/chatPage.css' %}" />
-
 {% endblock %}
 
 {% block body %}
-<!-- Navbar -->
 {% include 'navbar.html' %}
 
 <div class="chat-container">
-    <!-- Sidebar - Chat List -->
+    <!-- Sidebar -->
     <aside class="sidebar">
-        <!-- unchanged sidebar code -->
-        <!-- (keep your original contact list as-is) -->
         <h2>Chats</h2>
         <input type="text" class="search-bar" placeholder="Search messages or users" />
 
         <div class="contacts">
             {% for chat in chats %}
-            {% if request.user == chat.buyer %}
-            {% with chat.seller as other_user %}
-            <div class="contact"
-                onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
-                <!-- contact rendering unchanged -->
-                <div class="imagechat">
-                    <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %} https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }} {% endif %}"
-                        alt="User Avatar" />
-                </div>
-                <div class="chat-details">
-                    <div class="detailname">
-                        <p class="name">{{ other_user.first_name }} {{ other_user.last_name }}</p>
-                        <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
-                    </div>
-                    <div class="newchat">
-                        <p>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6 }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endwith %}
-            {% else %}
-            {% with chat.buyer as other_user %}
-            <div class="contact"
-                onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ chat.product.title }}', '{{ chat.product.price }}', '{% if chat.product.images.first.image1 %}{{ chat.product.images.first.image1.url }}{% else %}/static/default-product.jpg{% endif %}')">
-                <!-- similar to above -->
-                <div class="imagechat">
-                    <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %} https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }} {% endif %}"
-                        alt="User Avatar" />
-                </div>
-                <div class="chat-details">
-                    <div class="detailname">
-                        <p class="name">{{ other_user.first_name }} {{ other_user.last_name }}</p>
-                        <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
-                    </div>
-                    <div class="newchat">
-                        <p>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6 }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endwith %}
-            {% endif %}
+                {% if request.user == chat.buyer %}
+                    {% with other_user=chat.seller %}
+                        <div class="contact"
+                            onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ other_user.username }}', '{{ chat.product.title }}', '{{ chat.product.price }}', 
+                            {% with first_image=chat.product.images.first %}
+                                {% if first_image and first_image.image1 %}
+                                    '{{ first_image.image1.url }}'
+                                {% else %}
+                                    '/static/default-product.jpg'
+                                {% endif %}
+                            {% endwith %})"
+                            data-chat-id="{{ chat.id }}">
+
+                            <div class="imagechat">
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }}{% endif %}" alt="User Avatar" />
+                            </div>
+
+                            <div class="chat-details">
+                                <div class="detailname">
+                                    <p class="name">
+                                        {% if other_user.first_name or other_user.last_name %}
+                                            {{ other_user.first_name }} {{ other_user.last_name }}
+                                        {% else %}
+                                            {{ other_user.username }}
+                                        {% endif %}
+                                    </p>
+                                    <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
+                                </div>
+                                <div class="newchat">
+                                    <p>
+                                        {% if chat.messages.last.sender == request.user or chat.messages.last.is_read %}
+                                            {% if chat.messages.last.sender == request.user %}
+                                                You:
+                                            {% endif %}
+                                            {{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}
+                                        {% else %}
+                                            <strong>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}</strong>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% else %}
+                    {% with other_user=chat.buyer %}
+                        <div class="contact"
+                            onclick="setActiveChat(this, '{{ chat.id }}', '{{ other_user.first_name }}', '{{ other_user.last_name }}', '{{ other_user.username }}', '{{ chat.product.title }}', '{{ chat.product.price }}', 
+                            {% with first_image=chat.product.images.first %}
+                                {% if first_image and first_image.image1 %}
+                                    '{{ first_image.image1.url }}'
+                                {% else %}
+                                    '/static/default-product.jpg'
+                                {% endif %}
+                            {% endwith %})"
+                            data-chat-id="{{ chat.id }}">
+
+                            <div class="imagechat">
+                                <img src="{% if other_user.profile_picture %}{{ other_user.profile_picture.url }}{% else %}https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }}{% endif %}" alt="User Avatar" />
+                            </div>
+
+                            <div class="chat-details">
+                                <div class="detailname">
+                                    <p class="name">
+                                        {% if other_user.first_name or other_user.last_name %}
+                                            {{ other_user.first_name }} {{ other_user.last_name }}
+                                        {% else %}
+                                            {{ other_user.username }}
+                                        {% endif %}
+                                    </p>
+                                    <p class="date">{{ chat.created_at|date:"d/m/Y" }}</p>
+                                </div>
+                                <div class="newchat">
+                                    <p>
+                                        {% if chat.messages.last.sender == request.user or chat.messages.last.is_read %}
+                                            {% if chat.messages.last.sender == request.user %}
+                                                You:
+                                            {% endif %}
+                                            {{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}
+                                        {% else %}
+                                            <strong>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}</strong>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endif %}
             {% endfor %}
         </div>
     </aside>
@@ -70,11 +112,9 @@
     <!-- Main Chat Window -->
     <main class="chat-window">
         <header class="chat-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <!-- unchanged header -->
             <div class="topname">
                 <div class="image-container">
-                    <img id="chat-user-image" src="{% static 'img/about1.png' %}" alt="User Image"
-                        class="chat-user-image">
+                    <img id="chat-user-image" src="{% static 'img/about1.png' %}" alt="User Image" class="chat-user-image">
                     <img src="{% static 'img/userlogo.webp' %}" alt="User Image" class="user-image">
                 </div>
                 <div class="chat-details">
@@ -83,12 +123,10 @@
                 </div>
             </div>
             <div>
-                <button style="opacity: 1;" type="button" class="btn-close" id="closechat" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                <button style="opacity: 1;" type="button" class="btn-close" id="closechat" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
         </header>
 
-        <!-- ✅ Loader and messages container -->
         <div class="chat-messages" id="chat-messages" data-user-id="{{ request.user.id }}">
             <p class="no-messages">Select a chat to see messages</p>
         </div>
@@ -106,27 +144,25 @@
     function getCSRFToken() {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
-            let cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                let cookie = cookies[i].trim();
+            document.cookie.split(';').forEach(cookie => {
+                cookie = cookie.trim();
                 if (cookie.startsWith('csrftoken=')) {
-                    cookieValue = cookie.substring(10);
-                    break;
+                    cookieValue = cookie.substring('csrftoken='.length);
                 }
-            }
+            });
         }
         return cookieValue;
     }
 
-    function setActiveChat(element, chatId, first_name, last_name, title, price, imageUrl) {
+    function setActiveChat(element, chatId, first_name, last_name, username, title, price, imageUrl) {
         document.querySelectorAll('.contact').forEach(contact => contact.classList.remove('active'));
         element.classList.add('active');
 
         let displayImage = imageUrl && imageUrl !== 'None' ? imageUrl : "{% static 'img/userlogo.webp' %}";
-        let displayTitle = title ? title : "No Product";
+        let displayName = (first_name || last_name) ? `${first_name} ${last_name}`.trim() : username;
 
-        document.getElementById('chat-username').innerText = first_name + " " + last_name + "🔹";
-        document.getElementById('prodinfo').innerText = displayTitle + " - ₹" + price;
+        document.getElementById('chat-username').innerText = displayName + " 🔹";
+        document.getElementById('prodinfo').innerText = title + " - ₹" + price;
         document.getElementById('chat-user-image').src = displayImage;
         activeChatId = chatId;
 
@@ -135,18 +171,14 @@
 
     function loadMessages(chatId, showLoader = true) {
         const chatMessages = document.getElementById('chat-messages');
-        const currentUserId = chatMessages.getAttribute('data-user-id');
+        const currentUserId = chatMessages.dataset.userId;
 
         if (showLoader) {
-            chatMessages.innerHTML = `
-            <div class="loader">
-                <div></div>
-            </div>
-        `;
+            chatMessages.innerHTML = `<div class="loader"><div></div></div>`;
         }
 
         fetch(`/chat/get-messages/${chatId}/`)
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 chatMessages.innerHTML = '';
                 if (data.messages.length === 0) {
@@ -155,32 +187,39 @@
                 }
 
                 data.messages.forEach(msg => {
-                    let msgDiv = document.createElement('div');
-                    msgDiv.classList.add('message');
-                    msgDiv.classList.add(msg.sender_id == currentUserId ? 'sent' : 'received');
+                    const msgDiv = document.createElement('div');
+                    msgDiv.classList.add('message', msg.sender_id == currentUserId ? 'sent' : 'received');
                     msgDiv.innerText = msg.text;
                     msgDiv.style.animation = 'fadeIn 0.3s ease-in-out';
                     chatMessages.appendChild(msgDiv);
                 });
 
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Remove bold if message is read
+                const preview = document.querySelector(`.contact[data-chat-id='${chatId}'] .newchat p`);
+                if (preview && preview.querySelector('strong')) {
+                    preview.innerHTML = preview.querySelector('strong').innerHTML;
+                }
             })
-            .catch(error => {
-                console.error('🔥 Error fetching messages:', error);
+            .catch(() => {
                 chatMessages.innerHTML = '<p style="color:red;">Failed to load messages.</p>';
             });
     }
 
-
-    document.getElementById('send-message-btn').addEventListener('click', sendMessage);
-    document.getElementById('message-input').addEventListener('keypress', function (event) {
-        if (event.key === 'Enter') sendMessage();
-    });
-
     function sendMessage() {
-        let messageInput = document.getElementById('message-input');
-        let messageText = messageInput.value.trim();
-        if (messageText === '' || !activeChatId) return;
+        const input = document.getElementById('message-input');
+        const text = input.value.trim();
+        if (!text || !activeChatId) return;
+
+        const chatMessages = document.getElementById('chat-messages');
+        const tempMsg = document.createElement('div');
+        tempMsg.classList.add('message', 'sent');
+        tempMsg.innerText = text;
+        tempMsg.style.opacity = '0.6';
+        chatMessages.appendChild(tempMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        input.value = '';
 
         fetch(`/chat/send-message/${activeChatId}/`, {
             method: 'POST',
@@ -188,52 +227,45 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCSRFToken(),
             },
-            body: JSON.stringify({ 'text': messageText }),
+            body: JSON.stringify({ text }),
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadMessages(activeChatId, false);
-                    messageInput.value = '';
-                }
-            })
-            .catch(error => console.error('Error sending message:', error));
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                tempMsg.style.opacity = '1';
+            } else {
+                tempMsg.innerText = "❌ Failed to send";
+                tempMsg.style.color = 'red';
+            }
+        })
+        .catch(() => {
+            tempMsg.innerText = "❌ Network error";
+            tempMsg.style.color = 'red';
+        });
     }
 
+    document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+    document.getElementById('message-input').addEventListener('keypress', e => {
+        if (e.key === 'Enter') sendMessage();
+    });
 
+    // Responsive behavior
     document.addEventListener('DOMContentLoaded', function () {
-        const chatElements = document.querySelectorAll('.contact');
-        const closebutn = document.querySelector('#closechat');
-
-        chatElements.forEach(chat => {
+        document.querySelectorAll('.contact').forEach(chat => {
             chat.addEventListener('click', function () {
                 if (window.innerWidth < 800) {
-                    mySmallScreenFunction();
+                    document.querySelector('.sidebar').style.display = 'none';
+                    document.querySelector('.chat-window').style.display = 'flex';
                 }
             });
         });
 
-        if (closebutn) {
-            closebutn.addEventListener('click', function () {
-                if (window.innerWidth < 800) {
-                    mycloseScreenFunction();
-                }
-            });
-        }
+        document.getElementById('closechat').addEventListener('click', function () {
+            if (window.innerWidth < 800) {
+                document.querySelector('.sidebar').style.display = 'flex';
+                document.querySelector('.chat-window').style.display = 'none';
+            }
+        });
     });
-
-    function mySmallScreenFunction() {
-        document.querySelector('.chat-container')?.style.setProperty('height', '72vh');
-        document.querySelector('.sidebar')?.style.setProperty('display', 'none');
-        document.querySelector('.chat-window')?.style.setProperty('display', 'flex');
-        document.querySelector('.chat-window')?.style.setProperty('width', '100%');
-        document.querySelector('.chat-window')?.style.setProperty('height', '100%');
-        document.querySelector('.chat-input')?.style.setProperty('border-radius', '0px 0px 10px 10px');
-    }
-
-    function mycloseScreenFunction() {
-        document.querySelector('.sidebar')?.style.setProperty('display', 'flex');
-        document.querySelector('.chat-window')?.style.setProperty('display', 'none');
-    }
 </script>
 {% endblock %}

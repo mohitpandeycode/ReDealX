@@ -30,4 +30,4 @@ class Message(models.Model):
         ]
 
     def __str__(self):
-        return f"Message from {self.sender.username}"
+        return f"Message from {self.sender.username} to {self.chat.seller.username if self.sender == self.chat.buyer else self.chat.buyer.username}"
