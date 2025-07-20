@@ -4,11 +4,9 @@ from django.http import JsonResponse
 from django.db.models import Q, Prefetch
 from django.utils.html import escape
 import json
-
 from Chat.models import Chat, Message
 from home.models import Product, CustomUser, Notification, WishlistItem
 from home.views import search_products, handle_user_auth
-
 from django.db.models import Subquery, OuterRef
 
 @login_required

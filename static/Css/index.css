@@ -509,10 +509,11 @@
         bottom: 35px;
         z-index: 99;
         left: 30%;
-        border: 4px dashed #ff8b00;
+        border: 4px double #ffffff;
         text-align: center;
-        width: 150px;
+        width: 125px;
         margin: auto;
+        padding: 5px 1px !important;
     }
 
     .navbar-light .navbar-nav .nav-link {

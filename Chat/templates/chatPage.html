@@ -52,7 +52,7 @@
                                             {% if chat.messages.last.sender == request.user %}
                                                 You:
                                             {% endif %}
-                                            {{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}
+                                            {{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|safe }}
                                         {% else %}
                                             <strong>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}</strong>
                                         {% endif %}
@@ -95,7 +95,7 @@
                                             {% if chat.messages.last.sender == request.user %}
                                                 You:
                                             {% endif %}
-                                            {{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}
+                                           {{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|safe }}
                                         {% else %}
                                             <strong>{{ chat.messages.last.text|default:"No messages yet"|truncatewords:6|striptags }}</strong>
                                         {% endif %}
@@ -189,7 +189,7 @@
                 data.messages.forEach(msg => {
                     const msgDiv = document.createElement('div');
                     msgDiv.classList.add('message', msg.sender_id == currentUserId ? 'sent' : 'received');
-                    msgDiv.innerText = msg.text;
+                    msgDiv.innerHTML = msg.text;
                     msgDiv.style.animation = 'fadeIn 0.3s ease-in-out';
                     chatMessages.appendChild(msgDiv);
                 });

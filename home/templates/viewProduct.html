@@ -103,13 +103,13 @@
                 <p class="text-muted-custom">
                   <strong>Category:</strong>
                   {% if product.category.name == 'Others' %}
-                    {{ product.other_category|truncatechars:8 }}
+                    {{ product.other_category}}
                   {% else %}
-                    {{ product.category|truncatechars:8 }}
+                    {{ product.category }}
                   {% endif %}
                 </p>
                 <p class="text-muted-custom">
-                  <strong>Published at:</strong> {{ product.created_at|date:'d M Y' }} <strong>{{ product.created_at|date:'h:i A' }}</strong>
+                  <strong>Published at:</strong> {{ product.created_at|date:'d M Y' }}
                 </p>
                 <h5 class="mt-3">Description</h5>
                 <p>{{ product.description|linebreaksbr }}</p>
@@ -136,7 +136,11 @@
                           <!-- User Information -->
                           <div class="col-8">
                             <div class="px-3">
-                              <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name }}</h3>
+                              <h3 class="mb-0 text-dark fw-bold">{{ product.seller.first_name }} {{ product.seller.last_name }}
+                                {% if product.seller == request.user %}
+                                <span>(You)</span>    
+                                {% endif %}                                 
+                              </h3>
 
                               {% if product.seller.is_verified %}
                                 <div style="display:flex;align-items:center">
@@ -152,6 +156,8 @@
                       </a>
                     </div>
                     {% if user.is_authenticated %}
+                    
+                    {% if not product.seller == request.user %}
                       <div class="text-center my-3 d-flex justify-content-center gap-4">
                         {% if product.showNumber %}
                           <a href="tel:{{ product.seller.phone_number }}" class="btn btn-dark px-4 py-2"><i class="fas fa-phone-alt"></i> Call</a>
@@ -186,9 +192,10 @@
                           </div>
                         </div>
                       </div>
+                    {% endif %}
                     {% else %}
                       <div class="text-center my-3 d-flex justify-content-center gap-4">
-                        <p class="text-primary">Please Login to contact seller!</p>
+                        <h3 class="text-danger">Please Login to contact seller!</h3>
                       </div>
                     {% endif %}
                     <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7627007.329080649!2d80.83809581952544!3d22.566008254437364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1740314721825!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

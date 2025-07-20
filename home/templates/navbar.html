@@ -19,6 +19,7 @@
         </svg>
       </h2>
     </a>
+    
     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <div class="navbar-nav ms-auto">
@@ -147,7 +148,7 @@
               <a class="dropdown-item" href="{% url 'wishlist' %}"><i class="far fa-heart pe-2 wishlisst"></i> Wishlist</a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'chats' %}"><i class="fa-regular fa-comment-dots pe-2"></i> Chat</a>
+              <a style="position: relative;" class="dropdown-item" href="{% url 'chats' %}"><i class="fa-regular fa-comment-dots pe-2"></i> Chat<p style="left:12px;top:5px;" class="badgeic"></p></a>
             </li>
             <li>
               <a class="dropdown-item" href="{% url 'settings' %}"><i class="fas fa-cog pe-2"></i> Setting</a>
