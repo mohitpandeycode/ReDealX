@@ -49,7 +49,7 @@
       <!-- Submit Button -->
       <div class="d-grid mt-3">
         <p style="font-size: 12px;color: red;">Always remeber the Username and Password for further Login!</p>
-        <button type="submit" class="btn btn-submit">Sign Up</button>
+        <button type="submit" id="sign" class="btn btn-submit custom-btn-submit">Sign Up</button>
       </div>
     </form>
 
@@ -74,30 +74,45 @@
   }
   
   document.addEventListener('DOMContentLoaded', function () {
-    const formFields = ['firstName', 'lastName', 'username', 'email', 'phoneNumber']
-  
+    const formFields = ['firstName', 'lastName', 'username', 'email', 'phoneNumber'];
+    const sign = document.getElementById('sign');
+
     // Load values from sessionStorage on page load
     formFields.forEach((id) => {
-      const savedValue = sessionStorage.getItem(id)
+      const savedValue = sessionStorage.getItem(id);
       if (savedValue) {
-        const field = document.getElementById(id)
-        if (field) field.value = savedValue
+        const field = document.getElementById(id);
+        if (field) field.value = savedValue;
       }
-    })
-  
+    });
+
     // Save values to sessionStorage on input
     formFields.forEach((id) => {
-      const field = document.getElementById(id)
+      const field = document.getElementById(id);
       if (field) {
         field.addEventListener('input', () => {
-          sessionStorage.setItem(id, field.value)
-        })
+          sessionStorage.setItem(id, field.value);
+        });
       }
-    })
-  
-    //Clear saved data after successful form submission
+    });
+
+    // Clear saved data after form is submitted
     document.querySelector('form').addEventListener('submit', function () {
-      formFields.forEach((id) => sessionStorage.removeItem(id))
-    })
-  })
+      formFields.forEach((id) => sessionStorage.removeItem(id));
+    });
+
+    // Sign up button logic
+    sign.addEventListener('click', function (e) {
+      
+      // Check if all fields are filled
+      const allFilled = formFields.every((id) => {
+        const field = document.getElementById(id);
+        return field && field.value.trim() !== '';
+      });
+
+      if (allFilled) {
+        sign.innerHTML = `<span class="loader"></span> Creating account...`;
+      } 
+    });
+  });
 </script>

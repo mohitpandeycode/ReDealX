@@ -110,3 +110,4 @@ function updateCharCount() {
       textarea.value = textarea.value.substring(0, 500)
     }
   }
+

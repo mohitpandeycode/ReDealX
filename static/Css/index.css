@@ -691,6 +691,7 @@
     background-color: white;
 }
 
+
 /* Animation */
 .parallax>use {
     animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
@@ -829,6 +830,30 @@
 .property-item .border-end {
     border-right: 1px dashed rgba(0, 185, 142, .3) !important;
 }
+
+.custom-btn-submit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.custom-btn-submit .loader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 
 small {
     height: 20px;

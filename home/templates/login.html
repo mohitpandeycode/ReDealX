@@ -21,7 +21,7 @@
       </div>
       <!-- Submit Button -->
       <div class="d-grid mt-3">
-        <button type="submit" class="btn btn-submit">Log in</button>
+        <button id="loggin" type="submit" class="btn btn-submit custom-btn-submit">Log in</button>
       </div>
     </form>
 
@@ -50,4 +50,19 @@
       icon.classList.add('bi-eye')
     }
   }
+  // Get elements
+let log = document.getElementById('loggin'); 
+let username = document.getElementById('uusername'); 
+let password = document.getElementById('upassword'); 
+
+log.addEventListener('click', () => {
+  if (username.value !== "" && password.value !== "") {
+    log.innerHTML = ''; // Clear existing content
+    log.innerHTML = `
+      <span class="loader"></span> Verifying...
+    `;
+
+  }
+});
+
 </script>
