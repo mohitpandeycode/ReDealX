@@ -96,17 +96,6 @@ DATABASES = {
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'django_cache'),  # Directory to store cached files
-        'TIMEOUT': 60 * 15,  # 15 minutes
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000
-        }
-    }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

@@ -14,11 +14,9 @@ import random
 from django.core.paginator import Paginator
 from django.db.models.functions import Random
 from django.db.models import Prefetch, F
-from django.views.decorators.cache import cache_page
 
 
 # Home page
-@cache_page(60 * 5)
 def index(request):
     # Handle login/signup early
     auth_response = handle_user_auth(request)
@@ -117,7 +115,6 @@ def handle_logout(request):
 
 
 # All products page
-@cache_page(60 * 10)
 def allproducts(request):
     # Handle authentication (POST)
     auth_response = handle_user_auth(request)
@@ -263,7 +260,6 @@ def search_products(request):
 
 
 # Products by category
-@cache_page(60 * 10)
 def prodbyCategory(request, category):
      # Check for signup/login handling
     auth_response = handle_user_auth(request)
@@ -532,7 +528,6 @@ def viewSeller(request, slug):
     return render(request, 'sellerprofile.html', context)
 
 # Wishlist
-@cache_page(60 * 10)
 @login_required
 def wishlist(request):
     # Handle search queries early

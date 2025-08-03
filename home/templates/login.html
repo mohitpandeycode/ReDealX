@@ -6,8 +6,8 @@
   <div class="form-container">
     <div class="form-title">Welcome to RedealX</div>
     <form method="post">
-      <!-- Username -->
       {% csrf_token %}
+      <!-- Username -->
       <input type="hidden" name="form_type" value="login" />
       <div class="mb-1">
         <label for="username" class="form-label">Username</label>
