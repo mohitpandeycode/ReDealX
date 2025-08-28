@@ -75,7 +75,7 @@
 <!-- user profile section -->
               <li class="nav-item dropdown">
                 <button class="btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://api.dicebear.com/8.x/bottts/svg?seed={{ request.user.first_name|slugify }}{{ request.user.id }}" alt="yourImage" />
+                  <img style="width: 35px; height: 35px; border-radius: 50%;" src="https://api.dicebear.com/8.x/bottts/svg?seed={{ request.user.first_name|slugify }}{{ request.user.id }}" alt="yourImage" />
                   <i class="mx-1 fas fa-chevron-down"></i>
                 </button>
                 <ul class="dropdown-menu p-2 dropdown-menu-light">
@@ -132,9 +132,9 @@
           <!-- navbar for mobile screens -->
           <div class="nav-item navlink smallnav">
             <li>
-              <p class="fs-5 mb-2 dropdown-item">
-                <img style="width: 40px; height: 40px; border-radius: 50%;" src="https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }}
-" alt="userImage" /> <strong class="text-dark">{{ user.first_name }}</strong>
+              <p class="fs-6 mb-2 dropdown-item">
+                <img style="width: 30px; height: 30px; border-radius: 50%;" src="https://api.dicebear.com/8.x/bottts/svg?seed={{ other_user.first_name|slugify }}{{ other_user.id }}
+" alt="userImage" /> <strong class="text-dark">{{ user.get_full_name}}</strong>
               </p>
             </li>
             <hr class="m-1" />
@@ -164,7 +164,7 @@
         <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-              <div class="modal-header">
+              <div class="modal-header" style="padding: 5px;">
                 {% if messages %}
                   {{ message.tags }}
                   {% for message in messages %}
@@ -184,7 +184,7 @@
         <div class="modal fade" id="SignUp" tabindex="-1" aria-labelledby="SignUpLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
-              <div class="modal-header">
+              <div class="modal-header" style="padding: 5px;">
                 {% if messages %}
                   {{ message.tags }}
                   {% for message in messages %}
@@ -200,27 +200,27 @@
           </div>
         </div>
       </div>
-      <a href="{% url 'sellitem' %}" class="btn btn-primary gradient-btn px-3 d-none d-lg-flex"><i class="py-1 px-1 fas fa-plus"></i>Sell Item</a>
+      <a href="{% url 'sellitem' %}" style="font-size: 16px;padding: 5px;" class="btn btn-primary gradient-btn d-none d-lg-flex"><i class="py-1 px-1 fas fa-plus"></i>Sell Item</a>
     </div>
   </nav>
 
   <!-- Search Start -->
-  <div class="searchbox bg-primary mb-1 wow fadeIn" data-wow-delay="0.1s" style="padding: 8px;">
+  <div class="searchbox bg-primary mb-1 wow fadeIn" data-wow-delay="0.1s" style="padding: 5px;">
     <form method="get">
       <div class="p-0">
         <div class="row g-2">
           <div class="col-md-10">
             <div class="row g-2">
               <div class="col-5 col-lg-4">
-                <input type="text" name="address" class="form-control py-2 border-0" placeholder="🔍 City, area or locality" />
+                <input type="text" style="height: 35px;" name="address" class="form-control py-2 border-0" placeholder="🔍 City, area or locality" />
               </div>
               <div class="col-7 col-lg-8">
-                <input type="text" name="prod" id="searchInput" class="form-control py-2 border-0" placeholder="Search Products" />
+                <input type="text" style="height: 35px;" name="prod" id="searchInput" class="form-control py-2 border-0" placeholder="Search Products" />
               </div>
             </div>
           </div>
           <div class="col-md-2">
-            <button type="submit" id="searchbtn" class="btn btn-dark py-2 border-0 w-100">Search</button>
+            <button type="submit" id="searchbtn" style="height: 35px;" class="btn btn-dark py-2 border-0 w-100">Search</button>
           </div>
         </div>
       </div>

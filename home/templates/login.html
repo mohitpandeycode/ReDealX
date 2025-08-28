@@ -1,15 +1,15 @@
 {% load static %}
 <div class="container">
-  <div class="p-2 me-0 text-center">
+  <div class="me-0 text-center">
     <img class="img-fluid" src="{% static 'img/logo.png' %}" alt="Icon" style="width: 40px; height: 35px;" />
   </div>
   <div class="form-container">
     <div class="form-title">Welcome to RedealX</div>
-    <form method="post">
+    <form class="loginform" method="post">
       {% csrf_token %}
       <!-- Username -->
       <input type="hidden" name="form_type" value="login" />
-      <div class="mb-1">
+      <div class="">
         <label for="username" class="form-label">Username</label>
         <input type="text" name="lusername" class="form-control fmc" id="uusername" placeholder="Enter username" required />
       </div>
@@ -17,17 +17,17 @@
       <div class="mb-1">
         <label for="password" class="form-label">Password</label>
         <input type="password" name="lpassword" class="form-control fmc" id="upassword" placeholder="Enter password" required />
-        <span style="position: absolute;top: 50%;right: 50px; cursor: pointer;" onclick="togglePasswordVisibility('upassword', this)"><i class="bi bi-eye"></i></span>
+        <span style="position: absolute;top: 51%;right: 50px; cursor: pointer;" onclick="togglePasswordVisibility('upassword', this)"><i class="bi bi-eye"></i></span>
       </div>
       <!-- Submit Button -->
-      <div class="d-grid mt-3">
+      <div class="d-grid mt-2">
         <button id="loggin" type="submit" class="btn btn-submit custom-btn-submit">Log in</button>
       </div>
     </form>
 
-    <div class="form-footer">
-      <p class="fs-5 text-dark">or</p>
-      <div class="gologin text-dark mb-3">
+    <div class="form-footer" style="margin: 0;">
+      <p class="fs-5 text-dark m-0">or</p>
+      <div class="gologin text-dark">
         <img class="googlepic me-2" src="{% static 'img/google.png' %}" alt="" />
         <div>Continue with Google</div>
       </div>Not on ReDealX yet? <a href="" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#SignUp">Sign up</a>
@@ -54,6 +54,7 @@
 let log = document.getElementById('loggin'); 
 let username = document.getElementById('uusername'); 
 let password = document.getElementById('upassword'); 
+let loginform = document.querySelector('.loginform'); 
 
 log.addEventListener('click', () => {
   if (username.value !== "" && password.value !== "") {
@@ -61,8 +62,12 @@ log.addEventListener('click', () => {
     log.innerHTML = `
       <span class="loader"></span> Verifying...
     `;
-
   }
 });
+    loginform.addEventListener('submit', () => {
+    log.disabled = true;
+    log.style.backgroundColor = '#007258';
+    log.style.color = 'white';
+    });
 
 </script>

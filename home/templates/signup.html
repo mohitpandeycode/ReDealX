@@ -1,11 +1,11 @@
 {% load static %}
 <div class="container">
-  <div class="p-2 me-0 text-center">
+  <div class="me-0 text-center">
     <img class="img-fluid" src="{% static 'img/logo.png' %}" alt="Icon" style="width: 40px; height: 35px;" />
   </div>
   <div class="form-container">
     <div class="form-title">Create Your Account</div>
-    <form method="post">
+    <form class="signin-form" method="post">
       <!-- First and Last Name -->
       {% csrf_token %}
       <input type="hidden" name="form_type" value="signup" />
@@ -32,19 +32,19 @@
       <!-- Phone Number -->
       <div class="mb-1">
         <label for="phoneNumber" class="form-label">Phone Number</label>
-        <input type="tel" name="phone" class="form-control fmc" id="phoneNumber" placeholder="123-456-7890" required />
+        <input type="tel" name="phone" class="form-control fmc" id="phoneNumber" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" placeholder="123-456-7890" required />
       </div>
       <!-- Password -->
       <div class="mb-1" style="position: relative;">
         <label for="password" class="form-label">Password</label>
         <input type="password" name="password" class="form-control fmc" id="password" placeholder="Enter password" required />
-        <span style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('password', this)"><i class="bi bi-eye"></i></span>
+        <span style="position: absolute;top: 30px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('password', this)"><i class="bi bi-eye"></i></span>
       </div>
       <!-- Confirm Password -->
       <div class="mb-1" style="position: relative;">
         <label for="confirmPassword" class="form-label">Confirm Password</label>
         <input type="password" name="cpassword" class="form-control fmc" id="cpas" placeholder="Re-enter password" required />
-        <span style="position: absolute;top: 40px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('cpas', this)"><i class="bi bi-eye"></i></span>
+        <span style="position: absolute;top: 30px;right: 10px; cursor: pointer;" onclick="togglePasswordVisibility('cpas', this)"><i class="bi bi-eye"></i></span>
       </div>
       <!-- Submit Button -->
       <div class="d-grid mt-3">
@@ -115,4 +115,23 @@
       } 
     });
   });
+</script>
+<script>
+  const phoneInput = document.getElementById('phoneNumber')
+  const signinform = document.querySelector('.signin-form')
+
+  phoneInput.addEventListener('input', function () {
+    // Remove non-numeric characters
+    this.value = this.value.replace(/[^0-9]/g, '')
+
+    // Limit length to 10 digits
+    if (this.value.length > 10) {
+      this.value = this.value.slice(0, 10)
+    }
+  })
+    signinform.addEventListener('submit', () => {
+    sign.disabled = true;
+    sign.style.backgroundColor = '#007258';
+    sign.style.color = 'white';
+    });
 </script>

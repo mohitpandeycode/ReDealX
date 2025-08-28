@@ -31,7 +31,7 @@
                 <hr class="mb-3 mt-0" />
                 <div class="tab-content">
                   <div id="tab-1" class="tab-pane p-0 fade show active">
-                    <div class="row g-3">
+                    <div class="row g-3 wishlist-container">
                       {% for product in products %}
                         <div class="custom-col-5 wow fadeInUp" data-wow-delay="0.1s">
                           <div class="property-item rounded overflow-hidden">
@@ -77,7 +77,7 @@
                   </div>
                 </div>
               {% else %}
-                <section class="py-1 py-md-1 min-vh-75 d-flex justify-content-center align-items-center">
+                <section id="empty-wishlist" class="py-1 py-md-1 min-vh-75 d-flex justify-content-center align-items-center">
                   <div class="container">
                     <div class="row">
                       <div class="col-12">
@@ -117,8 +117,30 @@
           },
           success: function (response) {
             if (response.status === 'removed') {
-              btn.closest('.col-lg-3, .col-6, .col-sm-6, .col-md-4').fadeOut(300, function () {
+              btn.closest('.custom-col-5').fadeOut(300, function () {
                 $(this).remove()
+
+                // check if wishlist is empty
+                if ($('.wishlist-container .custom-col-5').length === 0) {
+                  $('.wishlist-container').parent().html(`
+                    <section id="empty-wishlist" class="py-1 py-md-1 min-vh-75 d-flex justify-content-center align-items-center">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="text-center">
+                              <img width="220" src="{% static 'img/favorites.webp' %}" alt="no favorites" />
+                              <h3 class="h2 mb-2">You haven't liked any ads yet</h3>
+                              <p class="mb-5">Like ads and share them with the world</p>
+                              <div class="col-12 mt-5 text-center" data-wow-delay="0.1s">
+                                <a class="btn btn-primary py-3 px-5" href="{% url 'allprod' %}">Discover More</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  `)
+                }
               })
             }
           },

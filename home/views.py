@@ -236,8 +236,8 @@ def sellItem(request):
 
 # Search products
 def search_products(request):
-    address_query = request.GET.get('address')
-    product_query = request.GET.get('prod')
+    address_query = request.GET.get('address', '').strip()
+    product_query = request.GET.get('prod', '').strip()
 
     # Initial queryset with prefetch for related images
     products = Product.objects.all().prefetch_related('images')
@@ -246,16 +246,19 @@ def search_products(request):
     if address_query:
         products = products.filter(location__icontains=address_query)
 
-    # Apply product-related filters
+    # Apply product-related filters with multiple keyword support
     if product_query:
-        products = products.filter(
-            Q(brand__icontains=product_query) |
-            Q(title__icontains=product_query) |
-            Q(description__icontains=product_query) |
-            Q(category__name__icontains=product_query)
-        )
+        keywords = product_query.split()
+        query = Q()
+        for keyword in keywords:
+            query |= (
+                Q(brand__icontains=keyword) |
+                Q(title__icontains=keyword) |
+                Q(description__icontains=keyword) |
+                Q(category__name__icontains=keyword)
+            )
+        products = products.filter(query).distinct()
 
-    # Just return the queryset, caller will handle rendering and context
     return products
 
 

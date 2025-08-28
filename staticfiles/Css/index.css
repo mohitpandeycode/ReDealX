@@ -38,32 +38,23 @@
     display: flex;
     align-items: center;
     padding: 10px 25px;
-    font-size: 1.1rem;
+    font-size: 1.1em;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #66b3ff, #4caf50);
-    /* Blue to Green gradient */
+    background: linear-gradient(135deg, #0080ff, #ff00bb);
     color: white;
-    border: 2px solid transparent;
-    /* Default transparent border */
     border-radius: 10px;
     text-decoration: none;
     position: relative;
-    /* For the pseudo-element */
     overflow: hidden;
-    /* To hide the moving border */
     transition: all 0.3s ease;
-    /* Smooth transition for all effects */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
 
 
 }
 
 .gradient-btn:hover {
-    background: linear-gradient(135deg, #4caf50, #66b3ff);
-    /* Reversed gradient on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #00b3ff, #bf66ff);
     /* Glow effect */
     transform: scale(1.05);
     /* Subtle scaling effect */
@@ -71,7 +62,7 @@
 
 .gradient-btn i {
     margin-right: 8px;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     transition: transform 0.6s ease-in-out;
     /* Smooth transition for rotation */
 }
@@ -90,7 +81,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, #81c784, #4db6ac, #009688, #80deea, #00bcd4);
+    background: linear-gradient(45deg, #0084ff, #4db6ac, #8000ff, #ea80e5, #f204ff);
     /* Green to Blue gradient */
     background-size: 300% 300%;
     /* Make the gradient larger to allow movement */
@@ -233,6 +224,7 @@
     border-radius: 0;
     background: transparent;
     transition: all 0.3s ease;
+    padding: 0;
 }
 
 .form-control:focus {
@@ -376,6 +368,7 @@
 
 .navbar {
     box-shadow: 0 0 30px rgba(0, 0, 0, .08);
+    height: 50px;
 }
 
 .navic {
@@ -482,6 +475,7 @@
     font-size: 15px;
     text-transform: uppercase;
     outline: none;
+    font-size: 14px;
 }
 
 .navbar-light .navbar-nav .nav-link:hover,
@@ -854,6 +848,9 @@
     100% { transform: rotate(360deg); }
 }
 
+.modal-content {
+    background-color: #ffffffd9;
+}
 
 small {
     height: 20px;
@@ -865,8 +862,8 @@ small {
 
 .prodimg {
     width: 100%;
-    height: 30vh;
-    object-fit: cover;
+    height: 25vh;
+    object-fit: contain;
 
 
 }
@@ -884,7 +881,32 @@ small {
     .priceelemnt {
         font-size: 14px;
     }
-
+    .form-label {
+    margin-bottom: .3rem;
+}
+    .navbar{
+        height: auto;
+    }
+    .headfont{
+        display: none;
+    }
+    .header{
+        padding-top: 0px;
+    }
+    .modal-body {
+    padding: 1rem 0px;
+    }
+    .navbar-brand{
+        margin-top: -12px;
+        margin-bottom: -12px;
+    }
+    .navbar-toggler{
+        margin-top: -15px;
+        margin-bottom: -15px;
+    }
+    .display-6{
+        margin-bottom: 0;
+    }
     .abouthead {
         font-size: 16px;
     }
