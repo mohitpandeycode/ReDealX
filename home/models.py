@@ -105,13 +105,3 @@ class Notification(models.Model):
     def __str__(self):
         return f"Notification for {self.user.username}"
     
-
-
-class SiteVisit(models.Model):
-    ip_address = models.GenericIPAddressField()
-    user_agent = models.TextField()
-    visited_at = models.DateTimeField(default=timezone.now)
-    page_visited = models.CharField(max_length=255)
-
-    def __str__(self):
-        return f"{self.ip_address} visited {self.page_visited} at {self.visited_at}"

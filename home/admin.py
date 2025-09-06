@@ -39,10 +39,3 @@ class WishlistItemAdmin(admin.ModelAdmin):
 class NotificationtemAdmin(admin.ModelAdmin):
     list_display = ('user', 'message', 'created_at')
     search_fields = ('user', 'message')
-
-
-@admin.register(SiteVisit)
-class SiteVisitAdmin(admin.ModelAdmin):
-    list_display = ('ip_address', 'page_visited', 'visited_at')
-    list_filter = ('visited_at',)
-    search_fields = ('ip_address', 'page_visited')
